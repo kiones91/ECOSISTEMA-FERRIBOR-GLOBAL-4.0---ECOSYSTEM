@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>FerriBor - Design System 3.0 (iPad Layout & Metallic Design)</title>
+
+    <!-- Scripts do Tailwind e Bibliotecas de Ícones Locais/Globais -->
+    <script src="lumina-video/assets/resource_3fa48481346f.js"></script>
+    <script src="lumina-video/assets/lucide_latest_2eebd0ebe8c2.js"></script>
+    <script src="glass-effect2/assets/iconify_654a1ef798a3.js"></script>
+
+    <!-- Fontes Locais / Google Fonts -->
+    <link href="lumina-video/assets/css2_2832c0ff631d.css" rel="stylesheet" />
+    <link href="glass-effect2/assets/css2_ac990486f183.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --cursor-size: 18px;
+            --cursor-hover-size: 55px;
+            --primary-red: #dc2626;
+            /* Vermelho Logo FerriBor */
+            --primary-red-hover: #b91c1c;
+            --bg-viewport: #F8FAF9;
+            --bg-grid-line: rgba(15, 23, 42, 0.04);
+
+            /* Stack Carousel CSS Custom Properties */
+            --_offset-steps: 2.2rem;
+            --_scale-steps: 8;
+            --_opacity-steps: 25;
+            --_offset-steps-two: calc(var(--_offset-steps) * -1);
+            --_offset-steps-three: calc(var(--_offset-steps) * -2);
+            --scale-steps-two: calc(1 - var(--_scale-steps) * 0.01);
+            --scale-steps-three: calc(1 - var(--_scale-steps) * 0.02);
+            --opacity-steps-two: calc(1 - var(--_opacity-steps) * 0.02);
+            --opacity-steps-three: calc(1 - var(--_opacity-steps) * 0.04);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0c0f12;
+            cursor: none;
+            overflow-y: auto;
+            overflow-x: hidden;
+            color: #0f172a;
+            /* Slate 900 */
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .font-heading {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .font-oswald {
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .font-space {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Custom scrollbar global premium */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-red);
+        }
+
+        /* Custom Cursor optimized for light design system inside iPad */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--cursor-size);
+            height: var(--cursor-size);
+            border: 2px solid #000000;
+            background-color: transparent;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.25s, height 0.25s, background-color 0.25s, border-color 0.25s, box-shadow 0.25s;
+        }
+
+        #custom-cursor.hovered {
+            width: var(--cursor-hover-size);
+            height: var(--cursor-hover-size);
+            background-color: rgba(220, 38, 38, 0.06);
+            border-color: var(--primary-red);
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.2);
+        }
+
+        /* Ruído Analógico Suave */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 40;
+            opacity: 0.022;
+            background: url("glass-effect2/assets/filter_3E_3Crect_width__100_25_ef7da59166f5.html");
+            mix-blend-mode: overlay;
+        }
+
+        /* Feixes laser verticais cinza/red */
+        @keyframes beam-fall {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+
+            90% {
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(120vh);
+                opacity: 0;
+            }
+        }
+
+        .animate-beam-red {
+            animation: beam-fall 7s linear infinite;
+        }
+
+        .animate-beam-slate {
+            animation: beam-fall 9s linear infinite;
+        }
+
+        /* Vidrificação Avançada Claro (Glassmorphism) */
+        .glass-panel-light {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px) saturate(190%);
+            -webkit-backdrop-filter: blur(20px) saturate(190%);
+            border-top: 1px solid rgba(255, 255, 255, 0.85);
+            border-left: 1px solid rgba(255, 255, 255, 0.6);
+            border-right: 1px solid rgba(255, 255, 255, 0.6);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.03);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .glass-panel-light:hover {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(220, 38, 38, 0.25);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(220, 38, 38, 0.07);
+        }
+
+        /* Varredura de Reflexo de Espelho (Mirror Glare Sweep) */
+        .mirror-sweep {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mirror-sweep::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.45) 50%,
+                    rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-25deg);
+            transition: 0.75s ease;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .mirror-sweep:hover::before {
+            left: 150%;
+            transition: 0.75s ease-in-out;
+        }
+
+        /* Border Gradient Helper (Rotating Beams / Glowing Borders) */
+        [style*="--border-gradient"] {
+            position: relative;
+        }
+
+        [style*="--border-gradient"]::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            padding: 1px;
+            border-radius: var(--border-radius-before, inherit);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            background: var(--border-gradient);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* 1. Botão Metálico Prateado Premium (Original Print style) */
+        .btn-silver-metallic {
+            position: relative;
+            overflow: hidden;
+            border-radius: 9999px;
+            padding: 12px 28px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #262626;
+            background: linear-gradient(180deg, #FFFFFF 0%, #EDEDED 35%, #D6D6D6 55%, #C2C2C2 100%);
+            box-shadow: 0 15px 33px -12px rgba(38, 38, 38, 0.4),
+                inset 0 2px 3px rgba(255, 255, 255, 0.95),
+                inset 0 -2px 3px rgba(0, 0, 0, 0.15);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer;
+        }
+
+        .btn-silver-metallic:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(180deg, #FFFFFF 0%, #F4F4F4 30%, #E0E0E0 60%, #CCCCCC 100%);
+            box-shadow: 0 20px 40px -10px rgba(38, 38, 38, 0.5),
+                inset 0 3px 4px rgba(255, 255, 255, 1),
+                inset 0 -3px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-silver-metallic:active {
+            transform: translateY(0);
+        }
+
+        /* Efeito de Reflexo no Hover */
+        .btn-silver-metallic::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.65) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-20deg);
+            transition: 0.75s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .btn-silver-metallic:hover::after {
+            left: 150%;
+            transition: 0.75s ease-in-out;
+        }
+
+        /* 2. Botão Secundário Branco Capsule (Comunidade) */
+        .btn-community {
+            position: relative;
+            border-radius: 9999px;
+            padding: 12px 28px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #555555;
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02),
+                inset 0 2px 2px rgba(255, 255, 255, 0.8);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer;
+        }
+
+        .btn-community:hover {
+            color: #1a1a1a;
+            transform: translateY(-2px);
+            border-color: rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-community:active {
+            transform: translateY(0);
+        }
+
+        /* Biblioteca de Variantes Cromáticas Metálicas de Botões */
+        .btn-metallic-variant {
+            position: relative;
+            overflow: hidden;
+            border-radius: 9999px;
+            padding: 11px 24px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-metallic-variant::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.45) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-20deg);
+            transition: 0.6s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .btn-metallic-variant:hover::after {
+            left: 150%;
+        }
+
+        .btn-metallic-variant:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-metallic-variant:active {
+            transform: translateY(0);
+        }
+
+        /* Cores dos botões metálicos */
+        .btn-m-red {
+            background: linear-gradient(180deg, #ef4444 0%, #dc2626 50%, #991b1b 100%);
+            color: white;
+            box-shadow: 0 10px 20px -6px rgba(220, 38, 38, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.4), inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-m-red:hover {
+            background: linear-gradient(180deg, #f87171 0%, #e11d48 50%, #be123c 100%);
+            box-shadow: 0 12px 24px -4px rgba(220, 38, 38, 0.5);
+        }
+
+        .btn-m-green {
+            background: linear-gradient(180deg, #34d399 0%, #10b981 50%, #065f46 100%);
+            color: white;
+            box-shadow: 0 10px 20px -6px rgba(16, 185, 129, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.4), inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-m-green:hover {
+            background: linear-gradient(180deg, #6ee7b7 0%, #059669 50%, #047857 100%);
+            box-shadow: 0 12px 24px -4px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-m-blue {
+            background: linear-gradient(180deg, #60a5fa 0%, #2563eb 50%, #1e40af 100%);
+            color: white;
+            box-shadow: 0 10px 20px -6px rgba(37, 99, 235, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.4), inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-m-blue:hover {
+            background: linear-gradient(180deg, #93c5fd 0%, #1d4ed8 50%, #1e3a8a 100%);
+            box-shadow: 0 12px 24px -4px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn-m-yellow {
+            background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 50%, #b45309 100%);
+            color: #451a03;
+            box-shadow: 0 10px 20px -6px rgba(245, 158, 11, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.5), inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-m-yellow:hover {
+            background: linear-gradient(180deg, #fcd34d 0%, #d97706 50%, #92400e 100%);
+            box-shadow: 0 12px 24px -4px rgba(245, 158, 11, 0.5);
+        }
+
+        .btn-m-grey {
+            background: linear-gradient(180deg, #94a3b8 0%, #64748b 50%, #334155 100%);
+            color: white;
+            box-shadow: 0 10px 20px -6px rgba(100, 116, 139, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.4), inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-m-grey:hover {
+            background: linear-gradient(180deg, #cbd5e1 0%, #475569 50%, #1e293b 100%);
+            box-shadow: 0 12px 24px -4px rgba(100, 116, 139, 0.5);
+        }
+
+        /* 3D Stack Carousel Overlapping Technique CSS */
+        .stack-section {
+            display: grid;
+            grid-template-areas: "stack";
+            width: min(calc(100% - 2rem), 26rem);
+            margin: 0 auto;
+        }
+
+        @media (min-width: 1024px) {
+            .stack-section {
+                width: min(calc(100% - 2rem), 34rem);
+                margin: 0 0 0 auto;
+                justify-items: end;
+            }
+        }
+
+        .stack-card {
+            grid-area: stack;
+            transition: 800ms cubic-bezier(0.23, 1, 0.32, 1);
+            translate: var(--_offset) 0;
+            order: var(--_order);
+            z-index: var(--_order);
+            scale: var(--_scale);
+            opacity: var(--_opacity);
+            transform-style: preserve-3d;
+        }
+
+        .stack-card:nth-of-type(1) {
+            --_order: var(--_1-order);
+            --_scale: var(--_1-scale);
+            --_opacity: var(--_1-opacity);
+            --_offset: var(--_1-offset);
+        }
+
+        .stack-card:nth-of-type(2) {
+            --_order: var(--_2-order);
+            --_scale: var(--_2-scale);
+            --_opacity: var(--_2-opacity);
+            --_offset: var(--_2-offset);
+        }
+
+        .stack-card:nth-of-type(3) {
+            --_order: var(--_3-order);
+            --_scale: var(--_3-scale);
+            --_opacity: var(--_3-opacity);
+            --_offset: var(--_3-offset);
+        }
+
+        .stack-card:nth-of-type(4) {
+            --_order: var(--_4-order);
+            --_scale: var(--_4-scale);
+            --_opacity: var(--_4-opacity);
+            --_offset: var(--_4-offset);
+        }
+
+        .stack-section.card-1-active {
+            --_1-order: 4;
+            --_1-scale: 1;
+            --_1-opacity: 1;
+            --_1-offset: 0;
+            --_2-order: 3;
+            --_2-scale: var(--scale-steps-two);
+            --_2-opacity: var(--opacity-steps-two);
+            --_2-offset: var(--_offset-steps-two);
+            --_3-order: 2;
+            --_3-scale: var(--scale-steps-three);
+            --_3-opacity: var(--opacity-steps-three);
+            --_3-offset: var(--_offset-steps-three);
+            --_4-order: 1;
+            --_4-scale: calc(1 - var(--_scale-steps) * 0.03);
+            --_4-opacity: calc(1 - var(--_opacity-steps) * 0.06);
+            --_4-offset: calc(var(--_offset-steps) * -3);
+        }
+
+        .stack-section.card-2-active {
+            --_2-order: 4;
+            --_2-scale: 1;
+            --_2-opacity: 1;
+            --_2-offset: 0;
+            --_3-order: 3;
+            --_3-scale: var(--scale-steps-two);
+            --_3-opacity: var(--opacity-steps-two);
+            --_3-offset: var(--_offset-steps-two);
+            --_4-order: 2;
+            --_4-scale: var(--scale-steps-three);
+            --_4-opacity: var(--opacity-steps-three);
+            --_4-offset: var(--_offset-steps-three);
+            --_1-order: 1;
+            --_1-scale: calc(1 - var(--_scale-steps) * 0.03);
+            --_1-opacity: calc(1 - var(--_opacity-steps) * 0.06);
+            --_1-offset: calc(var(--_offset-steps) * -3);
+        }
+
+        .stack-section.card-3-active {
+            --_3-order: 4;
+            --_3-scale: 1;
+            --_3-opacity: 1;
+            --_3-offset: 0;
+            --_4-order: 3;
+            --_4-scale: var(--scale-steps-two);
+            --_4-opacity: var(--opacity-steps-two);
+            --_4-offset: var(--_offset-steps-two);
+            --_1-order: 2;
+            --_1-scale: var(--scale-steps-three);
+            --_1-opacity: var(--opacity-steps-three);
+            --_1-offset: var(--_offset-steps-three);
+            --_2-order: 1;
+            --_2-scale: calc(1 - var(--_scale-steps) * 0.03);
+            --_2-opacity: calc(1 - var(--_opacity-steps) * 0.06);
+            --_2-offset: calc(var(--_offset-steps) * -3);
+        }
+
+        .stack-section.card-4-active {
+            --_4-order: 4;
+            --_4-scale: 1;
+            --_4-opacity: 1;
+            --_4-offset: 0;
+            --_1-order: 3;
+            --_1-scale: var(--scale-steps-two);
+            --_1-opacity: var(--opacity-steps-two);
+            --_1-offset: var(--_offset-steps-two);
+            --_2-order: 2;
+            --_2-scale: var(--scale-steps-three);
+            --_2-opacity: var(--opacity-steps-three);
+            --_2-offset: var(--_offset-steps-three);
+            --_3-order: 1;
+            --_3-scale: calc(1 - var(--_scale-steps) * 0.03);
+            --_3-opacity: calc(1 - var(--_opacity-steps) * 0.06);
+            --_3-offset: calc(var(--_offset-steps) * -3);
+        }
+
+        /* Lettering Vazado Refinado (Montserrat outlines) */
+        .text-hollow-black-ds {
+            color: transparent;
+            -webkit-text-stroke: 1.5px #0f172a;
+            transition: all 0.4s ease;
+        }
+
+        .text-hollow-black-ds:hover {
+            -webkit-text-stroke: 1.5px var(--primary-red);
+        }
+
+        /* Inputs Focados Técnicos */
+        .input-group {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-group input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1.5px solid rgba(15, 23, 42, 0.15);
+            padding: 12px 4px;
+            color: #0f172a;
+            outline: none;
+            transition: border-color 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 12px;
+            left: 4px;
+            color: rgba(15, 23, 42, 0.4);
+            pointer-events: none;
+            transition: 0.3s ease all;
+            font-size: 0.9rem;
+        }
+
+        .input-group input:focus {
+            border-bottom-color: var(--primary-red);
+        }
+
+        .input-group input:focus~label,
+        .input-group input:not(:placeholder-shown)~label {
+            top: -12px;
+            font-size: 0.75rem;
+            color: var(--primary-red);
+        }
+
+        /* Animação Scroll Reveal */
+        @keyframes fadeSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+                filter: blur(4px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0px);
+            }
+        }
+
+        .reveal-item {
+            opacity: 0;
+        }
+
+        .reveal-item.active {
+            animation: fadeSlideIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+    </style>
+</head>
+
+<body
+    class="min-h-screen select-none selection:bg-red-500/10 selection:text-red-900">
+
+    <!-- Overlay de Textura de Ruído -->
+    <div class="noise-overlay"></div>
+
+    <!-- Main Content Container with Lateral Borders (Normal Page Limit) -->
+    <div class="relative w-full max-w-[1440px] min-h-screen mx-auto bg-[#F8FAF9] border-x border-[#2f3136]/30 xl:border-x-[16px] xl:border-[#2f3136] shadow-[0_0_50px_rgba(0,0,0,0.8)] flex flex-col z-10"
+        id="viewport-screen">
+
+            <!-- Grade Vertical de Engenharia com Feixes Laser -->
+            <div
+                class="absolute inset-0 z-0 pointer-events-none flex w-full h-full border-r border-slate-900/[0.02] opacity-60">
+                <div class="flex-1 border-l border-slate-900/[0.015] h-full relative overflow-hidden">
+                    <span class="absolute bottom-8 left-4 text-slate-900/[0.04] text-xs font-mono">ENG.01</span>
+                </div>
+                <div class="flex-1 border-l border-slate-900/[0.015] h-full relative overflow-hidden">
+                    <div class="absolute top-0 -left-[1px] w-[1px] h-48 bg-gradient-to-b from-transparent via-red-500/15 to-transparent animate-beam-red"
+                        style="animation-duration: 6s;"></div>
+                    <span class="absolute bottom-8 left-4 text-slate-900/[0.04] text-xs font-mono">ENG.02</span>
+                </div>
+                <div
+                    class="flex-1 border-l border-slate-900/[0.015] h-full flex justify-center relative overflow-hidden">
+                    <div class="absolute top-0 -left-[1px] w-[1px] h-64 bg-gradient-to-b from-transparent via-slate-500/20 to-transparent animate-beam-slate"
+                        style="animation-duration: 8s;"></div>
+                    <div class="h-full border-r border-dashed border-red-500/[0.03] w-px"></div>
+                    <span class="absolute bottom-8 text-red-500/[0.04] text-xs font-mono">ENG.03</span>
+                </div>
+                <div class="flex-1 border-l border-slate-900/[0.015] h-full relative overflow-hidden">
+                    <div class="absolute top-0 -left-[1px] w-[1px] h-32 bg-gradient-to-b from-transparent via-red-500/15 to-transparent animate-beam-red"
+                        style="animation-duration: 5s; animation-delay: 2s;"></div>
+                    <span class="absolute bottom-8 left-4 text-slate-900/[0.04] text-xs font-mono">ENG.04</span>
+                </div>
+                <div class="flex-1 border-l border-slate-900/[0.015] h-full relative overflow-hidden">
+                    <span class="absolute bottom-8 left-4 text-slate-900/[0.04] text-xs font-mono">ENG.05</span>
+                </div>
+            </div>
+
+            <!-- Cabeçalho Glass Capsule (Modelo de docs/glass-effect2/design-system.html) -->
+            <nav class="sticky top-4 mx-4 md:mx-8 z-50 transition-all duration-300">
+                <div
+                    class="glass-panel-light rounded-full px-6 py-3.5 flex items-center justify-between border border-white/40 shadow-[0_8px_30px_rgba(0,0,0,0.02)] bg-white/40 backdrop-blur-xl">
+                    <!-- Marca & Logo -->
+                    <a class="cursor-hover group flex items-center gap-2" href="#hero">
+                        <img src="ferribor-site antigo/assets/b051a09f8fef5577_logotipo.png" alt="FerriBor Logo"
+                            class="h-8 transition-transform duration-300 group-hover:scale-103" />
+                        <div class="h-5 w-[1px] bg-slate-900/10 mx-1"></div>
+                        <span
+                            class="font-heading font-extrabold text-xs tracking-widest text-slate-900 uppercase">SYSTEM
+                            3.0</span>
+                    </a>
+
+                    <!-- Menu de Navegação do Visual -->
+                    <div
+                        class="hidden md:flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest text-slate-500">
+                        <a class="cursor-hover hover:text-red-600 transition-colors" href="#hero">Início</a>
+                        <a class="cursor-hover hover:text-red-600 transition-colors" href="#typography">Tipografia</a>
+                        <a class="cursor-hover hover:text-red-600 transition-colors" href="#colors">Cores</a>
+                        <a class="cursor-hover hover:text-red-600 transition-colors" href="#components">Componentes</a>
+                        <a class="cursor-hover hover:text-red-600 transition-colors" href="#layout">Layout</a>
+                    </div>
+
+                    <!-- Botão de Ação Direito -->
+                    <div>
+                        <a href="#components"
+                            class="cursor-hover text-[10px] font-bold uppercase tracking-widest px-5 py-2.5 bg-slate-900 text-white rounded-full hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300">
+                            Ver Biblioteca
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- SEÇÃO HERO (Primeira Dobra) -->
+            <section id="hero"
+                class="relative z-10 py-6 lg:py-10 px-6 md:px-12 flex flex-col justify-center min-h-[calc(100vh-120px)] xl:min-h-[690px] border-b border-slate-900/5">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center w-full">
+
+                    <!-- Lado Esquerdo: Headline & Ações -->
+                    <div class="lg:col-span-6 flex flex-col justify-center reveal-item active lg:pr-4">
+                        <div class="inline-flex items-center gap-2 text-red-600 mb-4">
+                            <span class="flex h-2 w-2 rounded-full bg-red-600 animate-pulse"></span>
+                            <span
+                                class="text-[10px] font-bold tracking-widest uppercase text-slate-400 font-heading">Elastômeros
+                                de Precisão</span>
+                        </div>
+                        <h1
+                            class="text-4xl md:text-5xl lg:text-5xl font-bold leading-[1.05] tracking-tighter text-slate-900 mb-5 font-heading">
+                            A Brutalidade da Indústria,<br />
+                            <span class="text-hollow-black-ds">A Sutileza da</span>
+                            <span
+                                class="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-black font-extrabold">Tecnologia.</span>
+                        </h1>
+                        <p class="leading-relaxed text-xs md:text-sm text-slate-500 max-w-xl mb-8 font-normal">
+                            Projetado especificamente para engenheiros exigentes. Unimos a resistência severa das
+                            borrachas e poliuretanos FerriBor com as maiores inovações mecânicas, garantindo vedações
+                            perfeitas e durabilidade inabalável sob extrema pressão industrial.
+                        </p>
+
+                        <!-- CTA Buttons -->
+                        <div class="flex flex-wrap gap-4 items-center">
+                            <!-- Botão Prateado Metálico de Waitlist -->
+                            <button class="btn-silver-metallic cursor-hover"
+                                style="--border-gradient: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(0,0,0,0.35), rgba(255,255,255,0.9)); --border-radius-before: 9999px"
+                                type="button">
+                                <span>Inscreva-se na Lista de Espera</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4 text-slate-800"></i>
+                            </button>
+
+                            <!-- Botão de Comunidade / Secundário -->
+                            <button class="btn-community cursor-hover" type="button">
+                                <span>Comunidade</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Lado Direito: Overlapping Card Stack Carousel (OpenAI Style) -->
+                    <div class="lg:col-span-6 flex flex-col justify-center relative reveal-item active"
+                        style="animation-delay: 0.15s;">
+                        <div class="w-full max-w-[26rem] lg:max-w-[34rem] ml-auto mr-0 flex flex-col items-center lg:items-end">
+                            <!-- Contêiner de Cards Sobrepostos (display: grid via classe css stack-section) -->
+                            <div class="stack-section card-1-active relative w-full h-[26rem] mb-4" id="cards-container">
+
+                            <!-- Card 1: Vedações Especiais -->
+                            <div
+                                class="stack-card glass-panel-light rounded-2xl border border-white/20 p-6 flex flex-col justify-between shadow-lg h-[24rem] w-[20rem] sm:w-[24rem] md:w-[28rem]">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-br from-red-500/[0.02] to-slate-900/5 z-0 pointer-events-none">
+                                </div>
+                                <div class="relative z-10 flex justify-between items-center">
+                                    <span
+                                        class="px-2.5 py-0.5 bg-red-600 text-white text-[9px] font-bold rounded uppercase">Vedações</span>
+                                    <span class="text-[9px] text-slate-400 font-mono">FB.01</span>
+                                </div>
+                                <div
+                                    class="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-2">
+                                    <div
+                                        class="w-14 h-14 bg-red-50 border border-red-100 rounded-xl flex items-center justify-center mb-4 text-red-600 shadow-sm group-hover:scale-105 transition-transform duration-300">
+                                        <i data-lucide="shield-check" class="w-7 h-7"></i>
+                                    </div>
+                                    <h3 class="font-heading text-lg font-bold text-slate-900 mb-1">Vedações Especiais
+                                    </h3>
+                                    <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-4">NBR, Silicone e
+                                        Viton</p>
+                                    <div class="w-full space-y-2 text-left">
+                                        <div class="flex justify-between text-[10px] text-slate-400 font-medium">
+                                            <span>Precisão de Molde</span>
+                                            <span class="text-slate-900 font-bold">&plusmn;0.05 mm</span>
+                                        </div>
+                                        <div class="w-full bg-slate-200/50 rounded-full h-1">
+                                            <div class="bg-red-600 h-1 rounded-full w-[95%]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative z-10">
+                                    <button onclick="toggleDemoModal()"
+                                        class="w-full py-2.5 bg-slate-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-red-600 hover:shadow-md transition-all duration-300 flex items-center justify-center gap-1.5 cursor-hover">
+                                        <span>Solicitar Cotação</span> <i data-lucide="chevron-right"
+                                            class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Poliuretano -->
+                            <div
+                                class="stack-card glass-panel-light rounded-2xl border border-white/20 p-6 flex flex-col justify-between shadow-lg h-[24rem] w-[20rem] sm:w-[24rem] md:w-[28rem]">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-br from-blue-500/[0.02] to-slate-900/5 z-0 pointer-events-none">
+                                </div>
+                                <div class="relative z-10 flex justify-between items-center">
+                                    <span
+                                        class="px-2.5 py-0.5 bg-blue-600 text-white text-[9px] font-bold rounded uppercase">PU
+                                        Industrial</span>
+                                    <span class="text-[9px] text-slate-400 font-mono">FB.02</span>
+                                </div>
+                                <div
+                                    class="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-2">
+                                    <div
+                                        class="w-14 h-14 bg-blue-50 border border-blue-100 rounded-xl flex items-center justify-center mb-4 text-blue-600 shadow-sm">
+                                        <i data-lucide="cpu" class="w-7 h-7"></i>
+                                    </div>
+                                    <h3 class="font-heading text-lg font-bold text-slate-900 mb-1">Poliuretanos</h3>
+                                    <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-4">Gaxetas e
+                                        Raspadores</p>
+                                    <div class="w-full space-y-2 text-left">
+                                        <div class="flex justify-between text-[10px] text-slate-400 font-medium">
+                                            <span>Dureza Máxima</span>
+                                            <span class="text-slate-900 font-bold">95 Shore A</span>
+                                        </div>
+                                        <div class="w-full bg-slate-200/50 rounded-full h-1">
+                                            <div class="bg-blue-600 h-1 rounded-full w-[90%]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative z-10">
+                                    <button onclick="toggleDemoModal()"
+                                        class="w-full py-2.5 bg-slate-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-blue-600 hover:shadow-md transition-all duration-300 flex items-center justify-center gap-1.5 cursor-hover">
+                                        <span>Solicitar Cotação</span> <i data-lucide="chevron-right"
+                                            class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Card 3: Revestimentos -->
+                            <div
+                                class="stack-card glass-panel-light rounded-2xl border border-white/20 p-6 flex flex-col justify-between shadow-lg h-[24rem] w-[20rem] sm:w-[24rem] md:w-[28rem]">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.02] to-slate-900/5 z-0 pointer-events-none">
+                                </div>
+                                <div class="relative z-10 flex justify-between items-center">
+                                    <span
+                                        class="px-2.5 py-0.5 bg-emerald-600 text-white text-[9px] font-bold rounded uppercase">Cilindros</span>
+                                    <span class="text-[9px] text-slate-400 font-mono">FB.03</span>
+                                </div>
+                                <div
+                                    class="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-2">
+                                    <div
+                                        class="w-14 h-14 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center justify-center mb-4 text-emerald-600 shadow-sm">
+                                        <i data-lucide="layers" class="w-7 h-7"></i>
+                                    </div>
+                                    <h3 class="font-heading text-lg font-bold text-slate-900 mb-1">Revestimento de Rolos
+                                    </h3>
+                                    <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-4">Usinados e
+                                        Retificados</p>
+                                    <div class="w-full space-y-2 text-left">
+                                        <div class="flex justify-between text-[10px] text-slate-400 font-medium">
+                                            <span>Retífica e Acabamento</span>
+                                            <span class="text-slate-900 font-bold">100% Retificado</span>
+                                        </div>
+                                        <div class="w-full bg-slate-200/50 rounded-full h-1">
+                                            <div class="bg-emerald-600 h-1 rounded-full w-[100%]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative z-10">
+                                    <button onclick="toggleDemoModal()"
+                                        class="w-full py-2.5 bg-slate-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-600 hover:shadow-md transition-all duration-300 flex items-center justify-center gap-1.5 cursor-hover">
+                                        <span>Solicitar Cotação</span> <i data-lucide="chevron-right"
+                                            class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Card 4: Vulcanização -->
+                            <div
+                                class="stack-card glass-panel-light rounded-2xl border border-white/20 p-6 flex flex-col justify-between shadow-lg h-[24rem] w-[20rem] sm:w-[24rem] md:w-[28rem]">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-br from-amber-500/[0.02] to-slate-900/5 z-0 pointer-events-none">
+                                </div>
+                                <div class="relative z-10 flex justify-between items-center">
+                                    <span
+                                        class="px-2.5 py-0.5 bg-amber-500 text-slate-900 text-[9px] font-bold rounded uppercase">Usinagem</span>
+                                    <span class="text-[9px] text-slate-400 font-mono">FB.04</span>
+                                </div>
+                                <div
+                                    class="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-2">
+                                    <div
+                                        class="w-14 h-14 bg-amber-50 border border-amber-100 rounded-xl flex items-center justify-center mb-4 text-amber-600 shadow-sm">
+                                        <i data-lucide="settings" class="w-7 h-7"></i>
+                                    </div>
+                                    <h3 class="font-heading text-lg font-bold text-slate-900 mb-1">Usinagem & Moldes
+                                    </h3>
+                                    <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-4">Centros de
+                                        Usinagem CNC</p>
+                                    <div class="w-full space-y-2 text-left">
+                                        <div class="flex justify-between text-[10px] text-slate-400 font-medium">
+                                            <span>Tolerância de Usinagem</span>
+                                            <span class="text-slate-900 font-bold">&plusmn;0.01 mm</span>
+                                        </div>
+                                        <div class="w-full bg-slate-200/50 rounded-full h-1">
+                                            <div class="bg-amber-500 h-1 rounded-full w-[85%]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative z-10">
+                                    <button onclick="toggleDemoModal()"
+                                        class="w-full py-2.5 bg-slate-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-amber-600 hover:shadow-md transition-all duration-300 flex items-center justify-center gap-1.5 cursor-hover">
+                                        <span>Solicitar Cotação</span> <i data-lucide="chevron-right"
+                                            class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dot Navigation do Carrossel de Cards -->
+                        <div class="flex space-x-3 items-center justify-center z-20 lg:mr-[12rem]">
+                            <button
+                                class="cursor-hover w-3.5 h-3.5 rounded-full bg-slate-900 transition-all duration-300 scale-125 shadow-[0_0_8px_rgba(0,0,0,0.2)]"
+                                id="dot-1"></button>
+                            <button
+                                class="cursor-hover w-2 h-2 rounded-full bg-slate-900/20 hover:bg-slate-900/50 transition-all duration-300"
+                                id="dot-2"></button>
+                            <button
+                                class="cursor-hover w-2 h-2 rounded-full bg-slate-900/20 hover:bg-slate-900/50 transition-all duration-300"
+                                id="dot-3"></button>
+                            <button
+                                class="cursor-hover w-2 h-2 rounded-full bg-slate-900/20 hover:bg-slate-900/50 transition-all duration-300"
+                                id="dot-4"></button>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 1: TIPOGRAFIA -->
+            <section id="typography" class="py-24 px-6 md:px-12 border-b border-slate-900/5 relative">
+                <div class="mb-16 reveal-item">
+                    <div class="text-[10px] font-bold tracking-widest uppercase text-red-600 mb-2">Escrita de Alta
+                        Visibilidade</div>
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tighter text-slate-900 mb-4 font-heading">
+                        Tipografia do Sistema</h2>
+                    <p class="text-slate-500 max-w-xl">Hierarquia e estilos de fontes selecionados para a legibilidade
+                        técnica de desenhos industriais e catálogos.</p>
+                </div>
+
+                <div class="space-y-8 bg-white border border-slate-900/5 p-8 rounded-2xl reveal-item shadow-sm">
+                    <!-- Heading 1 Display -->
+                    <div
+                        class="flex flex-col md:flex-row justify-between gap-6 pb-6 border-b border-slate-900/5 items-start md:items-center">
+                        <div>
+                            <span
+                                class="text-[9px] font-mono text-slate-400 uppercase tracking-widest block mb-2">Montserrat
+                                Bold</span>
+                            <h1
+                                class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-none font-heading">
+                                Borrachas Especiais</h1>
+                        </div>
+                        <span class="font-mono text-xs text-slate-400">Montserrat (700) / 60px</span>
+                    </div>
+
+                    <!-- Oswald Heading -->
+                    <div
+                        class="flex flex-col md:flex-row justify-between gap-6 pb-6 border-b border-slate-900/5 items-start md:items-center">
+                        <div>
+                            <span
+                                class="text-[9px] font-mono text-slate-400 uppercase tracking-widest block mb-2">Oswald
+                                Display / Contorno Fino</span>
+                            <h2
+                                class="text-4xl md:text-5xl font-bold tracking-tight text-hollow-black-ds leading-none font-oswald uppercase">
+                                Vedações Industriais</h2>
+                        </div>
+                        <span class="font-mono text-xs text-slate-400">Oswald Outline / 48px</span>
+                    </div>
+
+                    <!-- Body Regular -->
+                    <div
+                        class="flex flex-col md:flex-row justify-between gap-6 pb-6 border-b border-slate-900/5 items-start md:items-center">
+                        <div>
+                            <span class="text-[9px] font-mono text-slate-400 uppercase tracking-widest block mb-2">Body
+                                Regular / Inter Regular</span>
+                            <p class="text-base text-slate-600 leading-relaxed max-w-2xl">Oferecemos ferramentaria
+                                própria e acompanhamento de desenhos técnicos específicos de engenharia, criando
+                                vedações com tolerâncias decimais rígidas.</p>
+                        </div>
+                        <span class="font-mono text-xs text-slate-400">Inter (400) / 16px</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 2: CORES -->
+            <section id="colors" class="py-24 px-6 md:px-12 border-b border-slate-900/5 relative">
+                <div class="mb-16 reveal-item">
+                    <div class="text-[10px] font-bold tracking-widest uppercase text-red-600 mb-2">Identidade Cromática
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tighter text-slate-900 mb-4 font-heading">Cores &
+                        Superfícies</h2>
+                    <p class="text-slate-500 max-w-xl">Paleta minimalista baseada no logotipo corporativo da FerriBor,
+                        combinada com superfícies de desfoque sofisticadas.</p>
+                </div>
+
+                <!-- Cores Corporativas -->
+                <h3 class="font-heading text-base font-bold mb-6 text-slate-800 reveal-item">Cores Corporativas</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 reveal-item">
+                    <!-- Pure White -->
+                    <div
+                        class="bg-white border border-slate-900/5 p-5 rounded-2xl flex flex-col justify-between h-40 shadow-sm">
+                        <div
+                            class="w-full h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-xs text-slate-400">
+                            #FFFFFF</div>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-900">Branco Puro</div>
+                            <div class="text-xs text-slate-400 font-mono mt-0.5">Fundo Geral e Elementos</div>
+                        </div>
+                    </div>
+
+                    <!-- Pure Black -->
+                    <div
+                        class="bg-white border border-slate-900/5 p-5 rounded-2xl flex flex-col justify-between h-40 shadow-sm">
+                        <div
+                            class="w-full h-12 rounded-xl bg-slate-950 flex items-center justify-center text-xs text-white">
+                            #0C0F12</div>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-900">Preto Profundo</div>
+                            <div class="text-xs text-slate-400 font-mono mt-0.5">Textos e Molduras</div>
+                        </div>
+                    </div>
+
+                    <!-- Primary Red -->
+                    <div
+                        class="bg-white border border-slate-900/5 p-5 rounded-2xl flex flex-col justify-between h-40 shadow-sm">
+                        <div
+                            class="w-full h-12 rounded-xl bg-[#dc2626] flex items-center justify-center text-xs text-white font-medium">
+                            #dc2626</div>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-900">Vermelho Industrial</div>
+                            <div class="text-xs text-slate-400 font-mono mt-0.5">Acentos e Destaque</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cores de Botões -->
+                <h3 class="font-heading text-base font-bold mb-6 text-slate-800 reveal-item">Cores Cromáticas de Botões
+                    (Variantes de Engenharia)</h3>
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-6 reveal-item">
+                    <!-- Cinza -->
+                    <div class="bg-white border border-slate-900/5 p-4 rounded-xl flex flex-col gap-3 shadow-sm">
+                        <div
+                            class="h-10 rounded-lg bg-gradient-to-b from-[#FFFFFF] to-[#C2C2C2] border border-slate-300">
+                        </div>
+                        <span class="text-xs font-semibold text-slate-900">Prata Metálico</span>
+                    </div>
+                    <!-- Vermelho -->
+                    <div class="bg-white border border-slate-900/5 p-4 rounded-xl flex flex-col gap-3 shadow-sm">
+                        <div class="h-10 rounded-lg bg-[#dc2626]"></div>
+                        <span class="text-xs font-semibold text-slate-900">Vermelho Ação</span>
+                    </div>
+                    <!-- Verde -->
+                    <div class="bg-white border border-slate-900/5 p-4 rounded-xl flex flex-col gap-3 shadow-sm">
+                        <div class="h-10 rounded-lg bg-[#10b981]"></div>
+                        <span class="text-xs font-semibold text-slate-900">Verde Sucesso</span>
+                    </div>
+                    <!-- Azul -->
+                    <div class="bg-white border border-slate-900/5 p-4 rounded-xl flex flex-col gap-3 shadow-sm">
+                        <div class="h-10 rounded-lg bg-[#2563eb]"></div>
+                        <span class="text-xs font-semibold text-slate-900">Azul Precisão</span>
+                    </div>
+                    <!-- Amarelo -->
+                    <div class="bg-white border border-slate-900/5 p-4 rounded-xl flex flex-col gap-3 shadow-sm">
+                        <div class="h-10 rounded-lg bg-[#f59e0b]"></div>
+                        <span class="text-xs font-semibold text-slate-900">Amarelo Alerta</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 3: COMPONENTES DE UI -->
+            <section id="components" class="py-24 px-6 md:px-12 border-b border-slate-900/5 relative">
+                <div class="mb-16 reveal-item">
+                    <div class="text-[10px] font-bold tracking-widest uppercase text-red-600 mb-2">Biblioteca do Projeto
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tighter text-slate-900 mb-4 font-heading">UI
+                        Components</h2>
+                    <p class="text-slate-500 max-w-xl">Todos os componentes com efeito diagonal de espelho, vidrificação
+                        delicada e sombras premium.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start reveal-item">
+                    <!-- Coluna Esquerda: Botões Cromáticos e Código -->
+                    <div class="lg:col-span-7 bg-white border border-slate-900/5 p-8 rounded-2xl space-y-8 shadow-sm">
+                        <h3 class="font-heading text-lg font-bold border-b border-slate-900/5 pb-3">Botões Metálicos &
+                            Vidrificados</h3>
+
+                        <!-- Showcase e Código -->
+                        <div class="space-y-6">
+
+                            <!-- Silver Button -->
+                            <div class="flex flex-col gap-3 p-4 bg-slate-50 rounded-xl">
+                                <div class="flex items-center justify-between flex-wrap gap-4">
+                                    <button class="btn-silver-metallic cursor-hover"
+                                        style="--border-gradient: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(0,0,0,0.35), rgba(255,255,255,0.9)); --border-radius-before: 9999px">
+                                        <span>Prateado Metálico</span>
+                                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-800"></i>
+                                    </button>
+                                    <button onclick="copyCode('code-silver')"
+                                        class="text-[10px] font-mono font-bold uppercase text-red-600 hover:text-red-800 cursor-hover">Copiar
+                                        HTML</button>
+                                </div>
+                                <textarea id="code-silver" readonly
+                                    class="w-full h-12 bg-white border border-slate-200 rounded-lg p-2 font-mono text-[9px] text-slate-500 overflow-hidden outline-none resize-none"><button class="btn-silver-metallic" style="--border-gradient: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(0,0,0,0.35), rgba(255,255,255,0.9)); --border-radius-before: 9999px"><span>Lista de Espera</span><i class="lucide-arrow-right"></i></button></textarea>
+                            </div>
+
+                            <!-- Red Button -->
+                            <div class="flex flex-col gap-3 p-4 bg-slate-50 rounded-xl">
+                                <div class="flex items-center justify-between flex-wrap gap-4">
+                                    <button class="btn-metallic-variant btn-m-red cursor-hover">
+                                        <span>Vermelho Logo</span>
+                                        <i data-lucide="shield" class="w-4 h-4"></i>
+                                    </button>
+                                    <button onclick="copyCode('code-red')"
+                                        class="text-[10px] font-mono font-bold uppercase text-red-600 hover:text-red-800 cursor-hover">Copiar
+                                        HTML</button>
+                                </div>
+                                <textarea id="code-red" readonly
+                                    class="w-full h-12 bg-white border border-slate-200 rounded-lg p-2 font-mono text-[9px] text-slate-500 overflow-hidden outline-none resize-none"><button class="btn-metallic-variant btn-m-red"><span>Vermelho Logo</span></button></textarea>
+                            </div>
+
+                            <!-- Green Button -->
+                            <div class="flex flex-col gap-3 p-4 bg-slate-50 rounded-xl">
+                                <div class="flex items-center justify-between flex-wrap gap-4">
+                                    <button class="btn-metallic-variant btn-m-green cursor-hover">
+                                        <span>Verde Sucesso</span>
+                                        <i data-lucide="check-circle" class="w-4 h-4"></i>
+                                    </button>
+                                    <button onclick="copyCode('code-green')"
+                                        class="text-[10px] font-mono font-bold uppercase text-red-600 hover:text-red-800 cursor-hover">Copiar
+                                        HTML</button>
+                                </div>
+                                <textarea id="code-green" readonly
+                                    class="w-full h-12 bg-white border border-slate-200 rounded-lg p-2 font-mono text-[9px] text-slate-500 overflow-hidden outline-none resize-none"><button class="btn-metallic-variant btn-m-green"><span>Verde Sucesso</span></button></textarea>
+                            </div>
+
+                            <!-- Blue Button -->
+                            <div class="flex flex-col gap-3 p-4 bg-slate-50 rounded-xl">
+                                <div class="flex items-center justify-between flex-wrap gap-4">
+                                    <button class="btn-metallic-variant btn-m-blue cursor-hover">
+                                        <span>Azul Engenharia</span>
+                                        <i data-lucide="wrench" class="w-4 h-4"></i>
+                                    </button>
+                                    <button onclick="copyCode('code-blue')"
+                                        class="text-[10px] font-mono font-bold uppercase text-red-600 hover:text-red-800 cursor-hover">Copiar
+                                        HTML</button>
+                                </div>
+                                <textarea id="code-blue" readonly
+                                    class="w-full h-12 bg-white border border-slate-200 rounded-lg p-2 font-mono text-[9px] text-slate-500 overflow-hidden outline-none resize-none"><button class="btn-metallic-variant btn-m-blue"><span>Azul Engenharia</span></button></textarea>
+                            </div>
+
+                            <!-- Yellow Button -->
+                            <div class="flex flex-col gap-3 p-4 bg-slate-50 rounded-xl">
+                                <div class="flex items-center justify-between flex-wrap gap-4">
+                                    <button class="btn-metallic-variant btn-m-yellow cursor-hover">
+                                        <span>Amarelo Alerta</span>
+                                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                                    </button>
+                                    <button onclick="copyCode('code-yellow')"
+                                        class="text-[10px] font-mono font-bold uppercase text-red-600 hover:text-red-800 cursor-hover">Copiar
+                                        HTML</button>
+                                </div>
+                                <textarea id="code-yellow" readonly
+                                    class="w-full h-12 bg-white border border-slate-200 rounded-lg p-2 font-mono text-[9px] text-slate-500 overflow-hidden outline-none resize-none"><button class="btn-metallic-variant btn-m-yellow"><span>Amarelo Alerta</span></button></textarea>
+                            </div>
+
+                            <!-- Grey Button -->
+                            <div class="flex flex-col gap-3 p-4 bg-slate-50 rounded-xl">
+                                <div class="flex items-center justify-between flex-wrap gap-4">
+                                    <button class="btn-metallic-variant btn-m-grey cursor-hover">
+                                        <span>Cinza Sofisticado</span>
+                                        <i data-lucide="cog" class="w-4 h-4"></i>
+                                    </button>
+                                    <button onclick="copyCode('code-grey')"
+                                        class="text-[10px] font-mono font-bold uppercase text-red-600 hover:text-red-800 cursor-hover">Copiar
+                                        HTML</button>
+                                </div>
+                                <textarea id="code-grey" readonly
+                                    class="w-full h-12 bg-white border border-slate-200 rounded-lg p-2 font-mono text-[9px] text-slate-500 overflow-hidden outline-none resize-none"><button class="btn-metallic-variant btn-m-grey"><span>Cinza Sofisticado</span></button></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna Direita: Inputs, Bento Cards & Modals -->
+                    <div class="lg:col-span-5 space-y-8">
+                        <!-- Inputs Industriais -->
+                        <div class="bg-white border border-slate-900/5 p-8 rounded-2xl space-y-6 shadow-sm">
+                            <h3 class="font-heading text-lg font-bold border-b border-slate-900/5 pb-3">Formulários
+                                Técnicos</h3>
+                            <div class="input-group">
+                                <input type="text" placeholder=" " id="input-engineer-ds" />
+                                <label for="input-engineer-ds">Nome do Solicitante</label>
+                            </div>
+                            <div class="input-group">
+                                <input type="email" placeholder=" " id="input-email-ds" />
+                                <label for="input-email-ds">E-mail Técnico</label>
+                            </div>
+                        </div>
+
+                        <!-- Bento Card Glassmorphism -->
+                        <div class="glass-panel-light mirror-sweep p-8 rounded-2xl cursor-hover group">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-tr from-red-500/[0.02] to-transparent z-0 pointer-events-none">
+                            </div>
+                            <div
+                                class="absolute top-4 right-4 opacity-20 group-hover:opacity-100 transition-opacity duration-300">
+                                <i data-lucide="arrow-up-right" class="w-5 h-5 text-red-600"></i>
+                            </div>
+                            <div
+                                class="w-12 h-12 bg-red-50 border border-red-100 rounded-xl flex items-center justify-center text-red-600 mb-6 shadow-sm">
+                                <i data-lucide="cpu" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="font-heading text-lg font-bold mb-2">Tolerância Decimal</h3>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                Garantimos encaixes micrométricos nas vedações. Nossos compostos são testados em
+                                laboratórios de vulcanização próprios seguindo normas de alta exigência.
+                            </p>
+                        </div>
+
+                        <!-- Modal launch button -->
+                        <div class="bg-white border border-slate-900/5 p-8 rounded-2xl shadow-sm text-center">
+                            <h3 class="font-heading text-lg font-bold mb-4">Janelas & Pop-ups</h3>
+                            <button onclick="toggleDemoModal()"
+                                class="cursor-hover px-6 py-3 bg-slate-900 hover:bg-red-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300">
+                                Demonstrar Janela Modal
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 4: CONTAINER / LAYOUT -->
+            <section id="layout" class="py-24 px-6 md:px-12 relative">
+                <div class="mb-16 reveal-item">
+                    <div class="text-[10px] font-bold tracking-widest uppercase text-red-600 mb-2">Estrutura Espacial
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tighter text-slate-900 mb-4 font-heading">Grids &
+                        Contêineres</h2>
+                    <p class="text-slate-500 max-w-xl">Modelos espaciais de visualização e Bento grids aplicados a
+                        catálogos de especificações.</p>
+                </div>
+
+                <div class="space-y-6 reveal-item bg-white border border-slate-900/5 p-8 rounded-2xl shadow-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div
+                            class="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center text-xs font-semibold text-slate-500">
+                            Coluna Bento 1/3
+                        </div>
+                        <div
+                            class="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center text-xs font-semibold text-slate-500">
+                            Coluna Bento 1/3
+                        </div>
+                        <div
+                            class="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center text-xs font-semibold text-slate-500">
+                            Coluna Bento 1/3
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div
+                            class="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center text-xs font-semibold text-slate-500">
+                            Metade 1/2
+                        </div>
+                        <div
+                            class="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center text-xs font-semibold text-slate-500">
+                            Metade 1/2
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    <!-- JANELA MODAL DEMONSTRATIVA (Simulando orçamento técnico) -->
+    <div id="demo-modal"
+        class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
+        <div class="relative w-full max-w-lg bg-[#F8FAF9] rounded-3xl border border-white/50 p-8 shadow-2xl flex flex-col transform translate-y-4 scale-95 transition-all duration-300"
+            id="modal-content">
+            <!-- Close Button -->
+            <button onclick="toggleDemoModal()"
+                class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 cursor-hover">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="flex items-center gap-2 text-red-600 mb-4">
+                <i data-lucide="cog" class="w-5 h-5 animate-spin-slow"></i>
+                <span class="text-xs font-bold tracking-widest uppercase text-slate-500 font-heading">Desenhos
+                    Técnicos</span>
+            </div>
+
+            <h3 class="text-2xl font-bold tracking-tight text-slate-900 mb-2 font-heading">Enviar Projeto de Engenharia
+            </h3>
+            <p class="text-xs text-slate-500 mb-6 leading-relaxed">Carregue sua planta ou desenho técnico para cotação
+                de molde e fabricação de vedações sob demanda.</p>
+
+            <form class="space-y-5"
+                onsubmit="event.preventDefault(); alert('Projeto simulado enviado com sucesso!'); toggleDemoModal();">
+                <div class="input-group">
+                    <input type="text" placeholder=" " id="input-modal-name" required />
+                    <label for="input-modal-name">Nome do Engenheiro</label>
+                </div>
+                <div class="input-group">
+                    <input type="text" placeholder=" " id="input-modal-code" required />
+                    <label for="input-modal-code">Código do Componente (ex: FB-802)</label>
+                </div>
+
+                <!-- Simulated upload box -->
+                <div
+                    class="border-2 border-dashed border-slate-900/10 rounded-2xl p-6 text-center cursor-hover hover:border-red-600/30 transition-colors">
+                    <i data-lucide="upload-cloud" class="w-8 h-8 text-slate-400 mx-auto mb-2"></i>
+                    <span class="text-xs font-bold text-slate-700 block mb-1">Upload de arquivo CAD / PDF</span>
+                    <span class="text-[10px] text-slate-400">Arraste e solte o arquivo técnico (Máx 50MB)</span>
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button type="submit" class="btn-silver-metallic flex-1 cursor-hover"
+                        style="--border-gradient: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(0,0,0,0.35), rgba(255,255,255,0.9)); --border-radius-before: 9999px">
+                        <span>Enviar Projeto</span>
+                    </button>
+                    <button type="button" onclick="toggleDemoModal()" class="btn-community cursor-hover">
+                        <span>Cancelar</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPTS DE INTERATIVIDADE -->
+    <script>
+        // Inicialização de ícones do Lucide
+        lucide.createIcons();
+
+        // 1. Lógica do Custom Cursor interno
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            if (cursor) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            }
+        });
+
+        const hoverableElements = document.querySelectorAll('.cursor-hover');
+        hoverableElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor && cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor && cursor.classList.remove('hovered'));
+        });
+
+        // 2. Lógica do Carrossel de Cards Sobrepostos (OpenAI/Neon Style)
+        const cardsContainer = document.getElementById('cards-container');
+        const dots = [
+            document.getElementById('dot-1'),
+            document.getElementById('dot-2'),
+            document.getElementById('dot-3'),
+            document.getElementById('dot-4')
+        ];
+
+        let currentCard = 1;
+        let isAnimating = false;
+        let rotationInterval;
+
+        function updateDots() {
+            if (!cardsContainer) return;
+            dots.forEach((dot, index) => {
+                if (index === currentCard - 1) {
+                    dot.className = 'cursor-hover w-3.5 h-3.5 rounded-full bg-slate-900 transition-all duration-300 scale-125 shadow-[0_0_8px_rgba(0,0,0,0.2)]';
+                } else {
+                    dot.className = 'cursor-hover w-2 h-2 rounded-full bg-slate-900/20 hover:bg-slate-900/50 transition-all duration-300';
+                }
+            });
+        }
+
+        function setActiveCard(cardNumber) {
+            if (!cardsContainer) return;
+            if (isAnimating || cardNumber === currentCard) return;
+
+            isAnimating = true;
+            cardsContainer.className = `stack-section card-${cardNumber}-active relative w-full h-[26rem] mb-4`;
+            currentCard = cardNumber;
+            updateDots();
+
+            setTimeout(() => {
+                isAnimating = false;
+            }, 800);
+        }
+
+        dots.forEach((dot, index) => {
+            if (dot) {
+                dot.addEventListener('click', () => {
+                    setActiveCard(index + 1);
+                    resetAutoRotation(); // Reinicia temporizador de rotação ao interagir manualmente
+                });
+            }
+        });
+
+        function startAutoRotation() {
+            rotationInterval = setInterval(() => {
+                if (!isAnimating) {
+                    const nextCard = currentCard === 4 ? 1 : currentCard + 1;
+                    setActiveCard(nextCard);
+                }
+            }, 5000);
+        }
+
+        function resetAutoRotation() {
+            clearInterval(rotationInterval);
+            startAutoRotation();
+        }
+
+        if (cardsContainer) {
+            startAutoRotation();
+        }
+
+        // 3. Lógica do Modal Demonstrativo
+        const modal = document.getElementById('demo-modal');
+        const modalContent = document.getElementById('modal-content');
+
+        function toggleDemoModal() {
+            if (!modal) return;
+            const isOpen = !modal.classList.contains('pointer-events-none');
+            if (isOpen) {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                modalContent && modalContent.classList.add('translate-y-4', 'scale-95');
+            } else {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modalContent && modalContent.classList.remove('translate-y-4', 'scale-95');
+            }
+        }
+
+        // 4. Copiar códigos da Biblioteca
+        function copyCode(id) {
+            const textarea = document.getElementById(id);
+            if (textarea) {
+                textarea.select();
+                document.execCommand('copy');
+                alert('Código copiado com sucesso para a área de transferência!');
+            }
+        }
+
+        // 5. Scroll Reveal de Elementos internos da página
+        function revealOnViewportScroll() {
+            const reveals = document.querySelectorAll('.reveal-item');
+            const windowHeight = window.innerHeight;
+            const elementVisible = 80;
+
+            reveals.forEach((reveal) => {
+                const elementTop = reveal.getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', revealOnViewportScroll);
+        // Executa na carga para carregar a primeira dobra
+        revealOnViewportScroll();
+    </script>
+</body>
+
+</html>

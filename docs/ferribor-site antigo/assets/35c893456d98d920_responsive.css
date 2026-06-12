@@ -1,0 +1,30 @@
+@media (max-width: 603px){
+    #tf-menu.navbar-default {
+        background-color: rgba(0, 0, 0, 0.79);
+    }
+
+    #box-calendario li.pull-right, #box-calendario li.pull-left {
+        margin-top: 10px;
+        float: none !important;
+        text-align: center;
+        display: block;
+    }
+    label{
+        float: none !important
+    }
+    .pull-left.fnav,
+    .pull-right.fnav {
+        float: none !important;
+        text-align: center;
+    }
+
+    .hover-bg .hover-text {
+        padding: 12% 10%;
+    }
+}
+
+@media (max-width: 360px){
+    .hover-bg .hover-text {
+        padding: 22% 10%;
+    }
+}

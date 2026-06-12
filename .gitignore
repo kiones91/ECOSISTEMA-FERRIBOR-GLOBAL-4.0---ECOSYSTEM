@@ -1,0 +1,19 @@
+# Dependency directories
+node_modules/
+Site/node_modules/
+
+# Build outputs
+.next/
+Site/.next/
+out/
+Site/out/
+
+# Local env files
+.env*.local
+
+# Nested cloned repo
+Site-FerriBor/
+
+# OS files
+.DS_Store
+Thumbs.db
