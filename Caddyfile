@@ -1,0 +1,37 @@
+# Local: roteamento por porta (localhost)
+# Em produção: trocar localhost por domínios reais
+
+:80 {
+  # Site principal
+  handle /site* {
+    reverse_proxy site:3000
+  }
+
+  # CRM Admin
+  handle /admin* {
+    reverse_proxy crm:80
+  }
+
+  # Evolution API (WhatsApp)
+  handle /evolution* {
+    reverse_proxy evolution:8080
+  }
+
+  # Default: Site
+  handle {
+    reverse_proxy site:3000
+  }
+}
+
+# Para produção com domínios, descomentar abaixo:
+# ferribor.com.br {
+#   reverse_proxy site:3000
+# }
+#
+# app.ferribor.com.br {
+#   reverse_proxy crm:80
+# }
+#
+# wa.ferribor.com.br {
+#   reverse_proxy evolution:8080
+# }

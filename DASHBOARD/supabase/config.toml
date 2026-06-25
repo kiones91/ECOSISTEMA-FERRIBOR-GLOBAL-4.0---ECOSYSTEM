@@ -1,0 +1,30 @@
+# Dashboard FerriBor — projeto Supabase LAB compartilhado (ECOSISTEMA FERRIBOR GLOBAL 4.0)
+# https://supabase.com/dashboard/project/sdumhbekklmaayammrjh
+# Mesmo projeto/banco do CRM e Site no lab; cada módulo mantém seu próprio supabase/ isolado.
+
+project_id = "sdumhbekklmaayammrjh"
+
+[api]
+enabled = true
+port = 54325
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54326
+shadow_port = 54324
+major_version = 15
+
+[studio]
+enabled = true
+port = 54327
+
+[auth]
+enabled = true
+site_url = "http://localhost:5174"
+additional_redirect_urls = ["http://localhost:5174/**"]
+
+[auth.email]
+enable_signup = true
+enable_confirmations = false

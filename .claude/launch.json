@@ -1,0 +1,26 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dashboard",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "Dashboard",
+      "port": 5174
+    },
+    {
+      "name": "site",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "Site",
+      "port": 3000
+    },
+    {
+      "name": "crm",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "CRM com IA/admin",
+      "port": 8080
+    }
+  ]
+}

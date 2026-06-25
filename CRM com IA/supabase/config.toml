@@ -1,0 +1,33 @@
+# CRM FerriBor — projeto Supabase LAB (ECOSISTEMA FERRIBOR GLOBAL 4.0)
+# https://supabase.com/dashboard/project/sdumhbekklmaayammrjh/settings/integrations
+
+project_id = "sdumhbekklmaayammrjh"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[studio]
+enabled = true
+port = 54323
+
+[auth]
+enabled = true
+site_url = "http://localhost:5173/admin/"
+additional_redirect_urls = [
+  "http://localhost:5173/admin/**",
+  "https://inforhealth.buffallos.com.br/admin/**",
+  "https://edu.inforhealth.com.br/admin/**",
+]
+
+[auth.email]
+enable_signup = true
+enable_confirmations = false

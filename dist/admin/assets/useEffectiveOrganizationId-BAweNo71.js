@@ -1,0 +1,1 @@
+import{u as n,W as t}from"./index-CFBGuBjp.js";async function i(e){return e??null}function u(){const{profile:e}=n();return t({queryKey:["effective-organization-id",e==null?void 0:e.organization_id],queryFn:()=>i(e==null?void 0:e.organization_id),enabled:!0,staleTime:6e4})}export{u};

@@ -1,0 +1,36 @@
+{
+  "$schema": "./crm.config.schema.json",
+  "_comentario": "Metadados do CRM Admin (não secretos). Credenciais em config/crm.env (gitignored).",
+  "ambiente": "desenvolvimento",
+  "_ambiente_opcoes": "desenvolvimento | homologacao | producao",
+  "urls": {
+    "portal": "https://edu.inforhealth.com.br",
+    "portal_staging": "https://inforhealth.buffallos.com.br",
+    "admin_path": "/admin",
+    "admin_base": "https://edu.inforhealth.com.br/admin",
+    "aluno_path": "/aluno",
+    "api_prefix": "/api"
+  },
+  "supabase": {
+    "project_ref": "kpkcqqqshbsyaxdaorqt",
+    "project_url": "https://kpkcqqqshbsyaxdaorqt.supabase.co",
+    "project_name_dev": "inforhealth-admin-dev",
+    "region": "us-east-1",
+    "_credenciais": "VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY em config/crm.env"
+  },
+  "integracoes": {
+    "evolution_webhook_path": "/functions/v1/evolution-webhook",
+    "webchat_api_path": "/functions/v1/webchat-api",
+    "form_submit_path": "/functions/v1/form-submit",
+    "mercadopago_webhook_worker": "/api/webhook/mercadopago"
+  },
+  "prioridade_implementacao": [
+    "E0_scaffold_admin",
+    "E1_crm_comercial_inbox",
+    "E2_alunos_mercadopago",
+    "E3_suporte_tickets",
+    "E4_financeiro",
+    "E5_cms_blog",
+    "E6_cms_cursos"
+  ]
+}

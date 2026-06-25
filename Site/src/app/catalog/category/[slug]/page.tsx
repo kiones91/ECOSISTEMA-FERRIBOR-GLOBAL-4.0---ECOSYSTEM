@@ -1,3 +1,9 @@
+export async function generateStaticParams() {
+	return [
+		{ slug: 'placeholder' }
+	];
+}
+
 export default function CatalogCategoryPage({ params }: { params: { slug: string } }) {
 	return (
 		<>

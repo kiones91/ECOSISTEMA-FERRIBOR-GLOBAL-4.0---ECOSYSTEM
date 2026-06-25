@@ -1,0 +1,6 @@
+import{e as n,j as e,b as i,I as l,B as p}from"./index-CFBGuBjp.js";import{R as x}from"./rotate-ccw-CsIc0dwz.js";/**
+ * @license lucide-react v0.462.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const m=n("PanelsTopLeft",[["rect",{width:"18",height:"18",x:"3",y:"3",rx:"2",key:"afitv7"}],["path",{d:"M3 9h18",key:"1pudct"}],["path",{d:"M9 21V9",key:"1oto5p"}]]);function u({label:o,value:t,onChange:s,description:c,defaultValue:a}){return e.jsxs("div",{className:"space-y-2",children:[e.jsx(i,{children:o}),e.jsxs("div",{className:"flex items-center gap-2",children:[e.jsx("input",{type:"color",value:t||"#000000",onChange:r=>s(r.target.value),className:"w-12 h-10 rounded cursor-pointer border-0 bg-transparent","aria-label":`${o} color picker`}),e.jsx(l,{value:t,onChange:r=>s(r.target.value),placeholder:"#000000",className:"flex-1 font-mono text-sm",maxLength:7}),a&&t!==a&&e.jsx(p,{type:"button",variant:"ghost",size:"icon",onClick:()=>s(a),title:"Restaurar padrão",children:e.jsx(x,{className:"h-4 w-4"})})]}),c&&e.jsx("p",{className:"text-xs text-muted-foreground",children:c})]})}export{u as C,m as P};

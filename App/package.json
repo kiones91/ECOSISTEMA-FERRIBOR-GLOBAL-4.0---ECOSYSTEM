@@ -1,0 +1,12 @@
+{
+  "name": "ferribor-app",
+  "private": true,
+  "version": "0.0.0",
+  "description": "FerriBor PWA (Camada 3) - scaffold inicial",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  }
+}

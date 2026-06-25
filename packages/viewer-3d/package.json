@@ -1,0 +1,14 @@
+{
+  "name": "@buffallos/viewer-3d",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Visualizador 3D e Customizador de Produtos - componentes reutilizáveis",
+  "main": "src/index.ts",
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@google/model-viewer": "^3.5.0"
+  }
+}

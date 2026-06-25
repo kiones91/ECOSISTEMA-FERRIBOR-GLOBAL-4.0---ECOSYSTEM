@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Geist', Inter, system-ui, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+.beautiful-shadow {
+  box-shadow:
+    0px 0px 0px 1px rgba(0, 0, 0, 0.06),
+    0px 1px 1px -0.5px rgba(0, 0, 0, 0.06),
+    0px 3px 3px -1.5px rgba(0, 0, 0, 0.06),
+    0px 6px 6px -3px rgba(0, 0, 0, 0.06),
+    0px 12px 12px -6px rgba(0, 0, 0, 0.06),
+    0px 24px 24px -12px rgba(0, 0, 0, 0.06);
+}
+
+.scroll-hide::-webkit-scrollbar {
+  display: none;
+}
+.scroll-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+  padding: 1.25rem;
+  box-shadow:
+    0px 0px 0px 1px rgba(0, 0, 0, 0.3),
+    0px 6px 6px -3px rgba(0, 0, 0, 0.3),
+    0px 12px 12px -6px rgba(0, 0, 0, 0.2);
+}
+
+.logo-3d {
+  filter:
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.3))
+    drop-shadow(0 2px 2px rgba(0, 0, 0, 0.4))
+    drop-shadow(0 4px 4px rgba(0, 0, 0, 0.3))
+    drop-shadow(0 8px 8px rgba(0, 0, 0, 0.2));
+  transform: perspective(600px) rotateX(2deg) scale(1.05);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.logo-3d:hover {
+  transform: perspective(600px) rotateX(0deg) scale(1.1);
+  filter:
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.4))
+    drop-shadow(0 3px 3px rgba(0, 0, 0, 0.5))
+    drop-shadow(0 6px 6px rgba(0, 0, 0, 0.35))
+    drop-shadow(0 12px 12px rgba(0, 0, 0, 0.25));
+}
+
+.logo-3d-dark {
+  filter:
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.6))
+    drop-shadow(0 2px 3px rgba(255, 255, 255, 0.15))
+    drop-shadow(0 4px 6px rgba(200, 200, 200, 0.1))
+    drop-shadow(0 0 12px rgba(255, 255, 255, 0.08));
+  transform: perspective(600px) rotateX(2deg) scale(1.05);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.logo-3d-dark:hover {
+  transform: perspective(600px) rotateX(0deg) scale(1.1);
+  filter:
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.7))
+    drop-shadow(0 3px 4px rgba(255, 255, 255, 0.2))
+    drop-shadow(0 6px 8px rgba(200, 200, 200, 0.15))
+    drop-shadow(0 0 16px rgba(255, 255, 255, 0.12));
+}
+
+.logo-3d-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.18));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.logo-3d-wrapper:hover {
+  transform: scale(1.04);
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.25));
+}
+.logo-3d-img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}

@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
+import { Logo3D } from '../components/navigation/Logo3D';
+
+const DASHBOARD_URL = process.env.NEXT_PUBLIC_DASHBOARD_URL || 'http://localhost:5174/auth';
 
 interface Service {
 	id: number;
@@ -138,7 +141,7 @@ export default function HomePage() {
 			longDesc: "Desenvolvimento e revestimento de peças com compostos de borracha de alta resistência à abrasão sob medida para transportadores e maquinários cerâmicos.",
 			icon: "lucide:layers",
 			colorClass: "btn-m-red",
-			imageUrl: "/assets/4d5dd7303ae3d6c2_ceramica.jpg"
+			imageUrl: "/assets/imagens/4d5dd7303ae3d6c2_ceramica.jpg"
 		},
 		{
 			id: 2,
@@ -147,7 +150,7 @@ export default function HomePage() {
 			longDesc: "Peças isolantes térmicas e elétricas fabricadas com silicone e poliuretanos especiais de altíssima durabilidade para processos de soldagem industrial.",
 			icon: "lucide:zap",
 			colorClass: "btn-m-blue",
-			imageUrl: "/assets/7ff406fba3211ef5_solda.jpg"
+			imageUrl: "/assets/imagens/7ff406fba3211ef5_solda.jpg"
 		},
 		{
 			id: 3,
@@ -156,7 +159,7 @@ export default function HomePage() {
 			longDesc: "Componentes projetados para suportar cargas elevadas, absorver vibrações severas e garantir o nivelamento milimétrico de equipamentos industriais.",
 			icon: "lucide:chevrons-up-down",
 			colorClass: "btn-m-yellow",
-			imageUrl: "/assets/08ca2f01e3417874_niveladores.jpg"
+			imageUrl: "/assets/imagens/08ca2f01e3417874_niveladores.jpg"
 		},
 		{
 			id: 4,
@@ -165,7 +168,7 @@ export default function HomePage() {
 			longDesc: "Desenvolvimento de O-rings, retentores, gaxetas, raspadores e anéis sob medida em NBR, silicone, viton e poliuretano de alta precisão.",
 			icon: "lucide:shield-check",
 			colorClass: "btn-m-red",
-			imageUrl: "/assets/7ed173cd6055799d_vedacoes.jpg"
+			imageUrl: "/assets/imagens/7ed173cd6055799d_vedacoes.jpg"
 		},
 		{
 			id: 5,
@@ -174,7 +177,7 @@ export default function HomePage() {
 			longDesc: "Soluções robustas em elastômeros para tratores, colheitadeiras e implementos agrícolas, garantindo resistência contra intempéries e atrito contínuo.",
 			icon: "lucide:leaf",
 			colorClass: "btn-m-green",
-			imageUrl: "/assets/5d1bcf832d66669c_linha-agro.jpg"
+			imageUrl: "/assets/imagens/5d1bcf832d66669c_linha-agro.jpg"
 		},
 		{
 			id: 6,
@@ -183,7 +186,7 @@ export default function HomePage() {
 			longDesc: "Revestimento de cilindros com elastômeros especiais seguidos de usinagem e retificação de altíssima precisão técnica decimal.",
 			icon: "lucide:settings",
 			colorClass: "btn-m-grey",
-			imageUrl: "/assets/6fa5f4bfad00f012_rolos.jpg"
+			imageUrl: "/assets/imagens/6fa5f4bfad00f012_rolos.jpg"
 		}
 	];
 
@@ -195,8 +198,8 @@ export default function HomePage() {
 			{/* Noise texture overlay */}
 			<div className="noise-overlay" />
 
-			{/* Main Content Container with Lateral Borders */}
-			<div className="relative w-full max-w-[1440px] min-h-screen mx-auto bg-[#F8FAF9] border-x border-[#2f3136]/30 xl:border-x-[16px] xl:border-[#2f3136] shadow-[0_0_50px_rgba(0,0,0,0.8)] flex flex-col z-10" id="viewport-screen">
+				{/* Main Content Container with Lateral and Top Borders */}
+				<div className="relative w-full max-w-[1440px] min-h-screen mx-auto bg-[#F8FAF9] border-x border-t border-[#2f3136]/30 xl:border-x-[16px] xl:border-t-[16px] xl:border-[#2f3136] rounded-t-[32px] xl:rounded-t-[48px] shadow-[0_0_50px_rgba(0,0,0,0.8)] flex flex-col z-10 overflow-hidden" id="viewport-screen">
 				
 				{/* Vertical Grid Lines with Laser Beams */}
 				<div className="absolute inset-0 z-0 pointer-events-none flex w-full h-full border-r border-slate-900/[0.02] opacity-60">
@@ -222,26 +225,27 @@ export default function HomePage() {
 				</div>
 
 				{/* Floating Header Capsule */}
-				<nav className="sticky top-4 mx-4 md:mx-8 z-50 transition-all duration-300">
-					<div className="glass-panel-light rounded-full px-6 py-3.5 flex items-center justify-between border border-white/40 shadow-[0_8px_30px_rgba(0,0,0,0.02)] bg-white/40 backdrop-blur-xl">
-						<a className="cursor-hover group flex items-center gap-2" href="#inicio">
-							<img src="/assets/logo.svg" alt="FerriBor Logo" className="h-8 transition-transform duration-300 group-hover:scale-105" onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
-							<span className="font-heading font-extrabold text-xs tracking-widest text-slate-900 uppercase">FERRIBOR</span>
-						</a>
+				<nav className="sticky top-4 mx-4 md:mx-8 z-50 flex items-center justify-between gap-4 transition-all duration-300">
+					{/* Logo 3D fora do menu glass */}
+					<a className="cursor-hover group flex items-center relative z-10" href="#inicio" aria-label="Voltar para o início">
+						<Logo3D />
+					</a>
 
-						<div className="hidden md:flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest text-slate-500">
-							<a className="cursor-hover hover:text-red-600 transition-colors" href="#inicio">Início</a>
-							<a className="cursor-hover hover:text-red-600 transition-colors" href="#aempresa">A Empresa</a>
-							<a className="cursor-hover hover:text-red-600 transition-colors" href="#servicos">Serviços</a>
-							<a className="cursor-hover hover:text-red-600 transition-colors" href="#depoimentos">Depoimentos</a>
-							<a className="cursor-hover hover:text-red-600 transition-colors" href="#noticias">Notícias & Cotações</a>
-							<a className="cursor-hover hover:text-red-600 transition-colors" href="#contato">Contato</a>
+					{/* Cápsula de Menu reduzida */}
+					<div className="glass-panel-light !overflow-visible rounded-full px-4 md:px-6 py-2 flex items-center gap-6 md:gap-8 border border-white/40 shadow-[0_8px_30px_rgba(0,0,0,0.02)] bg-white/40 backdrop-blur-xl">
+						<div className="hidden md:flex items-center gap-6 lg:gap-8 text-[11px] font-bold uppercase tracking-widest text-slate-500">
+							<a className="cursor-hover text-red-600 transition-colors" href="/">Início</a>
+							<a className="cursor-hover hover:text-red-600 transition-colors" href="/about">A Empresa</a>
+							<a className="cursor-hover hover:text-red-600 transition-colors" href="/services">Serviços</a>
+							<a className="cursor-hover hover:text-red-600 transition-colors" href="/catalog">Catálogo</a>
+							<a className="cursor-hover hover:text-red-600 transition-colors" href="/blog">Blog</a>
+							<a className="cursor-hover hover:text-red-600 transition-colors" href="/contact">Contato</a>
 						</div>
 
 						<div>
-							<button onClick={() => openQuoteModal()} className="cursor-hover text-[10px] font-bold uppercase tracking-widest px-5 py-2.5 bg-slate-900 text-white rounded-full hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300">
-								Solicitar Orçamento
-							</button>
+							<a href={DASHBOARD_URL} className="cursor-hover text-[10px] font-bold uppercase tracking-widest px-5 py-2.5 bg-slate-900 text-white rounded-full hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 text-center inline-block">
+								Portal do Cliente
+							</a>
 						</div>
 					</div>
 				</nav>
@@ -267,7 +271,7 @@ export default function HomePage() {
 
 							<div className="flex flex-wrap gap-4 items-center">
 								{/* Silver Metallic Button */}
-								<a href="#contato" className="btn-silver-metallic cursor-hover text-center" style={{ '--border-gradient': 'linear-gradient(180deg, rgba(255,255,255,0.9), rgba(0,0,0,0.35), rgba(255,255,255,0.9))', '--border-radius-before': '9999px' } as React.CSSProperties}>
+								<a href="/contact" className="btn-silver-metallic cursor-hover text-center" style={{ '--border-gradient': 'linear-gradient(180deg, rgba(255,255,255,0.9), rgba(0,0,0,0.35), rgba(255,255,255,0.9))', '--border-radius-before': '9999px' } as React.CSSProperties}>
 									<span>Solicitar Orçamento</span>
 									<i className="iconify text-lg text-slate-800" data-icon="lucide:arrow-right"></i>
 								</a>
@@ -295,13 +299,16 @@ export default function HomePage() {
 											<span className="text-[9px] text-slate-400 font-mono">FB.01</span>
 										</div>
 										<div className="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-2">
-											<div className="w-14 h-14 bg-red-50 border border-red-100 rounded-xl flex items-center justify-center mb-4 text-red-600 shadow-sm transition-transform duration-300 hover:scale-105">
-												<i className="iconify text-2xl" data-icon="lucide:shield-check"></i>
+											<div className="w-full h-28 relative rounded-xl overflow-hidden border border-slate-200/60 mb-3 shadow-inner group">
+												<img src="/assets/imagens/7ed173cd6055799d_vedacoes.jpg" alt="Vedações" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+												<div className="absolute top-2 left-2 w-8 h-8 bg-white/90 rounded-lg flex items-center justify-center text-red-600 shadow-sm">
+													<i className="iconify text-lg" data-icon="lucide:shield-check"></i>
+												</div>
 											</div>
-											<h3 className="font-heading text-lg font-bold text-slate-900 mb-1">Vedações Industriais</h3>
-											<p className="text-[10px] text-slate-400 uppercase tracking-widest mb-4">NBR, Silicone e Viton</p>
-											<div className="w-full space-y-2 text-left">
-												<div className="flex justify-between text-[10px] text-slate-400 font-medium">
+											<h3 className="font-heading text-base font-bold text-slate-900 mb-0.5">Vedações Industriais</h3>
+											<p className="text-[9px] text-slate-400 uppercase tracking-widest mb-3">NBR, Silicone e Viton</p>
+											<div className="w-full space-y-1.5 text-left">
+												<div className="flex justify-between text-[9px] text-slate-400 font-medium">
 													<span>Precisão de Molde</span>
 													<span className="text-slate-900 font-bold">&plusmn;0.05 mm</span>
 												</div>
@@ -326,13 +333,16 @@ export default function HomePage() {
 											<span className="text-[9px] text-slate-400 font-mono">FB.02</span>
 										</div>
 										<div className="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-2">
-											<div className="w-14 h-14 bg-blue-50 border border-blue-100 rounded-xl flex items-center justify-center mb-4 text-blue-600 shadow-sm">
-												<i className="iconify text-2xl" data-icon="lucide:settings"></i>
+											<div className="w-full h-28 relative rounded-xl overflow-hidden border border-slate-200/60 mb-3 shadow-inner group">
+												<img src="/assets/imagens/6fa5f4bfad00f012_rolos.jpg" alt="Rolos de Transporte" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+												<div className="absolute top-2 left-2 w-8 h-8 bg-white/90 rounded-lg flex items-center justify-center text-blue-600 shadow-sm">
+													<i className="iconify text-lg" data-icon="lucide:settings"></i>
+												</div>
 											</div>
-											<h3 className="font-heading text-lg font-bold text-slate-900 mb-1">Rolos de Transporte</h3>
-											<p className="text-[10px] text-slate-400 uppercase tracking-widest mb-4">Retificados e Usinados</p>
-											<div className="w-full space-y-2 text-left">
-												<div className="flex justify-between text-[10px] text-slate-400 font-medium">
+											<h3 className="font-heading text-base font-bold text-slate-900 mb-0.5">Rolos de Transporte</h3>
+											<p className="text-[9px] text-slate-400 uppercase tracking-widest mb-3">Retificados e Usinados</p>
+											<div className="w-full space-y-1.5 text-left">
+												<div className="flex justify-between text-[9px] text-slate-400 font-medium">
 													<span>Retífica e Acabamento</span>
 													<span className="text-slate-900 font-bold">100% Retificado</span>
 												</div>
@@ -357,13 +367,16 @@ export default function HomePage() {
 											<span className="text-[9px] text-slate-400 font-mono">FB.03</span>
 										</div>
 										<div className="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-2">
-											<div className="w-14 h-14 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center justify-center mb-4 text-emerald-600 shadow-sm">
-												<i className="iconify text-2xl" data-icon="lucide:layers"></i>
+											<div className="w-full h-28 relative rounded-xl overflow-hidden border border-slate-200/60 mb-3 shadow-inner group">
+												<img src="/assets/imagens/4d5dd7303ae3d6c2_ceramica.jpg" alt="Artefatos para Cerâmica" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+												<div className="absolute top-2 left-2 w-8 h-8 bg-white/90 rounded-lg flex items-center justify-center text-emerald-600 shadow-sm">
+													<i className="iconify text-lg" data-icon="lucide:layers"></i>
+												</div>
 											</div>
-											<h3 className="font-heading text-lg font-bold text-slate-900 mb-1">Artefatos para Cerâmica</h3>
-											<p className="text-[10px] text-slate-400 uppercase tracking-widest mb-4">Alta Resistência a Abrasão</p>
-											<div className="w-full space-y-2 text-left">
-												<div className="flex justify-between text-[10px] text-slate-400 font-medium">
+											<h3 className="font-heading text-base font-bold text-slate-900 mb-0.5">Artefatos para Cerâmica</h3>
+											<p className="text-[9px] text-slate-400 uppercase tracking-widest mb-3">Alta Resistência a Abrasão</p>
+											<div className="w-full space-y-1.5 text-left">
+												<div className="flex justify-between text-[9px] text-slate-400 font-medium">
 													<span>Composto Resistente</span>
 													<span className="text-slate-900 font-bold">Resistência Máxima</span>
 												</div>
@@ -388,13 +401,16 @@ export default function HomePage() {
 											<span className="text-[9px] text-slate-400 font-mono">FB.04</span>
 										</div>
 										<div className="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-2">
-											<div className="w-14 h-14 bg-amber-50 border border-amber-100 rounded-xl flex items-center justify-center mb-4 text-amber-600 shadow-sm">
-												<i className="iconify text-2xl" data-icon="lucide:zap"></i>
+											<div className="w-full h-28 relative rounded-xl overflow-hidden border border-slate-200/60 mb-3 shadow-inner group">
+												<img src="/assets/imagens/7ff406fba3211ef5_solda.jpg" alt="Artefatos para Solda" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+												<div className="absolute top-2 left-2 w-8 h-8 bg-white/90 rounded-lg flex items-center justify-center text-amber-600 shadow-sm">
+													<i className="iconify text-lg" data-icon="lucide:zap"></i>
+												</div>
 											</div>
-											<h3 className="font-heading text-lg font-bold text-slate-900 mb-1">Artefatos para Solda</h3>
-											<p className="text-[10px] text-slate-400 uppercase tracking-widest mb-4">Isolantes em Silicone e PU</p>
-											<div className="w-full space-y-2 text-left">
-												<div className="flex justify-between text-[10px] text-slate-400 font-medium">
+											<h3 className="font-heading text-base font-bold text-slate-900 mb-0.5">Artefatos para Solda</h3>
+											<p className="text-[9px] text-slate-400 uppercase tracking-widest mb-3">Isolantes em Silicone e PU</p>
+											<div className="w-full space-y-1.5 text-left">
+												<div className="flex justify-between text-[9px] text-slate-400 font-medium">
 													<span>Isolamento Térmico</span>
 													<span className="text-slate-900 font-bold">Até 250°C</span>
 												</div>
@@ -434,385 +450,66 @@ export default function HomePage() {
 					</div>
 				</section>
 
-				{/* SECTION: A EMPRESA */}
-				<section id="aempresa" className="py-24 px-6 md:px-12 border-b border-slate-900/5 relative">
-					<div className="mb-16 reveal-item">
-						<div className="text-[10px] font-bold tracking-widest uppercase text-red-600 mb-2">História e Compromisso</div>
-						<h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-slate-900 mb-4 font-heading font-extrabold">A Empresa</h2>
-						<p className="text-slate-500 max-w-2xl leading-relaxed text-sm">
-							Conheça um pouco sobre a FerriIndústria de Artefatos de Borracha Ltda-ME. Constituída em 20 de Março de 2014, somos movidos pelo compromisso de fabricar e prestar os melhores serviços em elastômeros e derivados da região.
-						</p>
-					</div>
-
-					<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-12">
-						{/* Main Text Panel */}
-						<div className="lg:col-span-6 bg-white border border-slate-900/5 p-8 rounded-2xl shadow-sm flex flex-col justify-center reveal-item">
-							<p className="text-slate-600 text-sm leading-relaxed mb-6">
-								Localizada estrategicamente em Santa Gertrudes - SP, polo da indústria de cerâmica, nossa pretensão é ir de encontro direto às solicitações mais complexas e urgentes de nossos clientes, desenvolvendo sempre a melhor solução em seus projetos técnicos.
-							</p>
-							<div className="p-4 bg-slate-50 rounded-xl border border-slate-100 flex items-center gap-4">
-								<div className="w-12 h-12 bg-red-100/55 rounded-lg flex items-center justify-center text-red-600">
-									<i className="iconify text-xl" data-icon="lucide:map-pin"></i>
-								</div>
-								<div>
-									<h4 className="text-xs font-bold text-slate-900 uppercase tracking-widest mb-0.5">Sede Própria</h4>
-									<p className="text-slate-500 text-xs">Rua Aurea Basso Baptista, 36 - Jardim D&apos;itália, Santa Gertrudes - SP</p>
-								</div>
-							</div>
-						</div>
-
-						{/* Image or Visual Graphic Panel */}
-						<div className="lg:col-span-6 relative rounded-2xl overflow-hidden min-h-[300px] border border-slate-900/5 shadow-sm reveal-item" style={{ animationDelay: '0.1s' }}>
-							<img src="/assets/04bf2a71c19980c2_01.jpg" alt="Instalação Industrial" className="absolute inset-0 w-full h-full object-cover" />
-							<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent flex flex-col justify-end p-8 text-white">
-								<span className="font-heading text-xl font-bold">Desde 2014</span>
-								<span className="text-[10px] uppercase tracking-widest text-slate-200 mt-1">Garantindo Alta Performance e Precisão Decimais</span>
-							</div>
-						</div>
-					</div>
-
-					{/* Missão, Visão Panels */}
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-8 reveal-item">
-						<div className="glass-panel-light p-8 rounded-2xl flex flex-col h-full">
-							<div className="w-12 h-12 bg-red-50 border border-red-100 rounded-xl flex items-center justify-center text-red-600 mb-6 shadow-sm">
-								<i className="iconify text-2xl" data-icon="lucide:compass"></i>
-							</div>
-							<h3 className="font-heading text-lg font-bold text-slate-900 mb-3">Missão</h3>
-							<p className="text-xs text-slate-500 leading-relaxed">
-								Garantir a qualidade elevada dos nossos produtos e serviços, com base na nossa competência e experiência aliada ao profissionalismo, superando as expectativas dos clientes e garantindo sua fidelização. Utilizar-se com respeito e conscientização dos Recursos Naturais e promovendo um ambiente seguro aos nossos Colaboradores.
+				{/* OVERVIEW SECTION - Quick access to main pages */}
+				<section className="relative z-10 py-20 lg:py-28 px-6 md:px-12 border-b border-slate-900/5">
+					<div className="max-w-5xl mx-auto">
+						<div className="text-center mb-14 reveal-item">
+							<h2 className="text-2xl md:text-4xl font-bold tracking-tighter text-slate-900 mb-4 font-heading">
+								Explore o que a <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-black">FerriBor</span> pode fazer por você.
+							</h2>
+							<p className="text-sm text-slate-500 max-w-xl mx-auto leading-relaxed">
+								Mais de 20 anos desenvolvendo soluções em elastômeros para os ambientes industriais mais exigentes.
 							</p>
 						</div>
 
-						<div className="glass-panel-light p-8 rounded-2xl flex flex-col h-full">
-							<div className="w-12 h-12 bg-red-50 border border-red-100 rounded-xl flex items-center justify-center text-red-600 mb-6 shadow-sm">
-								<i className="iconify text-2xl" data-icon="lucide:eye"></i>
-							</div>
-							<h3 className="font-heading text-lg font-bold text-slate-900 mb-3">Visão</h3>
-							<p className="text-xs text-slate-500 leading-relaxed">
-								A Ferri Indústria de Artefatos de Borracha Ltda - ME busca ser reconhecida nacionalmente no seu ramo de atividade, pela capacidade de apresentar novas soluções munida de alta capacidade técnica, agilidade de entrega e respeito incondicional aos nossos clientes.
-							</p>
-						</div>
-					</div>
-				</section>
-
-				{/* SECTION: NOSSOS SERVIÇOS (Bento Grid) */}
-				<section id="servicos" className="py-24 px-6 md:px-12 border-b border-slate-900/5 relative">
-					<div className="mb-16 reveal-item">
-						<div className="text-[10px] font-bold tracking-widest uppercase text-red-600 mb-2">Nosso Portfólio de Elastômeros</div>
-						<h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-slate-900 mb-4 font-heading font-extrabold">Nossos Serviços</h2>
-						<p className="text-slate-500 max-w-xl text-sm leading-relaxed">Oferecemos fabricação e recuperação completa de peças industriais em diversos materiais (Borracha, Silicone, PU e Viton).</p>
-					</div>
-
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-						{services.map((svc, index) => (
-							<div
-								key={svc.id}
-								className="glass-panel-light mirror-sweep rounded-2xl border border-slate-900/5 flex flex-col justify-between overflow-hidden shadow-sm reveal-item"
-								style={{ animationDelay: `${index * 0.05}s` }}
-							>
-								{/* Image wrapper */}
-								<div className="relative h-48 w-full bg-slate-100 overflow-hidden">
-									<img
-										src={svc.imageUrl}
-										alt={svc.title}
-										className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-										onError={(e) => {
-											// Fallback if image doesn't render
-											(e.target as HTMLElement).style.display = 'none';
-										}}
-									/>
-									<div className="absolute top-4 left-4 z-10 w-10 h-10 bg-white/95 rounded-lg flex items-center justify-center text-slate-900 shadow-sm border border-white/50">
-										<i className="iconify text-xl" data-icon={svc.icon}></i>
-									</div>
+						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+							<a href="/about" className="glass-panel-light rounded-2xl p-6 border border-white/40 bg-white/40 backdrop-blur-xl hover:border-red-500/25 transition-all group reveal-item">
+								<div className="w-10 h-10 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-600 mb-4">
+									<i className="iconify text-lg" data-icon="lucide:building-2"></i>
 								</div>
+								<h3 className="text-sm font-bold text-slate-900 mb-1 group-hover:text-red-600 transition-colors">A Empresa</h3>
+								<p className="text-xs text-slate-500 leading-relaxed">Nossa história, valores e certificações que garantem qualidade.</p>
+							</a>
 
-								{/* Info content */}
-								<div className="p-6 flex-1 flex flex-col justify-between">
-									<div className="mb-6">
-										<h3 className="font-heading font-bold text-slate-900 text-md mb-2">{svc.title}</h3>
-										<p className="text-[11px] text-slate-400 font-medium uppercase tracking-wider mb-3">{svc.shortDesc}</p>
-										<p className="text-slate-500 text-xs leading-relaxed">{svc.longDesc}</p>
-									</div>
-
-									{/* Action button utilizing dynamic button colors */}
-									<div>
-										<button
-											onClick={() => openQuoteModal(svc.title)}
-											className={`w-full btn-metallic-variant ${svc.colorClass} cursor-hover`}
-										>
-											<span>Solicitar Orçamento</span>
-											<i className="iconify text-md" data-icon="lucide:arrow-up-right"></i>
-										</button>
-									</div>
+							<a href="/services" className="glass-panel-light rounded-2xl p-6 border border-white/40 bg-white/40 backdrop-blur-xl hover:border-red-500/25 transition-all group reveal-item" style={{ animationDelay: "0.05s" }}>
+								<div className="w-10 h-10 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-600 mb-4">
+									<i className="iconify text-lg" data-icon="lucide:settings"></i>
 								</div>
-							</div>
-						))}
-					</div>
-				</section>
+								<h3 className="text-sm font-bold text-slate-900 mb-1 group-hover:text-red-600 transition-colors">Serviços</h3>
+								<p className="text-xs text-slate-500 leading-relaxed">6 linhas especializadas em borracha, silicone e poliuretano.</p>
+							</a>
 
-				{/* SECTION: DEPOIMENTOS */}
-				<section id="depoimentos" className="py-24 px-6 md:px-12 border-b border-slate-900/5 relative bg-slate-950 text-white">
-					{/* Grid layout decoration for dark background */}
-					<div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-
-					<div className="relative z-10 mb-16 reveal-item text-center">
-						<div className="text-[10px] font-bold tracking-widest uppercase text-red-500 mb-2">Reconhecimento do Mercado</div>
-						<h2 className="text-3xl md:text-5xl font-bold tracking-tighter mb-4 font-heading font-extrabold">Depoimentos dos Clientes</h2>
-						<p className="text-slate-400 max-w-xl mx-auto text-sm">O que dizem os parceiros e diretores que utilizam e confiam nos artefatos FerriBor.</p>
-					</div>
-
-					<div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto reveal-item">
-						{/* Testimonial 1 */}
-						<div className="bg-white/[0.03] backdrop-blur-md border border-white/10 p-8 rounded-2xl flex flex-col justify-between shadow-lg relative overflow-hidden group hover:border-red-500/20 transition-all duration-300">
-							<div className="absolute -top-4 -left-2 text-[120px] font-serif font-black text-red-500/10 pointer-events-none">&ldquo;</div>
-							<div className="relative z-10">
-								<p className="text-slate-300 text-sm italic leading-relaxed mb-6 font-light">
-									&quot;Temos a FerriBor como fornecedor número 1 para artefatos de borracha. Contamos com o melhor preço e prazo da região, o que torna nossos produtos competitivos no Mercado.&quot;
-								</p>
-							</div>
-							<div className="flex items-center gap-3 border-t border-white/5 pt-4">
-								<div className="w-10 h-10 rounded-full bg-red-600/20 flex items-center justify-center text-red-500 font-bold font-mono text-sm">
-									LG
+							<a href="/catalog" className="glass-panel-light rounded-2xl p-6 border border-white/40 bg-white/40 backdrop-blur-xl hover:border-red-500/25 transition-all group reveal-item" style={{ animationDelay: "0.1s" }}>
+								<div className="w-10 h-10 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-600 mb-4">
+									<i className="iconify text-lg" data-icon="lucide:package"></i>
 								</div>
-								<div>
-									<h4 className="text-xs font-bold text-white uppercase tracking-wider">Leonardo Gabriel</h4>
-									<p className="text-[10px] text-slate-500">Sócio Diretor da Trevo Impressoras</p>
+								<h3 className="text-sm font-bold text-slate-900 mb-1 group-hover:text-red-600 transition-colors">Catálogo</h3>
+								<p className="text-xs text-slate-500 leading-relaxed">Navegue por nossos produtos com filtros por material e aplicação.</p>
+							</a>
+
+							<a href="/blog" className="glass-panel-light rounded-2xl p-6 border border-white/40 bg-white/40 backdrop-blur-xl hover:border-red-500/25 transition-all group reveal-item" style={{ animationDelay: "0.15s" }}>
+								<div className="w-10 h-10 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-600 mb-4">
+									<i className="iconify text-lg" data-icon="lucide:newspaper"></i>
 								</div>
-							</div>
-						</div>
+								<h3 className="text-sm font-bold text-slate-900 mb-1 group-hover:text-red-600 transition-colors">Blog & Notícias</h3>
+								<p className="text-xs text-slate-500 leading-relaxed">Artigos técnicos e novidades do setor de elastômeros.</p>
+							</a>
 
-						{/* Testimonial 2 */}
-						<div className="bg-white/[0.03] backdrop-blur-md border border-white/10 p-8 rounded-2xl flex flex-col justify-between shadow-lg relative overflow-hidden group hover:border-red-500/20 transition-all duration-300">
-							<div className="absolute -top-4 -left-2 text-[120px] font-serif font-black text-red-500/10 pointer-events-none">&ldquo;</div>
-							<div className="relative z-10">
-								<p className="text-slate-300 text-sm italic leading-relaxed mb-6 font-light">
-									&quot;A FerriBor trouxe a solução que necessitávamos para a criação de um produto diferenciado, com baixo custo e maior durabilidade para nossos clientes.&quot;
-								</p>
-							</div>
-							<div className="flex items-center gap-3 border-t border-white/5 pt-4">
-								<div className="w-10 h-10 rounded-full bg-red-600/20 flex items-center justify-center text-red-500 font-bold font-mono text-sm">
-									MV
+							<a href="/contact" className="glass-panel-light rounded-2xl p-6 border border-white/40 bg-white/40 backdrop-blur-xl hover:border-red-500/25 transition-all group reveal-item" style={{ animationDelay: "0.2s" }}>
+								<div className="w-10 h-10 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-600 mb-4">
+									<i className="iconify text-lg" data-icon="lucide:mail"></i>
 								</div>
-								<div>
-									<h4 className="text-xs font-bold text-white uppercase tracking-wider">Marcos Vernice</h4>
-									<p className="text-[10px] text-slate-500">Sócio Diretor da M&D Translog</p>
+								<h3 className="text-sm font-bold text-slate-900 mb-1 group-hover:text-red-600 transition-colors">Contato</h3>
+								<p className="text-xs text-slate-500 leading-relaxed">Fale com nossa equipe técnica e solicite um orçamento.</p>
+							</a>
+
+							<a href={DASHBOARD_URL} className="glass-panel-light rounded-2xl p-6 border border-white/40 bg-white/40 backdrop-blur-xl hover:border-red-500/25 transition-all group reveal-item" style={{ animationDelay: "0.25s" }}>
+								<div className="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-white mb-4">
+									<i className="iconify text-lg" data-icon="lucide:layout-dashboard"></i>
 								</div>
-							</div>
-						</div>
-					</div>
-				</section>
-
-				{/* SECTION: NOTÍCIAS E COTAÇÕES */}
-				<section id="noticias" className="py-24 px-6 md:px-12 border-b border-slate-900/5 relative">
-					<div className="mb-16 reveal-item">
-						<div className="text-[10px] font-bold tracking-widest uppercase text-red-600 mb-2">Indicadores Industriais</div>
-						<h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-slate-900 mb-4 font-heading font-extrabold">Notícias & Cotações</h2>
-						<p className="text-slate-500 max-w-xl text-sm leading-relaxed">Acompanhe as principais informações econômicas e o feed de atualizações do setor agrícola e de insumos industriais.</p>
-					</div>
-
-					<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch reveal-item">
-						{/* News list - styled beautifully in glass panel */}
-						<div className="lg:col-span-8 bg-white border border-slate-900/5 p-8 rounded-2xl shadow-sm flex flex-col justify-between">
-							<div>
-								<div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
-									<h3 className="font-heading font-bold text-slate-900 text-sm uppercase tracking-wider">Feed Agro & Industrial</h3>
-									<span className="px-2.5 py-0.5 bg-slate-100 text-[10px] font-mono text-slate-500 rounded">Ao Vivo</span>
-								</div>
-
-								{/* Render clean mock lists of agricultural and financial news that look beautiful */}
-								<div className="space-y-4 max-h-[340px] overflow-y-auto pr-2">
-									<div className="p-3 hover:bg-slate-50 rounded-xl transition-colors flex items-start gap-3">
-										<span className="w-1.5 h-1.5 rounded-full bg-red-600 mt-2 flex-shrink-0"></span>
-										<div>
-											<span className="text-[10px] text-slate-400 font-mono block">18:28 | Economia</span>
-											<h4 className="text-xs font-semibold text-slate-800 hover:text-red-600 transition-colors">
-												Bolsas dos EUA disparam após Trump anunciar cancelamento de plano de ataque contra o Irã
-											</h4>
-										</div>
-									</div>
-
-									<div className="p-3 hover:bg-slate-50 rounded-xl transition-colors flex items-start gap-3">
-										<span className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 flex-shrink-0"></span>
-										<div>
-											<span className="text-[10px] text-slate-400 font-mono block">17:44 | Geopolítica</span>
-											<h4 className="text-xs font-semibold text-slate-800 hover:text-red-600 transition-colors">
-												Trump diz acreditar que líder supremo do Irã aprovou acordo com os EUA
-											</h4>
-										</div>
-									</div>
-
-									<div className="p-3 hover:bg-slate-50 rounded-xl transition-colors flex items-start gap-3">
-										<span className="w-1.5 h-1.5 rounded-full bg-red-600 mt-2 flex-shrink-0"></span>
-										<div>
-											<span className="text-[10px] text-slate-400 font-mono block">17:34 | Finanças</span>
-											<h4 className="text-xs font-semibold text-slate-800 hover:text-red-600 transition-colors">
-												Ibovespa fecha em alta com alívio no cenário de incertezas externas
-											</h4>
-										</div>
-									</div>
-
-									<div className="p-3 hover:bg-slate-50 rounded-xl transition-colors flex items-start gap-3">
-										<span className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 flex-shrink-0"></span>
-										<div>
-											<span className="text-[10px] text-slate-400 font-mono block">17:11 | Clima</span>
-											<h4 className="text-xs font-semibold text-slate-800 hover:text-red-600 transition-colors">
-												Área entre sul de Minas Gerais, São Paulo e Rio de Janeiro tem alerta laranja para tempestade
-											</h4>
-										</div>
-									</div>
-
-									<div className="p-3 hover:bg-slate-50 rounded-xl transition-colors flex items-start gap-3">
-										<span className="w-1.5 h-1.5 rounded-full bg-red-600 mt-2 flex-shrink-0"></span>
-										<div>
-											<span className="text-[10px] text-slate-400 font-mono block">16:44 | Insumos</span>
-											<h4 className="text-xs font-semibold text-slate-800 hover:text-red-600 transition-colors">
-												Taxas de juros futuras caem fortemente após abertura das negociações externas de commodities
-											</h4>
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<div className="text-[10px] text-slate-400 mt-4 border-t border-slate-100 pt-3 flex items-center justify-between">
-								<span>Fonte: Notícias Agrícolas / Cont On</span>
-								<a href="https://www.noticiasagricolas.com.br" target="_blank" className="hover:text-red-600 font-semibold uppercase tracking-wider">Acessar Portal Completo</a>
-							</div>
-						</div>
-
-						{/* Currency Exchange Frame panel */}
-						<div className="lg:col-span-4 bg-white border border-slate-900/5 p-8 rounded-2xl shadow-sm flex flex-col justify-between">
-							<div>
-								<div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
-									<h3 className="font-heading font-bold text-slate-900 text-sm uppercase tracking-wider">Cotação de Moedas</h3>
-									<i className="iconify text-lg text-slate-400" data-icon="lucide:line-chart"></i>
-								</div>
-								
-								{/* Embedded Currency Widget from ContOn */}
-								<div className="w-full h-[320px] rounded-xl overflow-hidden bg-slate-50 border border-slate-200">
-									<iframe
-										id="cotacao"
-										src="https://www.conton.com.br/cotacao.php"
-										width="100%"
-										height="100%"
-										frameBorder="0"
-										scrolling="no"
-										referrerPolicy="no-referrer-when-downgrade"
-										sandbox="allow-scripts allow-same-origin"
-										className="w-full h-full"
-									></iframe>
-								</div>
-							</div>
-
-							<p className="text-[9px] text-slate-400 mt-4 font-mono text-center">Atualizado via API conton.com.br</p>
-						</div>
-					</div>
-				</section>
-
-				{/* SECTION: CONTATO E LOCALIZAÇÃO */}
-				<section id="contato" className="py-24 px-6 md:px-12 relative">
-					<div className="mb-16 reveal-item">
-						<div className="text-[10px] font-bold tracking-widest uppercase text-red-600 mb-2">Atendimento Direto</div>
-						<h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-slate-900 mb-4 font-heading font-extrabold">Contato</h2>
-						<p className="text-slate-500 max-w-xl text-sm leading-relaxed">Fale diretamente com nossa equipe comercial e técnica. Solicite orçamentos, cotações de moldes e tire dúvidas.</p>
-					</div>
-
-					<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start reveal-item">
-						
-						{/* Left: Contact Form */}
-						<div className="lg:col-span-5 bg-white border border-slate-900/5 p-8 rounded-2xl shadow-sm">
-							<h3 className="font-heading text-lg font-bold border-b border-slate-100 pb-3 mb-6">Enviar Mensagem</h3>
-							
-							<form className="space-y-6" onSubmit={handleContactSubmit} id="form-contato">
-								<div className="input-group">
-									<input type="text" placeholder=" " id="nome" required />
-									<label htmlFor="nome">* Nome Completo</label>
-								</div>
-								
-								<div className="input-group">
-									<input type="text" placeholder=" " id="empresa" />
-									<label htmlFor="empresa">Empresa</label>
-								</div>
-
-								<div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-									<div className="input-group">
-										<input type="tel" placeholder=" " id="telefone" />
-										<label htmlFor="telefone">Telefone Fixo</label>
-									</div>
-									<div className="input-group">
-										<input type="tel" placeholder=" " id="celular" />
-										<label htmlFor="celular">Celular / WhatsApp</label>
-									</div>
-								</div>
-
-								<div className="input-group">
-									<input type="email" placeholder=" " id="email" required />
-									<label htmlFor="email">* E-mail</label>
-								</div>
-
-								<div className="input-group">
-									<textarea className="w-full bg-transparent border-none border-b border-slate-300 outline-none p-2 min-h-[100px] text-sm focus:border-red-600 transition-colors" placeholder="* Mensagem" id="mensagem" required rows={4}></textarea>
-								</div>
-
-								<p className="text-[11px] text-slate-400 leading-normal">
-									Ao informar meus dados eu concordo com a <a href="/politica-privacidade.pdf" target="_blank" className="font-semibold text-slate-700 hover:text-red-600 underline">Política de Privacidade</a> da FerriBor.
-								</p>
-
-								<div>
-									<button type="submit" className="w-full btn-silver-metallic cursor-hover text-center" style={{ '--border-gradient': 'linear-gradient(180deg, rgba(255,255,255,0.9), rgba(0,0,0,0.35), rgba(255,255,255,0.9))', '--border-radius-before': '9999px' } as React.CSSProperties}>
-										<span>Enviar Mensagem</span>
-										<i className="iconify text-md" data-icon="lucide:send"></i>
-									</button>
-								</div>
-							</form>
-						</div>
-
-						{/* Right: Info and Google Maps */}
-						<div className="lg:col-span-7 space-y-8">
-							
-							{/* Direct Channels Cards */}
-							<div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-								<a href="tel:+5519981748364" className="glass-panel-light p-5 rounded-xl text-center flex flex-col items-center justify-center cursor-hover hover:border-red-500/25 transition-all">
-									<div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-600 mb-3">
-										<i className="iconify text-lg" data-icon="lucide:phone"></i>
-									</div>
-									<h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Telefone</h4>
-									<span className="text-xs font-bold text-slate-800">(19) 98174-8364</span>
-								</a>
-
-								<a href="mailto:comercial@ferribor.com.br" className="glass-panel-light p-5 rounded-xl text-center flex flex-col items-center justify-center cursor-hover hover:border-red-500/25 transition-all">
-									<div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-600 mb-3">
-										<i className="iconify text-lg" data-icon="lucide:mail"></i>
-									</div>
-									<h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">E-mail</h4>
-									<span className="text-xs font-bold text-slate-800 break-all">comercial@ferribor.com.br</span>
-								</a>
-
-								<a href="https://maps.app.goo.gl/fctwXZ6ank7TiMUi6" target="_blank" className="glass-panel-light p-5 rounded-xl text-center flex flex-col items-center justify-center cursor-hover hover:border-red-500/25 transition-all">
-									<div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-600 mb-3">
-										<i className="iconify text-lg" data-icon="lucide:map-pin"></i>
-									</div>
-									<h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Endereço</h4>
-									<span className="text-[10px] font-semibold text-slate-800 leading-tight">Jd. D&apos;itália, Santa Gertrudes-SP</span>
-								</a>
-							</div>
-
-							{/* Map Card */}
-							<div className="bg-white border border-slate-900/5 p-4 rounded-2xl shadow-sm flex flex-col">
-								<h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3 px-1 flex items-center gap-1.5">
-									<span className="w-2 h-2 rounded-full bg-red-600"></span>
-									Nossa Localização
-								</h4>
-								<div className="w-full h-[320px] rounded-xl overflow-hidden border border-slate-200">
-									<iframe
-										allowFullScreen
-										loading="lazy"
-										referrerPolicy="no-referrer-when-downgrade"
-										src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3687.1863570868554!2d-47.533248890694246!3d-22.459630221955138!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c7d0d2775e2127%3A0xdc5ce312fce25945!2sR.%20Aurea%20Basso%20Baptista%2C%2036%20-%20Jardim%20D'it%C3%A1lia%2C%20Santa%20Gertrudes%20-%20SP%2C%2013510-092!5e0!3m2!1spt-BR!2sbr!4v1706014304769!5m2!1spt-BR!2sbr"
-										style={{ border: 0 }}
-										className="w-full h-full"
-									></iframe>
-								</div>
-							</div>
+								<h3 className="text-sm font-bold text-slate-900 mb-1 group-hover:text-red-600 transition-colors">Portal do Cliente</h3>
+								<p className="text-xs text-slate-500 leading-relaxed">Acesse pedidos, Track & Trace e recompra automática.</p>
+							</a>
 						</div>
 					</div>
 				</section>
@@ -822,9 +519,10 @@ export default function HomePage() {
 					<div className="grid grid-cols-1 md:grid-cols-12 gap-8 max-w-6xl mx-auto mb-12 relative z-10">
 						{/* Col 1: Bio */}
 						<div className="md:col-span-5 space-y-4">
-							<div className="flex items-center gap-2">
-								<img src="/assets/logo.svg" alt="FerriBor Logo" className="h-8 filter brightness-0 invert" onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
-								<span className="font-heading font-extrabold text-xs tracking-widest uppercase">FERRIBOR</span>
+							<div className="flex items-center">
+								<div className="h-20 w-64 relative flex items-center justify-center -ml-4">
+									<img src="/assets/imagens/logo.png" alt="Ferribor Logo" className="w-full h-full object-contain scale-[1.3]" />
+								</div>
 							</div>
 							<p className="text-slate-400 text-xs leading-relaxed max-w-sm">
 								A Ferri Indústria de Artefatos de Borracha Ltda-ME é especializada no desenvolvimento, fabricação e revestimento de peças técnicas em borracha, silicone e poliuretano.

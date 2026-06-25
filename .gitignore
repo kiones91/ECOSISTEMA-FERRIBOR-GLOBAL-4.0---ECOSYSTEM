@@ -8,8 +8,14 @@ Site/.next/
 out/
 Site/out/
 
-# Local env files
-.env*.local
+# Local env files / secrets (NUNCA commitar)
+.env
+.env.*
+!.env.example
+!.env.*.example
+crm.env
+**/crm.env
+**/.dev.vars
 
 # Nested cloned repo
 Site-FerriBor/
