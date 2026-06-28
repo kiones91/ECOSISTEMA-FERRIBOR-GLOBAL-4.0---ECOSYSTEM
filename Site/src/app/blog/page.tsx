@@ -2,69 +2,31 @@
 
 import { useEffect } from 'react';
 import { Logo3D } from '../../components/navigation/Logo3D';
+import { useI18n } from '../../i18n/LanguageContext';
+import { LanguageSwitcher } from '../../i18n/LanguageSwitcher';
 
 const DASHBOARD_URL = process.env.NEXT_PUBLIC_DASHBOARD_URL || 'http://localhost:5174/auth';
 
-const articles = [
-	{
-		id: 1,
-		title: "Como escolher o elastômero ideal para sua aplicação industrial",
-		excerpt: "Guia técnico sobre NBR, silicone, viton e poliuretano: propriedades, resistências e aplicações recomendadas para cada ambiente.",
-		category: "Guia Técnico",
-		date: "20 Jun 2026",
-		readTime: "8 min",
-		imageUrl: "/assets/imagens/7ed173cd6055799d_vedacoes.jpg"
-	},
-	{
-		id: 2,
-		title: "Revestimento de rolos: quando recuperar vs. fabricar novo",
-		excerpt: "Análise de custo-benefício e critérios técnicos para decidir entre a recuperação de rolos existentes e a fabricação de novos.",
-		category: "Análise",
-		date: "15 Jun 2026",
-		readTime: "6 min",
-		imageUrl: "/assets/imagens/6fa5f4bfad00f012_rolos.jpg"
-	},
-	{
-		id: 3,
-		title: "Vedações industriais: tolerâncias e padrões de qualidade",
-		excerpt: "Entenda como tolerâncias decimais e controle dimensional impactam a vida útil de O-rings e retentores em sistemas hidráulicos.",
-		category: "Qualidade",
-		date: "10 Jun 2026",
-		readTime: "5 min",
-		imageUrl: "/assets/imagens/7ed173cd6055799d_vedacoes.jpg"
-	},
-	{
-		id: 4,
-		title: "FerriBor expande operações para mercados andinos",
-		excerpt: "Com soluções customizadas para mineração em altitude, a empresa inicia fornecimento para Chile, Peru e Colômbia.",
-		category: "Notícia",
-		date: "05 Jun 2026",
-		readTime: "3 min",
-		imageUrl: "/assets/imagens/4d5dd7303ae3d6c2_ceramica.jpg"
-	},
-	{
-		id: 5,
-		title: "Pés niveladores: o componente invisível da precisão industrial",
-		excerpt: "Como a absorção de vibração e o nivelamento milimétrico afetam a qualidade de produção em linhas automatizadas.",
-		category: "Guia Técnico",
-		date: "28 Mai 2026",
-		readTime: "7 min",
-		imageUrl: "/assets/imagens/08ca2f01e3417874_niveladores.jpg"
-	},
-	{
-		id: 6,
-		title: "Sustentabilidade na indústria de borracha: desafios e oportunidades",
-		excerpt: "Logística reversa, reciclagem de elastômeros e economia circular no setor de artefatos de borracha industrial.",
-		category: "ESG",
-		date: "20 Mai 2026",
-		readTime: "6 min",
-		imageUrl: "/assets/imagens/5d1bcf832d66669c_linha-agro.jpg"
-	}
+const articleMeta = [
+	{ date: "20 Jun 2026", imageUrl: "/assets/imagens/7ed173cd6055799d_vedacoes.jpg" },
+	{ date: "15 Jun 2026", imageUrl: "/assets/imagens/6fa5f4bfad00f012_rolos.jpg" },
+	{ date: "10 Jun 2026", imageUrl: "/assets/imagens/7ed173cd6055799d_vedacoes.jpg" },
+	{ date: "05 Jun 2026", imageUrl: "/assets/imagens/4d5dd7303ae3d6c2_ceramica.jpg" },
+	{ date: "28 Mai 2026", imageUrl: "/assets/imagens/08ca2f01e3417874_niveladores.jpg" },
+	{ date: "20 Mai 2026", imageUrl: "/assets/imagens/5d1bcf832d66669c_linha-agro.jpg" },
 ];
 
-const categories = ["Todos", "Guia Técnico", "Análise", "Qualidade", "Notícia", "ESG"];
-
 export default function BlogPage() {
+	const { t } = useI18n();
+
+	const articles = (t('blog.articles') as { title: string; excerpt: string; category: string; readTime: string }[]).map((a, i) => ({
+		...a,
+		id: i + 1,
+		date: articleMeta[i].date,
+		imageUrl: articleMeta[i].imageUrl,
+	}));
+	const categories = t('blog.categories') as string[];
+
 	useEffect(() => {
 		const reveals = document.querySelectorAll('.reveal-item');
 		const observer = new IntersectionObserver((entries) => {
@@ -86,16 +48,17 @@ export default function BlogPage() {
 				</a>
 				<div className="glass-panel-light !overflow-visible rounded-full px-4 md:px-6 py-2 flex items-center gap-6 md:gap-8 border border-white/40 shadow-[0_8px_30px_rgba(0,0,0,0.02)] bg-white/40 backdrop-blur-xl">
 					<div className="hidden md:flex items-center gap-6 lg:gap-8 text-[11px] font-bold uppercase tracking-widest text-slate-500">
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/">Início</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/about">A Empresa</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/services">Serviços</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/catalog">Catálogo</a>
-						<a className="cursor-hover text-red-600 transition-colors" href="/blog">Blog</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/contact">Contato</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/">{t('nav.inicio')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/about">{t('nav.empresa')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/services">{t('nav.servicos')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/catalog">{t('nav.catalogo')}</a>
+						<a className="cursor-hover text-red-600 transition-colors" href="/blog">{t('nav.blog')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/contact">{t('nav.contato')}</a>
 					</div>
-					<div>
-						<a href={DASHBOARD_URL} className="cursor-hover text-[10px] font-bold uppercase tracking-widest px-5 py-2.5 bg-slate-900 text-white rounded-full hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 text-center inline-block">
-							Portal do Cliente
+					<div className="flex items-center gap-3">
+						<LanguageSwitcher />
+						<a href={DASHBOARD_URL} className="cursor-hover text-[10px] font-bold uppercase tracking-widest px-5 py-2.5 bg-white text-black rounded-full border border-white/60 hover:bg-white/20 hover:backdrop-blur-md hover:border-white/40 hover:text-red-600 transition-all duration-300 text-center inline-block">
+							{t('cta.portalCliente')}
 						</a>
 					</div>
 				</div>
@@ -106,14 +69,14 @@ export default function BlogPage() {
 				<div className="max-w-4xl mx-auto text-center reveal-item">
 					<div className="inline-flex items-center gap-2 text-red-600 mb-4">
 						<span className="flex h-2 w-2 rounded-full bg-red-600 animate-pulse"></span>
-						<span className="text-[10px] font-bold tracking-widest uppercase text-slate-400">Blog & Notícias</span>
+						<span className="text-[10px] font-bold tracking-widest uppercase text-slate-400">{t('blog.tag')}</span>
 					</div>
 					<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tighter text-slate-900 mb-6">
-						Conhecimento técnico<br />
-						<span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-black">direto da fábrica.</span>
+						{t('blog.heroTitle1')}<br />
+						<span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-black">{t('blog.heroTitle2')}</span>
 					</h1>
 					<p className="text-sm md:text-base text-slate-500 max-w-2xl mx-auto leading-relaxed">
-						Artigos técnicos, guias de especificação, estudos de caso e novidades do setor de elastômeros industriais.
+						{t('blog.heroParagraph')}
 					</p>
 				</div>
 			</section>
@@ -154,7 +117,7 @@ export default function BlogPage() {
 									<span className="text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 bg-red-50 text-red-600 rounded-full border border-red-100">
 										{article.category}
 									</span>
-									<span className="text-[10px] text-slate-400">{article.readTime} de leitura</span>
+									<span className="text-[10px] text-slate-400">{article.readTime} {t('blog.readTimeSuffix')}</span>
 								</div>
 								<h2 className="text-sm font-bold text-slate-900 leading-snug group-hover:text-red-600 transition-colors">
 									{article.title}
@@ -165,7 +128,7 @@ export default function BlogPage() {
 								<div className="flex items-center justify-between pt-2">
 									<span className="text-[10px] text-slate-400 font-mono">{article.date}</span>
 									<span className="text-[10px] font-bold uppercase tracking-widest text-red-600 group-hover:underline">
-										Ler mais →
+										{t('blog.readMore')}
 									</span>
 								</div>
 							</div>

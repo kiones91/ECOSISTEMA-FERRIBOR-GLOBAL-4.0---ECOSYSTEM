@@ -2,30 +2,20 @@
 
 import { useEffect } from 'react';
 import { Logo3D } from '../../components/navigation/Logo3D';
+import { useI18n } from '../../i18n/LanguageContext';
+import { LanguageSwitcher } from '../../i18n/LanguageSwitcher';
 
 const DASHBOARD_URL = process.env.NEXT_PUBLIC_DASHBOARD_URL || 'http://localhost:5174/auth';
 
-const values = [
-	{ icon: "lucide:shield-check", title: "Qualidade Total", desc: "Controle dimensional rigoroso com tolerâncias decimais em cada peça produzida." },
-	{ icon: "lucide:clock", title: "Pontualidade", desc: "Compromisso com prazos de entrega, respeitando cronogramas industriais críticos." },
-	{ icon: "lucide:lightbulb", title: "Inovação", desc: "Desenvolvimento contínuo de compostos e processos para superar desafios técnicos." },
-	{ icon: "lucide:users", title: "Parceria", desc: "Relacionamento próximo com cada cliente, entendendo suas necessidades específicas." },
-];
-
-const certifications = [
-	{ title: "ISO 9001:2015", desc: "Sistema de Gestão da Qualidade" },
-	{ title: "Laboratório Próprio", desc: "Ensaios de dureza, tração e envelhecimento" },
-	{ title: "Rastreabilidade", desc: "Controle total de lotes e matérias-primas" },
-];
-
-const stats = [
-	{ value: "12+", label: "Anos de experiência" },
-	{ value: "5.000+", label: "Projetos entregues" },
-	{ value: "4", label: "Setores industriais" },
-	{ value: "6", label: "Países atendidos" },
-];
+const valueIcons = ["lucide:shield-check", "lucide:clock", "lucide:lightbulb", "lucide:users"];
 
 export default function AboutPage() {
+	const { t } = useI18n();
+
+	const values = (t('about.values') as { title: string; desc: string }[]).map((v, i) => ({ ...v, icon: valueIcons[i] }));
+	const certifications = t('about.certifications') as { title: string; desc: string }[];
+	const stats = t('about.stats') as { value: string; label: string }[];
+
 	useEffect(() => {
 		const reveals = document.querySelectorAll('.reveal-item');
 		const observer = new IntersectionObserver((entries) => {
@@ -47,16 +37,17 @@ export default function AboutPage() {
 				</a>
 				<div className="glass-panel-light !overflow-visible rounded-full px-4 md:px-6 py-2 flex items-center gap-6 md:gap-8 border border-white/40 shadow-[0_8px_30px_rgba(0,0,0,0.02)] bg-white/40 backdrop-blur-xl">
 					<div className="hidden md:flex items-center gap-6 lg:gap-8 text-[11px] font-bold uppercase tracking-widest text-slate-500">
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/">Início</a>
-						<a className="cursor-hover text-red-600 transition-colors" href="/about">A Empresa</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/services">Serviços</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/catalog">Catálogo</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/blog">Blog</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/contact">Contato</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/">{t('nav.inicio')}</a>
+						<a className="cursor-hover text-red-600 transition-colors" href="/about">{t('nav.empresa')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/services">{t('nav.servicos')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/catalog">{t('nav.catalogo')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/blog">{t('nav.blog')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/contact">{t('nav.contato')}</a>
 					</div>
-					<div>
-						<a href={DASHBOARD_URL} className="cursor-hover text-[10px] font-bold uppercase tracking-widest px-5 py-2.5 bg-slate-900 text-white rounded-full hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 text-center inline-block">
-							Portal do Cliente
+					<div className="flex items-center gap-3">
+						<LanguageSwitcher />
+						<a href={DASHBOARD_URL} className="cursor-hover text-[10px] font-bold uppercase tracking-widest px-5 py-2.5 bg-white text-black rounded-full border border-white/60 hover:bg-white/20 hover:backdrop-blur-md hover:border-white/40 hover:text-red-600 transition-all duration-300 text-center inline-block">
+							{t('cta.portalCliente')}
 						</a>
 					</div>
 				</div>
@@ -67,14 +58,14 @@ export default function AboutPage() {
 				<div className="max-w-4xl mx-auto text-center reveal-item">
 					<div className="inline-flex items-center gap-2 text-red-600 mb-4">
 						<span className="flex h-2 w-2 rounded-full bg-red-600 animate-pulse"></span>
-						<span className="text-[10px] font-bold tracking-widest uppercase text-slate-400">Sobre Nós</span>
+						<span className="text-[10px] font-bold tracking-widest uppercase text-slate-400">{t('about.tag')}</span>
 					</div>
 					<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tighter text-slate-900 mb-6">
-						Desde 2014<br />
-						<span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-black">transformando borracha em solução.</span>
+						{t('about.heroTitle1')}<br />
+						<span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-black">{t('about.heroTitle2')}</span>
 					</h1>
 					<p className="text-sm md:text-base text-slate-500 max-w-2xl mx-auto leading-relaxed">
-						A Ferri Indústria de Artefatos de Borracha Ltda (FerriBor) é especializada no desenvolvimento, fabricação e revestimento de peças técnicas em borracha, silicone e poliuretano para os setores de mineração, cerâmica, agronegócio e metalmecânica.
+						{t('about.heroParagraph')}
 					</p>
 				</div>
 			</section>
@@ -96,18 +87,12 @@ export default function AboutPage() {
 				<div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 					<div className="reveal-item">
 						<h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-slate-900 mb-6">
-							Nossa <span className="text-red-600">História</span>
+							{t('about.historyTitle1')} <span className="text-red-600">{t('about.historyTitle2')}</span>
 						</h2>
 						<div className="space-y-4 text-sm text-slate-600 leading-relaxed">
-							<p>
-								Constituída em 20 de Março de 2014 em Santa Gertrudes, São Paulo, a FerriBor nasceu da paixão por elastômeros e da necessidade de fornecer soluções técnicas de alta precisão para a indústria brasileira.
-							</p>
-							<p>
-								Ao longo de mais de uma década, investimos continuamente em tecnologia de produção, laboratório próprio de ensaios e capacitação técnica da nossa equipe, consolidando-nos como referência em artefatos de borracha industrial.
-							</p>
-							<p>
-								Hoje, atendemos clientes em 6 países da América Latina, oferecendo desde vedações especiais até revestimentos de rolos com usinagem de precisão decimal.
-							</p>
+							<p>{t('about.historyP1')}</p>
+							<p>{t('about.historyP2')}</p>
+							<p>{t('about.historyP3')}</p>
 						</div>
 					</div>
 					<div className="reveal-item" style={{ animationDelay: '0.15s' }}>
@@ -129,9 +114,9 @@ export default function AboutPage() {
 				<div className="max-w-5xl mx-auto">
 					<div className="text-center mb-12 reveal-item">
 						<h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-slate-900 mb-3">
-							Nossos <span className="text-red-600">Valores</span>
+							{t('about.valuesTitle1')} <span className="text-red-600">{t('about.valuesTitle2')}</span>
 						</h2>
-						<p className="text-sm text-slate-500 max-w-xl mx-auto">Os pilares que guiam cada decisão e cada peça que fabricamos.</p>
+						<p className="text-sm text-slate-500 max-w-xl mx-auto">{t('about.valuesSubtitle')}</p>
 					</div>
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 						{values.map((v, i) => (
@@ -154,18 +139,18 @@ export default function AboutPage() {
 						<div className="w-10 h-10 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-600 mb-4">
 							<i className="iconify text-lg" data-icon="lucide:target"></i>
 						</div>
-						<h3 className="text-lg font-bold text-slate-900 mb-3">Missão</h3>
+						<h3 className="text-lg font-bold text-slate-900 mb-3">{t('about.missionTitle')}</h3>
 						<p className="text-sm text-slate-600 leading-relaxed">
-							Garantir a qualidade elevada dos nossos produtos e serviços, com base na nossa competência e experiência aliada ao profissionalismo, superando as expectativas dos clientes e garantindo sua fidelização. Utilizar-se com respeito e conscientização dos Recursos Naturais e promovendo um ambiente seguro aos nossos Colaboradores.
+							{t('about.missionText')}
 						</p>
 					</div>
 					<div className="glass-panel-light rounded-2xl p-8 border border-white/40 bg-white/40 backdrop-blur-xl reveal-item" style={{ animationDelay: '0.1s' }}>
 						<div className="w-10 h-10 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-600 mb-4">
 							<i className="iconify text-lg" data-icon="lucide:eye"></i>
 						</div>
-						<h3 className="text-lg font-bold text-slate-900 mb-3">Visão</h3>
+						<h3 className="text-lg font-bold text-slate-900 mb-3">{t('about.visionTitle')}</h3>
 						<p className="text-sm text-slate-600 leading-relaxed">
-							Ser reconhecida no ramo de atividade, pela capacidade de apresentar novas soluções munida de capacidade técnica e respeito aos nossos clientes.
+							{t('about.visionText')}
 						</p>
 					</div>
 				</div>
@@ -176,9 +161,9 @@ export default function AboutPage() {
 				<div className="max-w-5xl mx-auto">
 					<div className="text-center mb-12 reveal-item">
 						<h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-slate-900 mb-3">
-							Qualidade & <span className="text-red-600">Certificações</span>
+							{t('about.certTitle1')} <span className="text-red-600">{t('about.certTitle2')}</span>
 						</h2>
-						<p className="text-sm text-slate-500 max-w-xl mx-auto">Compromisso com padrões internacionais de qualidade e rastreabilidade.</p>
+						<p className="text-sm text-slate-500 max-w-xl mx-auto">{t('about.certSubtitle')}</p>
 					</div>
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 						{certifications.map((cert, i) => (
@@ -198,18 +183,18 @@ export default function AboutPage() {
 			<section className="relative z-10 py-16 lg:py-20 px-6 md:px-12">
 				<div className="max-w-3xl mx-auto text-center reveal-item">
 					<h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-slate-900 mb-4">
-						Pronto para um <span className="text-red-600">projeto sob medida</span>?
+						{t('about.ctaTitle1')} <span className="text-red-600">{t('about.ctaTitle2')}</span>?
 					</h2>
 					<p className="text-sm text-slate-500 mb-8 max-w-lg mx-auto">
-						Entre em contato com nossa equipe técnica e receba uma solução personalizada para seu desafio industrial.
+						{t('about.ctaParagraph')}
 					</p>
 					<div className="flex flex-wrap gap-4 items-center justify-center">
 						<a href="/#contato" className="text-[11px] font-bold uppercase tracking-widest px-6 py-3 bg-slate-900 text-white rounded-full hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300">
-							Solicitar Orçamento
+							{t('about.ctaOrcamento')}
 						</a>
 						<a href="https://api.whatsapp.com/send?phone=5519981748364&text=Ol%C3%A1!" target="_blank" className="text-[11px] font-bold uppercase tracking-widest px-6 py-3 border border-slate-200 text-slate-700 rounded-full hover:border-green-500 hover:text-green-600 transition-all duration-300 inline-flex items-center gap-2">
 							<i className="iconify text-lg text-green-600" data-icon="lucide:message-square"></i>
-							WhatsApp
+							{t('about.ctaWhatsapp')}
 						</a>
 					</div>
 				</div>

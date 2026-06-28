@@ -3,20 +3,14 @@
 import { useState, useEffect, useRef } from 'react';
 import Script from 'next/script';
 import { Logo3D } from '../components/navigation/Logo3D';
+import { useI18n } from '../i18n/LanguageContext';
+import { LanguageSwitcher } from '../i18n/LanguageSwitcher';
 
 const DASHBOARD_URL = process.env.NEXT_PUBLIC_DASHBOARD_URL || 'http://localhost:5174/auth';
 
-interface Service {
-	id: number;
-	title: string;
-	shortDesc: string;
-	longDesc: string;
-	icon: string;
-	colorClass: string;
-	imageUrl: string;
-}
-
 export default function HomePage() {
+
+	const { t } = useI18n();
 
 
 	// 3. Request Quote Modal logic
@@ -190,77 +184,12 @@ export default function HomePage() {
 		};
 	}, []);
 
-	// Real 6 services data
-	const services: Service[] = [
-		{
-			id: 1,
-			title: "Artefatos para Cerâmica",
-			shortDesc: "Fabricação e Recuperação de Artefatos para Industria Cerâmica",
-			longDesc: "Desenvolvimento e revestimento de peças com compostos de borracha de alta resistência à abrasão sob medida para transportadores e maquinários cerâmicos.",
-			icon: "lucide:layers",
-			colorClass: "btn-m-red",
-			imageUrl: "/assets/imagens/4d5dd7303ae3d6c2_ceramica.jpg"
-		},
-		{
-			id: 2,
-			title: "Artefatos para Solda",
-			shortDesc: "Fabricação e Recuperação de Artefatos para Equipamentos de Solda",
-			longDesc: "Peças isolantes térmicas e elétricas fabricadas com silicone e poliuretanos especiais de altíssima durabilidade para processos de soldagem industrial.",
-			icon: "lucide:zap",
-			colorClass: "btn-m-blue",
-			imageUrl: "/assets/imagens/7ff406fba3211ef5_solda.jpg"
-		},
-		{
-			id: 3,
-			title: "Pés Niveladores",
-			shortDesc: "Fabricação de Pés Niveladores",
-			longDesc: "Componentes projetados para suportar cargas elevadas, absorver vibrações severas e garantir o nivelamento milimétrico de equipamentos industriais.",
-			icon: "lucide:chevrons-up-down",
-			colorClass: "btn-m-yellow",
-			imageUrl: "/assets/imagens/08ca2f01e3417874_niveladores.jpg"
-		},
-		{
-			id: 4,
-			title: "Vedações",
-			shortDesc: "Fabricação de Vedações",
-			longDesc: "Desenvolvimento de O-rings, retentores, gaxetas, raspadores e anéis sob medida em NBR, silicone, viton e poliuretano de alta precisão.",
-			icon: "lucide:shield-check",
-			colorClass: "btn-m-red",
-			imageUrl: "/assets/imagens/7ed173cd6055799d_vedacoes.jpg"
-		},
-		{
-			id: 5,
-			title: "Linha Agro",
-			shortDesc: "Peças e equipamentos para linha agro",
-			longDesc: "Soluções robustas em elastômeros para tratores, colheitadeiras e implementos agrícolas, garantindo resistência contra intempéries e atrito contínuo.",
-			icon: "lucide:leaf",
-			colorClass: "btn-m-green",
-			imageUrl: "/assets/imagens/5d1bcf832d66669c_linha-agro.jpg"
-		},
-		{
-			id: 6,
-			title: "Rolos de Transporte",
-			shortDesc: "Fabricação e Recuperação de Rolos de Transporte",
-			longDesc: "Revestimento de cilindros com elastômeros especiais seguidos de usinagem e retificação de altíssima precisão técnica decimal.",
-			icon: "lucide:settings",
-			colorClass: "btn-m-grey",
-			imageUrl: "/assets/imagens/6fa5f4bfad00f012_rolos.jpg"
-		}
-	];
-
-	// Comparativo Tecnológico — FerriBor vs Concorrência Nacional
-	const comparison: { feature: string; competitor: string; ferribor: string; competitorStatus: 'none' | 'partial' }[] = [
-		{ feature: "Presença Digital", competitor: "Site institucional básico", ferribor: "Ecossistema completo: Site + Dashboard + PWA + CRM", competitorStatus: "partial" },
-		{ feature: "Visualização 3D Interativa", competitor: "Não possui", ferribor: "Modelos 360° — gire, amplie e inspecione antes de cotar", competitorStatus: "none" },
-		{ feature: "Análise de Desenhos Técnicos", competitor: "Manual e demorada", ferribor: "IA SmartSpec — leitura automática de plantas e specs", competitorStatus: "partial" },
-		{ feature: "Portal do Cliente", competitor: "Inexistente", ferribor: "Dashboard + PWA com histórico, pedidos e documentos", competitorStatus: "none" },
-		{ feature: "Emissão de Certificados", competitor: "Manual (PDF avulso)", ferribor: "Automática no PWA — técnicos e ESG", competitorStatus: "partial" },
-		{ feature: "Logística Reversa / Circular", competitor: "Não oferece", ferribor: "FerriBor Circular — devolva a peça usada e ganhe crédito", competitorStatus: "none" },
-		{ feature: "Multilinguagem", competitor: "Apenas português", ferribor: "PT · EN · ES · FR automático", competitorStatus: "none" },
-		{ feature: "Recompra Automática", competitor: "Pedido manual a cada compra", ferribor: "1-clique + alertas inteligentes de reposição", competitorStatus: "none" },
-		{ feature: "Ciclo Médio de Cotação", competitor: "15 a 25 dias", ferribor: "4 a 8 dias — acelerado por IA", competitorStatus: "partial" },
-		{ feature: "Nível de Inovação Digital", competitor: "Baixo / Tradicional", ferribor: "Líder em tecnologia no setor", competitorStatus: "none" },
-	];
+	// Status per comparison row (none = X, partial = dash) — content comes from i18n
+	const comparisonStatus: ('none' | 'partial')[] = ['partial', 'none', 'partial', 'none', 'partial', 'none', 'none', 'none', 'partial', 'none'];
+	const comparison = (t('comparison.rows') as { feature: string; competitor: string; ferribor: string }[]).map((row, i) => ({
+		...row,
+		competitorStatus: comparisonStatus[i],
+	}));
 
 	return (
 		<>
@@ -280,12 +209,12 @@ export default function HomePage() {
 				<div className="w-full max-w-[1440px] mx-auto">
 					<div className="max-w-3xl pointer-events-auto">
 						<h1 className="hero-type text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tighter text-[#f3f0e8] mb-8 font-heading">
-							A Brutalidade da Indústria,<br />
-							<span className="text-outline-light">A Sutileza da</span>
-							<span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300 font-extrabold">Tecnologia.</span>
+							{t('hero.title1')}<br />
+							<span className="text-outline-light">{t('hero.title2')} </span>
+							<span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300 font-extrabold">{t('hero.title3')}</span>
 						</h1>
 						<p className="leading-relaxed text-base md:text-lg text-[#f3f0e8] max-w-2xl font-normal" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.7)' }}>
-							Somos fabricantes de Artefatos de Borracha, Silicone e PU. Contamos com colaboradores especializados em Elastômeros. Consulte-nos que teremos prazer em desenvolver a melhor solução para seu projeto industrial com tolerâncias decimais e alta durabilidade.
+							{t('hero.paragraph')}
 						</p>
 					</div>
 				</div>
@@ -293,7 +222,7 @@ export default function HomePage() {
 
 			{/* Scroll hint */}
 			<div ref={scrollHintRef} className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[5] flex flex-col items-center gap-2 pointer-events-none text-[#f3f0e8]">
-				<span className="hero-type text-[9px] font-mono uppercase tracking-[0.25em]">Role para revelar</span>
+				<span className="hero-type text-[9px] font-mono uppercase tracking-[0.25em]">{t('hero.scrollHint')}</span>
 				<div className="w-px h-8 bg-[#f3f0e8]/30 overflow-hidden relative">
 					<div className="absolute top-0 left-0 w-full h-full bg-red-500 animate-scroll-line"></div>
 				</div>
@@ -315,34 +244,37 @@ export default function HomePage() {
 						<a className="group/nav relative overflow-hidden rounded-full px-5 py-2.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/">
 							<span className="absolute inset-0 rounded-full bg-red-600/0 transition-all duration-500 group-hover/nav:bg-red-600/[0.07]"></span>
 							<span className="absolute bottom-0 left-1/2 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-red-500 to-transparent transition-all duration-500 group-hover/nav:w-3/4"></span>
-							<span className="relative">Início</span>
+							<span className="relative">{t('nav.inicio')}</span>
 						</a>
 						<a className="group/nav relative overflow-hidden rounded-full px-5 py-2.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/about">
 							<span className="absolute inset-0 rounded-full bg-red-600/0 transition-all duration-500 group-hover/nav:bg-red-600/[0.07]"></span>
 							<span className="absolute bottom-0 left-1/2 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-red-500 to-transparent transition-all duration-500 group-hover/nav:w-3/4"></span>
-							<span className="relative">A Empresa</span>
+							<span className="relative">{t('nav.empresa')}</span>
 						</a>
 						<a className="group/nav relative overflow-hidden rounded-full px-5 py-2.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/services">
 							<span className="absolute inset-0 rounded-full bg-red-600/0 transition-all duration-500 group-hover/nav:bg-red-600/[0.07]"></span>
 							<span className="absolute bottom-0 left-1/2 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-red-500 to-transparent transition-all duration-500 group-hover/nav:w-3/4"></span>
-							<span className="relative">Serviços</span>
+							<span className="relative">{t('nav.servicos')}</span>
 						</a>
 						<a className="group/nav relative overflow-hidden rounded-full px-5 py-2.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/catalog">
 							<span className="absolute inset-0 rounded-full bg-red-600/0 transition-all duration-500 group-hover/nav:bg-red-600/[0.07]"></span>
 							<span className="absolute bottom-0 left-1/2 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-red-500 to-transparent transition-all duration-500 group-hover/nav:w-3/4"></span>
-							<span className="relative">Catálogo</span>
+							<span className="relative">{t('nav.catalogo')}</span>
 						</a>
 						<a className="group/nav relative overflow-hidden rounded-full px-5 py-2.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/blog">
 							<span className="absolute inset-0 rounded-full bg-red-600/0 transition-all duration-500 group-hover/nav:bg-red-600/[0.07]"></span>
 							<span className="absolute bottom-0 left-1/2 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-red-500 to-transparent transition-all duration-500 group-hover/nav:w-3/4"></span>
-							<span className="relative">Contato</span>
+							<span className="relative">{t('nav.contato')}</span>
 						</a>
 					</nav>
 
-					{/* Portal button */}
-					<a href={DASHBOARD_URL} className="relative z-10 text-sm font-bold uppercase tracking-[0.12em] px-7 py-3 bg-slate-900 text-white rounded-full border border-slate-800 shadow-[0_2px_12px_rgba(0,0,0,0.2)] hover:bg-red-600 hover:border-red-600 hover:shadow-[0_0_20px_rgba(220,38,38,0.35)] transition-all duration-300 text-center inline-block">
-						Portal do Cliente
-					</a>
+					{/* Portal button + Language Switcher */}
+					<div className="relative z-10 flex items-center gap-3">
+						<LanguageSwitcher />
+						<a href={DASHBOARD_URL} className="text-sm font-bold uppercase tracking-[0.12em] px-7 py-3 bg-white text-black rounded-full border border-white/60 shadow-[0_2px_12px_rgba(0,0,0,0.15)] hover:bg-white/20 hover:backdrop-blur-md hover:border-white/40 hover:text-red-600 transition-all duration-300 text-center inline-block">
+							{t('cta.portalCliente')}
+						</a>
+					</div>
 				</header>
 
 				{/* HERO SCRUB SPACER — drives the fixed canvas; you scroll the whole
@@ -356,16 +288,16 @@ export default function HomePage() {
 						<div className="space-y-8">
 							<div className="inline-flex items-center gap-2">
 								<span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-								<span className="text-xs font-bold tracking-widest uppercase text-white/60">Tecnologia Industrial</span>
+								<span className="text-xs font-bold tracking-widest uppercase text-white/60">{t('catalog3d.tag')}</span>
 							</div>
 							<h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-white font-heading leading-[1.05]">
-								Engenharia que você pode <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300">tocar.</span>
+								{t('catalog3d.title1')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300">{t('catalog3d.title2')}</span>
 							</h2>
 							<p className="text-base md:text-lg text-white/70 leading-relaxed max-w-lg" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>
-								Cada peça nasce da brutalidade industrial e da precisão tecnológica. Visualize nossos artefatos em 360° — gire, amplie e inspecione antes mesmo de solicitar seu orçamento. Sustentabilidade, agilidade e engenharia de ponta em cada milímetro.
+								{t('catalog3d.paragraph')}
 							</p>
 							<a href="/catalog" className="inline-flex items-center gap-3 px-8 py-4 bg-red-600 text-white font-bold text-sm uppercase tracking-widest rounded-full hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] transition-all duration-300">
-								<span>Explorar Catálogo 3D</span>
+								<span>{t('cta.explorarCatalogo')}</span>
 								<svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
 							</a>
 						</div>
@@ -377,7 +309,7 @@ export default function HomePage() {
 								className="w-full h-full"
 							/>
 							<div className="absolute bottom-4 left-4 right-4 flex justify-between items-center pointer-events-none">
-								<span className="text-[10px] font-mono uppercase tracking-widest text-white/40">Arraste para girar</span>
+								<span className="text-[10px] font-mono uppercase tracking-widest text-white/40">{t('catalog3d.drag')}</span>
 								<span className="text-[10px] font-mono uppercase tracking-widest text-white/40">360°</span>
 							</div>
 						</div>
@@ -391,27 +323,27 @@ export default function HomePage() {
 				<section className="relative z-10 bg-black py-28 lg:py-36 px-6 md:px-12">
 					<div className="max-w-6xl mx-auto text-center mb-16">
 						<h2 className="text-3xl md:text-4xl font-bold tracking-tighter text-white font-heading mb-4">
-							Números que <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300">falam.</span>
+							{t('stats.title1')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300">{t('stats.title2')}</span>
 						</h2>
-						<p className="text-white/50 text-sm max-w-md mx-auto">Cada dado reflete nossa obsessão por precisão e performance industrial.</p>
+						<p className="text-white/50 text-sm max-w-md mx-auto">{t('stats.subtitle')}</p>
 					</div>
 					<div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
 						<div className="text-center space-y-3">
 							<span className="text-5xl md:text-6xl font-bold text-white font-heading">±0.05</span>
 							<span className="text-red-500 text-2xl font-bold">mm</span>
-							<p className="text-white/50 text-xs uppercase tracking-widest">Precisão de Molde</p>
+							<p className="text-white/50 text-xs uppercase tracking-widest">{t('stats.items')[0].label}</p>
 						</div>
 						<div className="text-center space-y-3">
 							<span className="text-5xl md:text-6xl font-bold text-white font-heading">12<span className="text-red-500">+</span></span>
-							<p className="text-white/50 text-xs uppercase tracking-widest">Anos de Experiência</p>
+							<p className="text-white/50 text-xs uppercase tracking-widest">{t('stats.items')[1].label}</p>
 						</div>
 						<div className="text-center space-y-3">
 							<span className="text-5xl md:text-6xl font-bold text-white font-heading">6</span>
-							<p className="text-white/50 text-xs uppercase tracking-widest">Linhas Industriais</p>
+							<p className="text-white/50 text-xs uppercase tracking-widest">{t('stats.items')[2].label}</p>
 						</div>
 						<div className="text-center space-y-3">
 							<span className="text-5xl md:text-6xl font-bold text-white font-heading">250<span className="text-red-500">°C</span></span>
-							<p className="text-white/50 text-xs uppercase tracking-widest">Resistência Máxima</p>
+							<p className="text-white/50 text-xs uppercase tracking-widest">{t('stats.items')[3].label}</p>
 						</div>
 					</div>
 				</section>
@@ -423,11 +355,11 @@ export default function HomePage() {
 				<section className="relative z-10 bg-[#0a0a0c] py-28 lg:py-36 px-6 md:px-12">
 					<div className="max-w-6xl mx-auto">
 						<div className="text-center mb-16 space-y-4">
-							<span className="text-xs font-bold tracking-widest uppercase text-red-500/80">Para Engenheiros & Compradores</span>
+							<span className="text-xs font-bold tracking-widest uppercase text-red-500/80">{t('why.tag')}</span>
 							<h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-white font-heading">
-								Por que especificadores confiam na <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300">FerriBor?</span>
+								{t('why.title1')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300">{t('why.title2')}</span>
 							</h2>
-							<p className="text-white/50 text-sm max-w-xl mx-auto">Desde 2014, desenvolvendo a melhor solução para cada projeto — com capacidade técnica, respeito aos prazos e consciência ambiental.</p>
+							<p className="text-white/50 text-sm max-w-xl mx-auto">{t('why.subtitle')}</p>
 						</div>
 
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -436,8 +368,8 @@ export default function HomePage() {
 								<div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 mb-5">
 									<svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>
 								</div>
-								<h3 className="text-lg font-bold text-white mb-2">Compostos Sob Medida</h3>
-								<p className="text-white/50 text-sm leading-relaxed">Formulações exclusivas em NBR, Silicone, Viton e PU — desenvolvidas para as condições exatas da sua aplicação.</p>
+								<h3 className="text-lg font-bold text-white mb-2">{t('why.cards')[0].title}</h3>
+								<p className="text-white/50 text-sm leading-relaxed">{t('why.cards')[0].desc}</p>
 							</div>
 
 							{/* Card 2 */}
@@ -445,8 +377,8 @@ export default function HomePage() {
 								<div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 mb-5">
 									<svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
 								</div>
-								<h3 className="text-lg font-bold text-white mb-2">Prazo Competitivo</h3>
-								<p className="text-white/50 text-sm leading-relaxed">Compromisso com o cronograma da sua obra. Entregas pontuais que mantêm sua linha de produção girando sem paradas.</p>
+								<h3 className="text-lg font-bold text-white mb-2">{t('why.cards')[1].title}</h3>
+								<p className="text-white/50 text-sm leading-relaxed">{t('why.cards')[1].desc}</p>
 							</div>
 
 							{/* Card 3 */}
@@ -454,8 +386,8 @@ export default function HomePage() {
 								<div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 mb-5">
 									<svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" /></svg>
 								</div>
-								<h3 className="text-lg font-bold text-white mb-2">Rastreabilidade Total</h3>
-								<p className="text-white/50 text-sm leading-relaxed">Cada lote com certificado de qualidade, controle dimensional e rastreio de matéria-prima. Conformidade documental garantida.</p>
+								<h3 className="text-lg font-bold text-white mb-2">{t('why.cards')[2].title}</h3>
+								<p className="text-white/50 text-sm leading-relaxed">{t('why.cards')[2].desc}</p>
 							</div>
 
 							{/* Card 4 */}
@@ -463,8 +395,8 @@ export default function HomePage() {
 								<div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 mb-5">
 									<svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" /></svg>
 								</div>
-								<h3 className="text-lg font-bold text-white mb-2">Sustentabilidade Real</h3>
-								<p className="text-white/50 text-sm leading-relaxed">Uso consciente de recursos naturais, reaproveitamento de elastômeros e ambiente seguro para colaboradores. ESG na prática.</p>
+								<h3 className="text-lg font-bold text-white mb-2">{t('why.cards')[3].title}</h3>
+								<p className="text-white/50 text-sm leading-relaxed">{t('why.cards')[3].desc}</p>
 							</div>
 
 							{/* Card 5 */}
@@ -472,8 +404,8 @@ export default function HomePage() {
 								<div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 mb-5">
 									<svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" /></svg>
 								</div>
-								<h3 className="text-lg font-bold text-white mb-2">Engenharia de Aplicação</h3>
-								<p className="text-white/50 text-sm leading-relaxed">Equipe técnica especializada em elastômeros orienta a seleção de composto, dureza e geometria ideal para seu projeto.</p>
+								<h3 className="text-lg font-bold text-white mb-2">{t('why.cards')[4].title}</h3>
+								<p className="text-white/50 text-sm leading-relaxed">{t('why.cards')[4].desc}</p>
 							</div>
 
 							{/* Card 6 */}
@@ -481,15 +413,15 @@ export default function HomePage() {
 								<div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 mb-5">
 									<svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" /></svg>
 								</div>
-								<h3 className="text-lg font-bold text-white mb-2">Melhor Custo-Benefício</h3>
-								<p className="text-white/50 text-sm leading-relaxed">Preço competitivo sem sacrificar qualidade. Peças com maior vida útil reduzem paradas e custo total de manutenção.</p>
+								<h3 className="text-lg font-bold text-white mb-2">{t('why.cards')[5].title}</h3>
+								<p className="text-white/50 text-sm leading-relaxed">{t('why.cards')[5].desc}</p>
 							</div>
 						</div>
 
 						{/* CTA Final */}
 						<div className="text-center mt-16">
 							<a href="/contact" className="inline-flex items-center gap-3 px-8 py-4 bg-white text-black font-bold text-sm uppercase tracking-widest rounded-full hover:bg-red-500 hover:text-white hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] transition-all duration-300">
-								<span>Solicitar Orçamento Técnico</span>
+								<span>{t('cta.solicitarOrcamento')}</span>
 								<svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
 							</a>
 						</div>
@@ -509,14 +441,14 @@ export default function HomePage() {
 						<div className="text-center mb-16 space-y-4 reveal-item">
 							<div className="inline-flex items-center gap-2 justify-center">
 								<span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-								<span className="text-xs font-bold tracking-widest uppercase text-red-500/80">FerriBor vs. Concorrência Nacional</span>
+								<span className="text-xs font-bold tracking-widest uppercase text-red-500/80">{t('comparison.tag')}</span>
 							</div>
 							<h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-white font-heading">
-								Enquanto o setor opera no <span className="text-outline-light">analógico,</span><br />
-								nós entregamos o <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300">futuro digital.</span>
+								{t('comparison.title1')} <span className="text-outline-light">{t('comparison.title2')}</span><br />
+								{t('comparison.title3')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300">{t('comparison.title4')}</span>
 							</h2>
 							<p className="text-white/50 text-sm max-w-2xl mx-auto leading-relaxed">
-								Nenhum player do mercado oferece IA para análise de desenhos, portal do cliente ou logística circular. Veja por que a FerriBor lidera em tecnologia.
+								{t('comparison.subtitle')}
 							</p>
 						</div>
 
@@ -525,16 +457,16 @@ export default function HomePage() {
 							{/* Linha de cabeçalho das colunas */}
 							<div className="grid grid-cols-[1.1fr_1fr_1.3fr] md:grid-cols-[1.3fr_1fr_1.4fr] border-b border-white/[0.08]">
 								<div className="p-4 md:p-6 flex items-end">
-									<span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-white/40">Critério</span>
+									<span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-white/40">{t('comparison.colCriterio')}</span>
 								</div>
 								<div className="p-4 md:p-6 border-l border-white/[0.06] flex flex-col gap-1">
-									<span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-white/40">Concorrência</span>
-									<span className="text-[9px] text-white/25 hidden md:block">Players tradicionais</span>
+									<span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-white/40">{t('comparison.colConcorrencia')}</span>
+									<span className="text-[9px] text-white/25 hidden md:block">{t('comparison.colConcorrenciaSub')}</span>
 								</div>
 								<div className="relative p-4 md:p-6 border-l border-red-500/30 bg-gradient-to-b from-red-600/15 to-transparent flex flex-col gap-1">
 									<span className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500 to-transparent"></span>
-									<span className="text-[10px] md:text-xs font-extrabold uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-200">FerriBor Global 4.0</span>
-									<span className="text-[9px] text-red-300/40 hidden md:block">Ecossistema inteligente</span>
+									<span className="text-[10px] md:text-xs font-extrabold uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-200">{t('comparison.colFerribor')}</span>
+									<span className="text-[9px] text-red-300/40 hidden md:block">{t('comparison.colFerriborSub')}</span>
 								</div>
 							</div>
 
@@ -575,23 +507,23 @@ export default function HomePage() {
 						{/* Faixa de impacto */}
 						<div className="grid grid-cols-1 sm:grid-cols-3 gap-px mt-px rounded-3xl overflow-hidden border border-white/[0.08] mt-6 reveal-item">
 							<div className="bg-white/[0.02] p-6 text-center">
-								<span className="block text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300 font-heading">3x</span>
-								<span className="text-[11px] text-white/40 uppercase tracking-widest">mais rápido na cotação</span>
+								<span className="block text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300 font-heading">{t('comparison.impact')[0].value}</span>
+								<span className="text-[11px] text-white/40 uppercase tracking-widest">{t('comparison.impact')[0].label}</span>
 							</div>
 							<div className="bg-white/[0.02] p-6 text-center border-y sm:border-y-0 sm:border-x border-white/[0.06]">
-								<span className="block text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300 font-heading">4</span>
-								<span className="text-[11px] text-white/40 uppercase tracking-widest">idiomas automáticos</span>
+								<span className="block text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300 font-heading">{t('comparison.impact')[1].value}</span>
+								<span className="text-[11px] text-white/40 uppercase tracking-widest">{t('comparison.impact')[1].label}</span>
 							</div>
 							<div className="bg-white/[0.02] p-6 text-center">
-								<span className="block text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300 font-heading">100%</span>
-								<span className="text-[11px] text-white/40 uppercase tracking-widest">digital e rastreável</span>
+								<span className="block text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300 font-heading">{t('comparison.impact')[2].value}</span>
+								<span className="text-[11px] text-white/40 uppercase tracking-widest">{t('comparison.impact')[2].label}</span>
 							</div>
 						</div>
 
 						{/* CTA */}
 						<div className="text-center mt-14 reveal-item">
 							<a href="/contact" className="inline-flex items-center gap-3 px-8 py-4 bg-red-600 text-white font-bold text-sm uppercase tracking-widest rounded-full hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] transition-all duration-300">
-								<span>Experimente o Ecossistema FerriBor</span>
+								<span>{t('cta.experimentarEcossistema')}</span>
 								<svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
 							</a>
 						</div>
@@ -626,25 +558,25 @@ export default function HomePage() {
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16 max-w-6xl mx-auto mb-12 relative z-10">
 						{/* Col 1: Site Map */}
 						<div className="space-y-4">
-							<h4 className="font-heading text-sm font-bold uppercase tracking-widest text-slate-950">Mapa do Site</h4>
+							<h4 className="font-heading text-sm font-bold uppercase tracking-widest text-slate-950">{t('footer.mapaTitle')}</h4>
 							<ul className="space-y-2.5 text-sm text-slate-800 font-medium">
-								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#inicio">Home</a></li>
-								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#aempresa">Empresa</a></li>
-								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#servicos">Serviços</a></li>
-								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#depoimentos">Depoimentos</a></li>
-								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#noticias">Notícias & Cotações</a></li>
-								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#contato">Contato</a></li>
-								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="/politica-privacidade.pdf" target="_blank">Política de Privacidade</a></li>
+								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#inicio">{t('footer.mapa.home')}</a></li>
+								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#aempresa">{t('footer.mapa.empresa')}</a></li>
+								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#servicos">{t('footer.mapa.servicos')}</a></li>
+								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#depoimentos">{t('footer.mapa.depoimentos')}</a></li>
+								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#noticias">{t('footer.mapa.noticias')}</a></li>
+								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#contato">{t('footer.mapa.contato')}</a></li>
+								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="/politica-privacidade.pdf" target="_blank">{t('footer.mapa.privacidade')}</a></li>
 							</ul>
 						</div>
 
 						{/* Col 2: Contacts */}
 						<div className="space-y-4">
-							<h4 className="font-heading text-sm font-bold uppercase tracking-widest text-slate-950">Contato</h4>
+							<h4 className="font-heading text-sm font-bold uppercase tracking-widest text-slate-950">{t('footer.contatoTitle')}</h4>
 							<ul className="space-y-3.5 text-sm text-slate-800 leading-normal">
 								<li className="flex gap-2">
 									<i className="iconify text-lg text-red-500 flex-shrink-0 mt-0.5" data-icon="lucide:map-pin"></i>
-									<span>Rua Aurea Basso Baptista, 36 - Jardim D&apos;itália, Santa Gertrudes - SP, 13510-092</span>
+									<span>{t('footer.endereco')}</span>
 								</li>
 								<li className="flex gap-2 items-center">
 									<i className="iconify text-lg text-red-500" data-icon="lucide:phone"></i>
@@ -705,67 +637,64 @@ export default function HomePage() {
 
 						<div className="flex items-center gap-2 text-red-600 mb-4">
 							<i className="iconify text-xl" data-icon="lucide:cog"></i>
-							<span className="text-xs font-bold tracking-widest uppercase text-slate-500 font-heading">Especificações Técnicas</span>
+							<span className="text-xs font-bold tracking-widest uppercase text-slate-500 font-heading">{t('quoteModal.tag')}</span>
 						</div>
 
-						<h3 className="text-2xl font-bold tracking-tight text-slate-900 mb-2 font-heading">Solicitar Orçamento Técnico</h3>
-						<p className="text-xs text-slate-500 mb-6 leading-relaxed">Carregue sua planta técnica ou envie as especificações do artefato para cotação rápida de fabricação/recuperação.</p>
+						<h3 className="text-2xl font-bold tracking-tight text-slate-900 mb-2 font-heading">{t('quoteModal.title')}</h3>
+						<p className="text-xs text-slate-500 mb-6 leading-relaxed">{t('quoteModal.subtitle')}</p>
 
 						<form className="space-y-5" onSubmit={(e) => { e.preventDefault(); closeQuoteModal(); setIsSuccessModalOpen(true); }}>
 							<div className="input-group">
 								<input type="text" placeholder=" " id="input-modal-name" required />
-								<label htmlFor="input-modal-name">Seu Nome / Engenheiro</label>
+								<label htmlFor="input-modal-name">{t('quoteModal.nome')}</label>
 							</div>
 
 							<div className="input-group">
 								<input type="text" placeholder=" " id="input-modal-empresa" required />
-								<label htmlFor="input-modal-empresa">Empresa</label>
+								<label htmlFor="input-modal-empresa">{t('quoteModal.empresa')}</label>
 							</div>
 
 							<div className="grid grid-cols-2 gap-4">
 								<div className="input-group">
 									<input type="email" placeholder=" " id="input-modal-email" required />
-									<label htmlFor="input-modal-email">E-mail Comercial</label>
+									<label htmlFor="input-modal-email">{t('quoteModal.email')}</label>
 								</div>
 								<div className="input-group">
 									<input type="tel" placeholder=" " id="input-modal-phone" required />
-									<label htmlFor="input-modal-phone">Telefone / Celular</label>
+									<label htmlFor="input-modal-phone">{t('quoteModal.telefone')}</label>
 								</div>
 							</div>
 
 							<div className="flex flex-col gap-1">
-								<label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider" htmlFor="input-modal-service">Serviço / Produto</label>
+								<label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider" htmlFor="input-modal-service">{t('quoteModal.servico')}</label>
 								<select
 									id="input-modal-service"
 									value={selectedService}
 									onChange={(e) => setSelectedService(e.target.value)}
 									className="w-full bg-transparent border-b border-slate-300 py-2.5 text-xs text-slate-800 focus:border-red-600 outline-none"
 								>
-									<option value="Artefatos para Cerâmica">Artefatos para Cerâmica</option>
-									<option value="Artefatos para Solda">Artefatos para Solda</option>
-									<option value="Pés Niveladores">Pés Niveladores</option>
-									<option value="Vedações">Vedações</option>
-									<option value="Linha Agro">Linha Agro</option>
-									<option value="Rolos de Transporte">Rolos de Transporte</option>
+									{(t('services.items') as { title: string }[]).map((s, i) => (
+										<option key={i} value={s.title}>{s.title}</option>
+									))}
 								</select>
 							</div>
 
 							<div className="input-group">
-								<textarea className="w-full bg-transparent border-none border-b border-slate-300 outline-none p-2 text-xs focus:border-red-600 transition-colors" placeholder="Especificações do elastômero (dureza, composto, dimensões)" id="input-modal-spec" required rows={2}></textarea>
+								<textarea className="w-full bg-transparent border-none border-b border-slate-300 outline-none p-2 text-xs focus:border-red-600 transition-colors" placeholder={t('quoteModal.spec')} id="input-modal-spec" required rows={2}></textarea>
 							</div>
-							
+
 							<div className="border-2 border-dashed border-slate-900/10 rounded-2xl p-4 text-center cursor-hover hover:border-red-600/30 transition-colors">
 								<i className="iconify text-2xl text-slate-400 mx-auto mb-1.5" data-icon="lucide:upload-cloud"></i>
-								<span className="text-xs font-bold text-slate-700 block mb-0.5">Upload de Desenho Técnico (PDF / DXF / STEP)</span>
-								<span className="text-[9px] text-slate-400">Arraste e solte o arquivo técnico (Máx 50MB)</span>
+								<span className="text-xs font-bold text-slate-700 block mb-0.5">{t('quoteModal.uploadTitle')}</span>
+								<span className="text-[9px] text-slate-400">{t('quoteModal.uploadSub')}</span>
 							</div>
 
 							<div className="flex gap-3 pt-2">
 								<button type="submit" className="btn-silver-metallic flex-1 cursor-hover" style={{ '--border-gradient': 'linear-gradient(180deg, rgba(255,255,255,0.9), rgba(0,0,0,0.35), rgba(255,255,255,0.9))', '--border-radius-before': '9999px' } as React.CSSProperties}>
-									<span>Enviar Solicitação</span>
+									<span>{t('quoteModal.enviar')}</span>
 								</button>
 								<button type="button" onClick={closeQuoteModal} className="btn-community cursor-hover">
-									<span>Cancelar</span>
+									<span>{t('quoteModal.cancelar')}</span>
 								</button>
 							</div>
 						</form>
@@ -780,15 +709,15 @@ export default function HomePage() {
 						<div className="w-14 h-14 bg-green-50 border border-green-100 rounded-full flex items-center justify-center text-green-600 mb-4 shadow-sm animate-bounce">
 							<i className="iconify text-2xl" data-icon="lucide:check-circle"></i>
 						</div>
-						<h3 className="text-xl font-bold text-slate-950 mb-2 font-heading">Mensagem Enviada!</h3>
+						<h3 className="text-xl font-bold text-slate-950 mb-2 font-heading">{t('success.title')}</h3>
 						<p className="text-slate-500 text-xs leading-relaxed mb-6">
-							Sua solicitação foi processada com sucesso. Nossa equipe comercial/técnica entrará em contato em breve para apresentar a melhor solução.
+							{t('success.message')}
 						</p>
 						<button
 							onClick={() => setIsSuccessModalOpen(false)}
 							className="px-8 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-green-600 hover:shadow-md transition-all duration-300 cursor-hover"
 						>
-							Fechar
+							{t('success.fechar')}
 						</button>
 					</div>
 				</div>

@@ -2,67 +2,30 @@
 
 import { useEffect } from 'react';
 import { Logo3D } from '../../components/navigation/Logo3D';
+import { useI18n } from '../../i18n/LanguageContext';
+import { LanguageSwitcher } from '../../i18n/LanguageSwitcher';
 
 const DASHBOARD_URL = process.env.NEXT_PUBLIC_DASHBOARD_URL || 'http://localhost:5174/auth';
 
-const services = [
-	{
-		id: 1,
-		title: "Artefatos para Cerâmica",
-		shortDesc: "Fabricação e Recuperação de Artefatos para Indústria Cerâmica",
-		longDesc: "Desenvolvimento e revestimento de peças com compostos de borracha de alta resistência à abrasão sob medida para transportadores e maquinários cerâmicos. Nossas soluções garantem maior vida útil dos equipamentos em ambientes com alto nível de desgaste particulado.",
-		features: ["Revestimento de rolos e tambores", "Raspadores e lâminas flexíveis", "Guias e perfis para esteiras", "Compostos anti-abrasão customizados"],
-		icon: "lucide:layers",
-		imageUrl: "/assets/imagens/4d5dd7303ae3d6c2_ceramica.jpg"
-	},
-	{
-		id: 2,
-		title: "Artefatos para Solda",
-		shortDesc: "Fabricação e Recuperação de Artefatos para Equipamentos de Solda",
-		longDesc: "Peças isolantes térmicas e elétricas fabricadas com silicone e poliuretanos especiais de altíssima durabilidade para processos de soldagem industrial. Resistência a temperaturas extremas e proteção contra arcos elétricos.",
-		features: ["Isolantes térmicos em silicone", "Proteções anti-respingo", "Mangueiras e conduítes flexíveis", "Bocais e difusores especiais"],
-		icon: "lucide:zap",
-		imageUrl: "/assets/imagens/7ff406fba3211ef5_solda.jpg"
-	},
-	{
-		id: 3,
-		title: "Pés Niveladores",
-		shortDesc: "Fabricação de Pés Niveladores Industriais",
-		longDesc: "Componentes projetados para suportar cargas elevadas, absorver vibrações severas e garantir o nivelamento milimétrico de equipamentos industriais. Fabricados em borracha natural, neoprene e poliuretano com insertos metálicos.",
-		features: ["Suporte para cargas de até 20 toneladas", "Absorção de vibração industrial", "Insertos metálicos rosqueados", "Compostos anti-óleo e anti-ozônio"],
-		icon: "lucide:chevrons-up-down",
-		imageUrl: "/assets/imagens/08ca2f01e3417874_niveladores.jpg"
-	},
-	{
-		id: 4,
-		title: "Vedações",
-		shortDesc: "Fabricação de Vedações de Alta Precisão",
-		longDesc: "Desenvolvimento de O-rings, retentores, gaxetas, raspadores e anéis sob medida em NBR, silicone, viton e poliuretano de alta precisão. Tolerâncias decimais para aplicações hidráulicas, pneumáticas e rotativas.",
-		features: ["O-rings e anéis de vedação", "Retentores e gaxetas", "Raspadores hidráulicos", "Vedações rotativas e estáticas"],
-		icon: "lucide:shield-check",
-		imageUrl: "/assets/imagens/7ed173cd6055799d_vedacoes.jpg"
-	},
-	{
-		id: 5,
-		title: "Linha Agro",
-		shortDesc: "Peças e Equipamentos para Linha Agrícola",
-		longDesc: "Soluções robustas em elastômeros para tratores, colheitadeiras e implementos agrícolas, garantindo resistência contra intempéries e atrito contínuo. Peças projetadas para operação em campo com exposição solar e contato com químicos.",
-		features: ["Vedações para sistemas hidráulicos", "Amortecedores e coxins", "Revestimentos anti-desgaste", "Peças para plantio e colheita"],
-		icon: "lucide:leaf",
-		imageUrl: "/assets/imagens/5d1bcf832d66669c_linha-agro.jpg"
-	},
-	{
-		id: 6,
-		title: "Rolos de Transporte",
-		shortDesc: "Fabricação e Recuperação de Rolos de Transporte",
-		longDesc: "Revestimento de cilindros com elastômeros especiais seguidos de usinagem e retificação de altíssima precisão técnica decimal. Rolos para impressão, laminação, transporte e processamento industrial.",
-		features: ["Revestimento em PU, borracha e silicone", "Usinagem e retificação CNC", "Balanceamento dinâmico", "Dureza sob especificação (20 a 90 Shore A)"],
-		icon: "lucide:settings",
-		imageUrl: "/assets/imagens/6fa5f4bfad00f012_rolos.jpg"
-	}
+const serviceMeta = [
+	{ icon: "lucide:layers", imageUrl: "/assets/imagens/4d5dd7303ae3d6c2_ceramica.jpg" },
+	{ icon: "lucide:zap", imageUrl: "/assets/imagens/7ff406fba3211ef5_solda.jpg" },
+	{ icon: "lucide:chevrons-up-down", imageUrl: "/assets/imagens/08ca2f01e3417874_niveladores.jpg" },
+	{ icon: "lucide:shield-check", imageUrl: "/assets/imagens/7ed173cd6055799d_vedacoes.jpg" },
+	{ icon: "lucide:leaf", imageUrl: "/assets/imagens/5d1bcf832d66669c_linha-agro.jpg" },
+	{ icon: "lucide:settings", imageUrl: "/assets/imagens/6fa5f4bfad00f012_rolos.jpg" },
 ];
 
 export default function ServicesPage() {
+	const { t } = useI18n();
+
+	const services = (t('servicesPage.items') as { title: string; longDesc: string; features: string[] }[]).map((s, i) => ({
+		...s,
+		id: i + 1,
+		icon: serviceMeta[i].icon,
+		imageUrl: serviceMeta[i].imageUrl,
+	}));
+
 	useEffect(() => {
 		const reveals = document.querySelectorAll('.reveal-item');
 		const observer = new IntersectionObserver((entries) => {
@@ -84,16 +47,17 @@ export default function ServicesPage() {
 				</a>
 				<div className="glass-panel-light !overflow-visible rounded-full px-4 md:px-6 py-2 flex items-center gap-6 md:gap-8 border border-white/40 shadow-[0_8px_30px_rgba(0,0,0,0.02)] bg-white/40 backdrop-blur-xl">
 					<div className="hidden md:flex items-center gap-6 lg:gap-8 text-[11px] font-bold uppercase tracking-widest text-slate-500">
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/">Início</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/about">A Empresa</a>
-						<a className="cursor-hover text-red-600 transition-colors" href="/services">Serviços</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/catalog">Catálogo</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/blog">Blog</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/contact">Contato</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/">{t('nav.inicio')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/about">{t('nav.empresa')}</a>
+						<a className="cursor-hover text-red-600 transition-colors" href="/services">{t('nav.servicos')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/catalog">{t('nav.catalogo')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/blog">{t('nav.blog')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/contact">{t('nav.contato')}</a>
 					</div>
-					<div>
-						<a href={DASHBOARD_URL} className="cursor-hover text-[10px] font-bold uppercase tracking-widest px-5 py-2.5 bg-slate-900 text-white rounded-full hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 text-center inline-block">
-							Portal do Cliente
+					<div className="flex items-center gap-3">
+						<LanguageSwitcher />
+						<a href={DASHBOARD_URL} className="cursor-hover text-[10px] font-bold uppercase tracking-widest px-5 py-2.5 bg-white text-black rounded-full border border-white/60 hover:bg-white/20 hover:backdrop-blur-md hover:border-white/40 hover:text-red-600 transition-all duration-300 text-center inline-block">
+							{t('cta.portalCliente')}
 						</a>
 					</div>
 				</div>
@@ -145,7 +109,7 @@ export default function ServicesPage() {
 									<div className="w-8 h-8 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-600">
 										<i className="iconify text-sm" data-icon={service.icon}></i>
 									</div>
-									<span className="text-[10px] font-bold tracking-widest uppercase text-slate-400">Serviço {String(service.id).padStart(2, '0')}</span>
+									<span className="text-[10px] font-bold tracking-widest uppercase text-slate-400">{t('servicesPage.serviceLabel')} {String(service.id).padStart(2, '0')}</span>
 								</div>
 
 								<h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-slate-900">
@@ -170,7 +134,7 @@ export default function ServicesPage() {
 										href="/#contato"
 										className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest px-5 py-2.5 bg-slate-900 text-white rounded-full hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300"
 									>
-										Solicitar Orçamento
+										{t('servicesPage.ctaOrcamento')}
 										<i className="iconify text-sm" data-icon="lucide:arrow-right"></i>
 									</a>
 								</div>

@@ -2,6 +2,14 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "vanila",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-c", "import os,http.server,socketserver; socketserver.TCPServer(('',int(os.environ.get('PORT','8000'))),http.server.SimpleHTTPRequestHandler).serve_forever()"],
+      "cwd": "VANILA",
+      "port": 8000,
+      "autoPort": true
+    },
+    {
       "name": "dashboard",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
@@ -10,10 +18,11 @@
     },
     {
       "name": "site",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "dev"],
       "cwd": "Site",
-      "port": 3000
+      "port": 3000,
+      "autoPort": true
     },
     {
       "name": "crm",

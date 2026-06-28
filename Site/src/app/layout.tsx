@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Script from 'next/script';
+import { LanguageProvider } from '../i18n/LanguageContext';
 
 export const metadata: Metadata = {
 	title: 'FerriBor',
@@ -26,10 +27,12 @@ export default function RootLayout({
 				/>
 			</head>
 			<body>
-				<a href="#conteudo" className="skip-link">
-					Pular para o conteúdo
-				</a>
-				<main id="conteudo">{children}</main>
+				<LanguageProvider>
+					<a href="#conteudo" className="skip-link">
+						Pular para o conteúdo
+					</a>
+					<main id="conteudo">{children}</main>
+				</LanguageProvider>
 				<Script src="https://code.iconify.design/3/3.1.0/iconify.min.js" strategy="lazyOnload" />
 			</body>
 		</html>

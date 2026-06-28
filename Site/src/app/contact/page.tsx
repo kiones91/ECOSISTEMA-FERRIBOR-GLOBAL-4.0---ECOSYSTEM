@@ -2,10 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { Logo3D } from '../../components/navigation/Logo3D';
+import { useI18n } from '../../i18n/LanguageContext';
+import { LanguageSwitcher } from '../../i18n/LanguageSwitcher';
 
 const DASHBOARD_URL = process.env.NEXT_PUBLIC_DASHBOARD_URL || 'http://localhost:5174/auth';
 
 export default function ContactPage() {
+	const { t } = useI18n();
 	const [formData, setFormData] = useState({ name: '', email: '', phone: '', company: '', sector: '', message: '' });
 	const [submitted, setSubmitted] = useState(false);
 
@@ -39,16 +42,17 @@ export default function ContactPage() {
 				</a>
 				<div className="glass-panel-light !overflow-visible rounded-full px-4 md:px-6 py-2 flex items-center gap-6 md:gap-8 border border-white/40 shadow-[0_8px_30px_rgba(0,0,0,0.02)] bg-white/40 backdrop-blur-xl">
 					<div className="hidden md:flex items-center gap-6 lg:gap-8 text-[11px] font-bold uppercase tracking-widest text-slate-500">
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/">Início</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/about">A Empresa</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/services">Serviços</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/catalog">Catálogo</a>
-						<a className="cursor-hover hover:text-red-600 transition-colors" href="/blog">Blog</a>
-						<a className="cursor-hover text-red-600 transition-colors" href="/contact">Contato</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/">{t('nav.inicio')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/about">{t('nav.empresa')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/services">{t('nav.servicos')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/catalog">{t('nav.catalogo')}</a>
+						<a className="cursor-hover hover:text-red-600 transition-colors" href="/blog">{t('nav.blog')}</a>
+						<a className="cursor-hover text-red-600 transition-colors" href="/contact">{t('nav.contato')}</a>
 					</div>
-					<div>
-						<a href={DASHBOARD_URL} className="cursor-hover text-[10px] font-bold uppercase tracking-widest px-5 py-2.5 bg-slate-900 text-white rounded-full hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 text-center inline-block">
-							Portal do Cliente
+					<div className="flex items-center gap-3">
+						<LanguageSwitcher />
+						<a href={DASHBOARD_URL} className="cursor-hover text-[10px] font-bold uppercase tracking-widest px-5 py-2.5 bg-white text-black rounded-full border border-white/60 hover:bg-white/20 hover:backdrop-blur-md hover:border-white/40 hover:text-red-600 transition-all duration-300 text-center inline-block">
+							{t('cta.portalCliente')}
 						</a>
 					</div>
 				</div>
@@ -59,14 +63,14 @@ export default function ContactPage() {
 				<div className="max-w-4xl mx-auto text-center reveal-item">
 					<div className="inline-flex items-center gap-2 text-red-600 mb-4">
 						<span className="flex h-2 w-2 rounded-full bg-red-600 animate-pulse"></span>
-						<span className="text-[10px] font-bold tracking-widest uppercase text-slate-400">Fale Conosco</span>
+						<span className="text-[10px] font-bold tracking-widest uppercase text-slate-400">{t('contact.tag')}</span>
 					</div>
 					<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tighter text-slate-900 mb-6">
-						Vamos conversar sobre<br />
-						<span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-black">seu próximo projeto.</span>
+						{t('contact.heroTitle1')}<br />
+						<span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-black">{t('contact.heroTitle2')}</span>
 					</h1>
 					<p className="text-sm md:text-base text-slate-500 max-w-2xl mx-auto leading-relaxed">
-						Nossa equipe técnica está pronta para analisar seu projeto e oferecer a melhor solução em elastômeros industriais. Retornamos em até 24 horas úteis.
+						{t('contact.heroParagraph')}
 					</p>
 				</div>
 			</section>
@@ -82,60 +86,57 @@ export default function ContactPage() {
 								<div className="w-16 h-16 rounded-full bg-green-50 border border-green-200 flex items-center justify-center text-green-600 mx-auto mb-6">
 									<i className="iconify text-2xl" data-icon="lucide:check"></i>
 								</div>
-								<h2 className="text-xl font-bold text-slate-900 mb-2">Mensagem enviada!</h2>
-								<p className="text-sm text-slate-500 mb-6">Nossa equipe retornará em até 24 horas úteis.</p>
+								<h2 className="text-xl font-bold text-slate-900 mb-2">{t('contact.successTitle')}</h2>
+								<p className="text-sm text-slate-500 mb-6">{t('contact.successText')}</p>
 								<button onClick={() => setSubmitted(false)} className="text-[11px] font-bold uppercase tracking-widest px-5 py-2.5 border border-slate-200 text-slate-700 rounded-full hover:border-red-500 hover:text-red-600 transition-all">
-									Enviar outra mensagem
+									{t('contact.successAgain')}
 								</button>
 							</div>
 						) : (
 							<form onSubmit={handleSubmit} className="glass-panel-light rounded-2xl p-8 border border-white/40 bg-white/40 backdrop-blur-xl space-y-5">
-								<h2 className="text-lg font-bold text-slate-900 mb-2">Solicite um orçamento</h2>
-								<p className="text-xs text-slate-500 mb-6">Preencha os campos abaixo e nossa equipe entrará em contato.</p>
+								<h2 className="text-lg font-bold text-slate-900 mb-2">{t('contact.formTitle')}</h2>
+								<p className="text-xs text-slate-500 mb-6">{t('contact.formSubtitle')}</p>
 
 								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 									<div>
-										<label htmlFor="name" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 block">Nome completo *</label>
-										<input id="name" name="name" type="text" required value={formData.name} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30 transition" placeholder="Seu nome" />
+										<label htmlFor="name" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 block">{t('contact.labelName')}</label>
+										<input id="name" name="name" type="text" required value={formData.name} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30 transition" placeholder={t('contact.phName')} />
 									</div>
 									<div>
-										<label htmlFor="email" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 block">E-mail *</label>
-										<input id="email" name="email" type="email" required value={formData.email} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30 transition" placeholder="voce@empresa.com" />
+										<label htmlFor="email" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 block">{t('contact.labelEmail')}</label>
+										<input id="email" name="email" type="email" required value={formData.email} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30 transition" placeholder={t('contact.phEmail')} />
 									</div>
 								</div>
 
 								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 									<div>
-										<label htmlFor="phone" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 block">Telefone / WhatsApp *</label>
-										<input id="phone" name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30 transition" placeholder="(00) 00000-0000" />
+										<label htmlFor="phone" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 block">{t('contact.labelPhone')}</label>
+										<input id="phone" name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30 transition" placeholder={t('contact.phPhone')} />
 									</div>
 									<div>
-										<label htmlFor="company" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 block">Empresa</label>
-										<input id="company" name="company" type="text" value={formData.company} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30 transition" placeholder="Nome da empresa" />
+										<label htmlFor="company" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 block">{t('contact.labelCompany')}</label>
+										<input id="company" name="company" type="text" value={formData.company} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30 transition" placeholder={t('contact.phCompany')} />
 									</div>
 								</div>
 
 								<div>
-									<label htmlFor="sector" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 block">Setor de interesse</label>
+									<label htmlFor="sector" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 block">{t('contact.labelSector')}</label>
 									<select id="sector" name="sector" value={formData.sector} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30 transition">
-										<option value="">Selecionar setor...</option>
-										<option value="ceramica">Artefatos para Cerâmica</option>
-										<option value="solda">Artefatos para Solda</option>
-										<option value="niveladores">Pés Niveladores</option>
-										<option value="vedacoes">Vedações</option>
-										<option value="agro">Linha Agro</option>
-										<option value="rolos">Rolos de Transporte</option>
-										<option value="outro">Outro</option>
+										<option value="">{t('contact.sectorPlaceholder')}</option>
+										{(t('services.items') as { title: string }[]).map((s, i) => (
+											<option key={i} value={s.title}>{s.title}</option>
+										))}
+										<option value="outro">{t('contact.sectorOther')}</option>
 									</select>
 								</div>
 
 								<div>
-									<label htmlFor="message" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 block">Mensagem / Detalhes do projeto *</label>
-									<textarea id="message" name="message" required rows={5} value={formData.message} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30 transition resize-none" placeholder="Descreva sua necessidade, especificações, quantidades..." />
+									<label htmlFor="message" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 block">{t('contact.labelMessage')}</label>
+									<textarea id="message" name="message" required rows={5} value={formData.message} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30 transition resize-none" placeholder={t('contact.phMessage')} />
 								</div>
 
 								<button type="submit" className="w-full text-[11px] font-bold uppercase tracking-widest px-6 py-3.5 bg-slate-900 text-white rounded-full hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300">
-									Enviar Solicitação
+									{t('contact.submit')}
 								</button>
 							</form>
 						)}
@@ -150,7 +151,7 @@ export default function ContactPage() {
 									<i className="iconify text-lg" data-icon="lucide:message-square"></i>
 								</div>
 								<div>
-									<h4 className="text-xs font-bold text-slate-900">WhatsApp</h4>
+									<h4 className="text-xs font-bold text-slate-900">{t('contact.cardWhatsapp')}</h4>
 									<p className="text-[11px] text-slate-500">(19) 98174-8364</p>
 								</div>
 								<i className="iconify text-sm text-slate-300 group-hover:text-green-500 ml-auto transition-colors" data-icon="lucide:arrow-up-right"></i>
@@ -161,7 +162,7 @@ export default function ContactPage() {
 									<i className="iconify text-lg" data-icon="lucide:phone"></i>
 								</div>
 								<div>
-									<h4 className="text-xs font-bold text-slate-900">Telefone</h4>
+									<h4 className="text-xs font-bold text-slate-900">{t('contact.cardPhone')}</h4>
 									<p className="text-[11px] text-slate-500">(19) 98174-8364</p>
 								</div>
 								<i className="iconify text-sm text-slate-300 group-hover:text-red-500 ml-auto transition-colors" data-icon="lucide:arrow-up-right"></i>
@@ -172,7 +173,7 @@ export default function ContactPage() {
 									<i className="iconify text-lg" data-icon="lucide:mail"></i>
 								</div>
 								<div>
-									<h4 className="text-xs font-bold text-slate-900">E-mail</h4>
+									<h4 className="text-xs font-bold text-slate-900">{t('contact.cardEmail')}</h4>
 									<p className="text-[11px] text-slate-500">comercial@ferribor.com.br</p>
 								</div>
 								<i className="iconify text-sm text-slate-300 group-hover:text-red-500 ml-auto transition-colors" data-icon="lucide:arrow-up-right"></i>
@@ -183,8 +184,8 @@ export default function ContactPage() {
 									<i className="iconify text-lg" data-icon="lucide:map-pin"></i>
 								</div>
 								<div>
-									<h4 className="text-xs font-bold text-slate-900">Endereço</h4>
-									<p className="text-[11px] text-slate-500 leading-relaxed">Rua Aurea Basso Baptista, 36<br />Jardim D&apos;itália, Santa Gertrudes - SP<br />CEP 13510-092</p>
+									<h4 className="text-xs font-bold text-slate-900">{t('contact.cardAddress')}</h4>
+									<p className="text-[11px] text-slate-500 leading-relaxed">{(t('contact.addressLines') as string).split('\n').map((line, i, arr) => (<span key={i}>{line}{i < arr.length - 1 && <br />}</span>))}</p>
 								</div>
 							</div>
 						</div>
@@ -193,7 +194,7 @@ export default function ContactPage() {
 						<div className="bg-white border border-slate-900/5 p-4 rounded-2xl shadow-sm">
 							<h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3 px-1 flex items-center gap-1.5">
 								<span className="w-2 h-2 rounded-full bg-red-600"></span>
-								Nossa Localização
+								{t('contact.mapTitle')}
 							</h4>
 							<div className="w-full h-[280px] rounded-xl overflow-hidden border border-slate-200">
 								<iframe
