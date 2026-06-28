@@ -15,9 +15,9 @@ import {
   Smartphone,
   ScrollText,
   Wrench,
-  Palette,
   Mail,
   ShoppingCart,
+  Award,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -40,6 +40,7 @@ export const fixedItems: AdminMenuItem[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'inbox', label: 'Atendimentos', icon: MessageSquare },
   { id: 'orders', label: 'Pedidos', icon: ShoppingCart },
+  { id: 'certificates', label: 'Certificados', icon: Award },
 ];
 
 // Grupos em accordion
@@ -74,7 +75,6 @@ export const menuGroups: AdminMenuGroup[] = [
       { id: 'platform-whatsapp', label: 'WhatsApp / Evolution', icon: Smartphone },
       { id: 'platform-agent-tools', label: 'Ações dos Agentes', icon: Wrench },
       { id: 'platform-ai-quality', label: 'Qualidade da IA', icon: BarChart3 },
-      { id: 'platform-branding', label: 'Identidade Visual', icon: Palette },
       { id: 'platform-email', label: 'E-mail', icon: Mail },
       { id: 'platform-audit', label: 'Logs de Auditoria', icon: ScrollText },
     ],

@@ -1,6 +1,4 @@
 import { useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 import {
   generateColorScale,
   buildGradient,
@@ -9,51 +7,45 @@ import {
   pickReadableForeground,
   type GradientStyle,
 } from '@/lib/colors';
+import { BRANDING } from '@/config/branding';
 
-interface PlatformSettings {
-  id: string;
-  platform_name: string | null;
-  support_email: string | null;
-  primary_color: string | null;
-  accent_color: string | null;
-  gradient_style: string | null;
+export interface PlatformSettings {
+  platform_name: string;
+  support_email: string;
+  primary_color: string;
+  accent_color: string;
+  gradient_style: string;
   gradient_custom: any | null;
-  border_radius: number | null;
-  default_theme: string | null;
-  font_family: string | null;
-  font_url: string | null;
-  base_font_size: number | null;
-  footer_text: string | null;
-  terms_url: string | null;
-  privacy_url: string | null;
-  logo_url: string | null;
-  logo_dark_url: string | null;
-  favicon_url: string | null;
-  login_headline: string | null;
-  login_subheadline: string | null;
-  login_stats_enabled: boolean | null;
-  login_bg_image_url: string | null;
-  login_bg_layout: string | null;
-  login_logo_position: string | null;
-  hide_widget_branding: boolean | null;
-  widget_accent_color: string | null;
-  powered_by_text: string | null;
-  browser_title: string | null;
-  meta_description: string | null;
-  og_image_url: string | null;
-  twitter_handle: string | null;
-  default_language: string | null;
-  public_app_url: string | null;
+  border_radius: number;
+  default_theme: string;
+  font_family: string;
+  font_url: string;
+  base_font_size: number;
+  footer_text: string;
+  terms_url: string;
+  privacy_url: string;
+  logo_url: string;
+  logo_dark_url: string;
+  favicon_url: string;
+  login_headline: string;
+  login_subheadline: string;
+  login_stats_enabled: boolean;
+  login_bg_image_url: string;
+  login_bg_layout: string;
+  login_logo_position: string;
+  hide_widget_branding: boolean;
+  widget_accent_color: string;
+  powered_by_text: string;
+  browser_title: string;
+  meta_description: string;
+  og_image_url: string;
+  twitter_handle: string;
+  default_language: string;
+  public_app_url: string;
 }
 
 const FONT_URLS: Record<string, string> = {
   Inter: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap',
-  Poppins: 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap',
-  Roboto: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap',
-  Manrope: 'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap',
-  'DM Sans': 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap',
-  'Plus Jakarta Sans':
-    'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
 };
 
 function injectFont(family: string, customUrl?: string | null) {
@@ -75,61 +67,19 @@ function injectFont(family: string, customUrl?: string | null) {
   document.body.style.fontFamily = `'${family}', system-ui, -apple-system, sans-serif`;
 }
 
-const BRANDING_CACHE_KEY = 'platform-branding-cache-v1';
-
 export const PLATFORM_BRANDING_QUERY_KEY = ['platform-branding'] as const;
 
-export async function fetchPlatformBranding(): Promise<PlatformSettings | null> {
-  const { data, error } = await (supabase as any)
-    .from('platform_branding_public')
-    .select('*')
-    .limit(1)
-    .maybeSingle();
-
-  if (error) {
-    console.error('Error fetching platform settings:', error);
-    return null;
-  }
-
-  if (data) {
-    try {
-      localStorage.setItem(BRANDING_CACHE_KEY, JSON.stringify(data));
-    } catch {
-      // ignore quota errors
-    }
-  }
-
-  return data as unknown as PlatformSettings | null;
+export async function fetchPlatformBranding(): Promise<PlatformSettings> {
+  return BRANDING as unknown as PlatformSettings;
 }
 
-/**
- * Hook canônico de identidade visual.
- *
- * Importante:
- *  - NÃO usamos `initialData` aqui. Quando combinado com `staleTime > 0`,
- *    o React Query trata o cache como "fresco" e não busca o estado real
- *    do banco — foi por isso que alterações feitas no painel Super Admin
- *    paravam de aparecer ("travadas" em uma versão antiga).
- *  - O `localStorage` continua sendo usado como fallback visual imediato
- *    apenas para evitar flash, lido em sync na primeira renderização.
- */
 export function usePlatformBranding() {
-  const { data: settings } = useQuery({
-    queryKey: PLATFORM_BRANDING_QUERY_KEY,
-    queryFn: fetchPlatformBranding,
-    // Sempre revalidar — alterações no Super Admin precisam aparecer rápido
-    staleTime: 0,
-    gcTime: 1000 * 60 * 30,
-    refetchOnMount: 'always',
-    refetchOnWindowFocus: true,
-  });
+  const settings = BRANDING as unknown as PlatformSettings;
 
   useEffect(() => {
-    if (!settings) return;
     const root = document.documentElement;
 
-    // ===== COLORS =====
-    const primary = settings.primary_color || '#84CC16';
+    const primary = settings.primary_color;
     const scale = generateColorScale(primary);
     if (scale) {
       root.style.setProperty('--primary', scale.baseStr);
@@ -162,18 +112,12 @@ export function usePlatformBranding() {
       }
     }
 
-    if (settings.border_radius != null) {
-      root.style.setProperty('--radius', `${settings.border_radius}px`);
-    }
+    root.style.setProperty('--radius', `${settings.border_radius}px`);
 
-    if (settings.font_family) {
-      injectFont(settings.font_family, settings.font_url);
-    }
-    if (settings.base_font_size) {
-      root.style.fontSize = `${settings.base_font_size}px`;
-    }
+    injectFont(settings.font_family, settings.font_url || null);
+    root.style.fontSize = `${settings.base_font_size}px`;
 
-    // ===== FAVICON =====
+    // Favicon
     if (settings.favicon_url) {
       let faviconLink = document.querySelector("link[rel='icon']") as HTMLLinkElement;
       if (!faviconLink) {
@@ -193,38 +137,24 @@ export function usePlatformBranding() {
       }
       appleIcon.href = settings.favicon_url;
 
-      const appleSizes = ['180x180', '152x152', '144x144', '120x120', '76x76', '60x60'];
-      appleSizes.forEach((size) => {
-        let icon = document.querySelector(
-          `link[rel='apple-touch-icon'][sizes='${size}']`
-        ) as HTMLLinkElement;
-        if (!icon) {
-          icon = document.createElement('link');
-          icon.rel = 'apple-touch-icon';
-          icon.setAttribute('sizes', size);
-          document.head.appendChild(icon);
-        }
-        icon.href = settings.favicon_url;
-      });
-
       let manifestLink = document.querySelector("link[rel='manifest']") as HTMLLinkElement;
       if (manifestLink) {
         const dynamicManifest = {
-          name: settings.platform_name || 'Buffallos Sales',
-          short_name: settings.platform_name || 'Buffallos Sales',
-          description: settings.meta_description || 'Plataforma de vendas',
+          name: settings.platform_name,
+          short_name: settings.platform_name,
+          description: settings.meta_description,
           start_url: '/',
           display: 'standalone',
           orientation: 'portrait',
           background_color: '#0a0d14',
-          theme_color: settings.primary_color || '#84CC16',
+          theme_color: settings.primary_color,
           icons: [192, 384, 512].map((s) => ({
-            src: settings.favicon_url!,
+            src: settings.favicon_url,
             sizes: `${s}x${s}`,
             type: 'image/png',
             purpose: 'maskable any',
           })),
-          lang: settings.default_language || 'pt-BR',
+          lang: settings.default_language,
         };
 
         const manifestBlob = new Blob([JSON.stringify(dynamicManifest)], {
@@ -235,20 +165,15 @@ export function usePlatformBranding() {
       }
     }
 
-    document.title = settings.browser_title || settings.platform_name || 'Buffallos Sales';
+    document.title = settings.browser_title || settings.platform_name;
 
-    if (settings.primary_color) {
-      let themeColor = document.querySelector("meta[name='theme-color']") as HTMLMetaElement;
-      if (!themeColor) {
-        themeColor = document.createElement('meta');
-        themeColor.name = 'theme-color';
-        document.head.appendChild(themeColor);
-      }
-      themeColor.content = settings.primary_color;
+    let themeColor = document.querySelector("meta[name='theme-color']") as HTMLMetaElement;
+    if (!themeColor) {
+      themeColor = document.createElement('meta');
+      themeColor.name = 'theme-color';
+      document.head.appendChild(themeColor);
     }
-
-    const platformName = settings.platform_name || 'Buffallos Sales';
-    const description = settings.meta_description || 'Buffallos Sales — Plataforma de vendas com IA';
+    themeColor.content = settings.primary_color;
 
     const updateMeta = (selector: string, attr: string, value: string) => {
       let el = document.querySelector(selector) as HTMLMetaElement;
@@ -261,36 +186,22 @@ export function usePlatformBranding() {
       el.setAttribute(attr, value);
     };
 
-    updateMeta("meta[name='description']", 'content', description);
-    updateMeta("meta[name='author']", 'content', platformName);
-    updateMeta("meta[property='og:title']", 'content', platformName);
-    updateMeta("meta[property='og:description']", 'content', description);
+    updateMeta("meta[name='description']", 'content', settings.meta_description);
+    updateMeta("meta[name='author']", 'content', settings.platform_name);
+    updateMeta("meta[property='og:title']", 'content', settings.platform_name);
+    updateMeta("meta[property='og:description']", 'content', settings.meta_description);
     updateMeta("meta[name='twitter:card']", 'content', 'summary_large_image');
-
-    if (settings.twitter_handle) {
-      updateMeta("meta[name='twitter:site']", 'content', settings.twitter_handle);
-    }
 
     const ogImage = settings.og_image_url || settings.logo_url;
     if (ogImage) {
       updateMeta("meta[property='og:image']", 'content', ogImage);
       updateMeta("meta[name='twitter:image']", 'content', ogImage);
     }
-  }, [settings]);
+  }, []);
 
   return settings;
 }
 
-/**
- * Lê o cache local de branding síncronamente — usado apenas como
- * placeholder visual antes do React Query carregar a versão real.
- */
-export function readCachedBrandingSync(): PlatformSettings | null {
-  try {
-    if (typeof window === 'undefined') return null;
-    const raw = localStorage.getItem(BRANDING_CACHE_KEY);
-    return raw ? (JSON.parse(raw) as PlatformSettings) : null;
-  } catch {
-    return null;
-  }
+export function readCachedBrandingSync(): PlatformSettings {
+  return BRANDING as unknown as PlatformSettings;
 }

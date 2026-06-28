@@ -18,6 +18,7 @@ import { AIGlobalToggle } from '@/components/admin/AIGlobalToggle';
 const f = {
   AdminDashboard: () => import('@/components/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })),
   OrdersManager: () => import('@/components/admin/orders/OrdersManager').then(m => ({ default: m.OrdersManager })),
+  CertificatesManager: () => import('@/components/admin/certificates/CertificatesManager').then(m => ({ default: m.CertificatesManager })),
   IntegrationsManager: () => import('@/components/admin/integrations/IntegrationsManager').then(m => ({ default: m.IntegrationsManager })),
   NotificationManager: () => import('@/components/admin/NotificationManager').then(m => ({ default: m.NotificationManager })),
   InboxManager: () => import('@/components/admin/InboxManager').then(m => ({ default: m.InboxManager })),
@@ -31,7 +32,6 @@ const f = {
   PlatformWhatsApp: () => import('@/components/superadmin/EvolutionManager').then(m => ({ default: m.EvolutionManager })),
   PlatformAgentTools: () => import('@/components/superadmin/AgentToolExecutionsPanel').then(m => ({ default: m.AgentToolExecutionsPanel })),
   PlatformAIQuality: () => import('@/components/superadmin/AIQualityPanel').then(m => ({ default: m.AIQualityPanel })),
-  PlatformBranding: () => import('@/components/superadmin/PlatformSettings').then(m => ({ default: m.PlatformSettings })),
   PlatformEmail: () => import('@/components/superadmin/EmailSettings').then(m => ({ default: m.EmailSettings })),
   PlatformAudit: () => import('@/components/superadmin/AuditLogs').then(m => ({ default: m.AuditLogs })),
 };
@@ -39,6 +39,7 @@ const f = {
 // Lazy components (com retry + cache compartilhado para prefetch).
 const AdminDashboard = lazyWithRetry(f.AdminDashboard);
 const OrdersManager = lazyWithRetry(f.OrdersManager);
+const CertificatesManager = lazyWithRetry(f.CertificatesManager);
 const IntegrationsManager = lazyWithRetry(f.IntegrationsManager);
 const NotificationManager = lazyWithRetry(f.NotificationManager);
 const InboxManager = lazyWithRetry(f.InboxManager);
@@ -53,7 +54,6 @@ const BusinessHoursManager = lazyWithRetry(f.BusinessHoursManager);
 const PlatformWhatsApp = lazyWithRetry(f.PlatformWhatsApp);
 const PlatformAgentTools = lazyWithRetry(f.PlatformAgentTools);
 const PlatformAIQuality = lazyWithRetry(f.PlatformAIQuality);
-const PlatformBranding = lazyWithRetry(f.PlatformBranding);
 const PlatformEmail = lazyWithRetry(f.PlatformEmail);
 const PlatformAudit = lazyWithRetry(f.PlatformAudit);
 
@@ -66,6 +66,7 @@ const PlatformAudit = lazyWithRetry(f.PlatformAudit);
 const sectionFactories: Record<string, () => Promise<unknown>> = {
   dashboard: f.AdminDashboard,
   orders: f.OrdersManager,
+  certificates: f.CertificatesManager,
   inbox: f.InboxManager,
   agents: f.AgentsManager,
   capture: f.CaptureManager,
@@ -79,7 +80,6 @@ const sectionFactories: Record<string, () => Promise<unknown>> = {
   'platform-whatsapp': f.PlatformWhatsApp,
   'platform-agent-tools': f.PlatformAgentTools,
   'platform-ai-quality': f.PlatformAIQuality,
-  'platform-branding': f.PlatformBranding,
   'platform-email': f.PlatformEmail,
   'platform-audit': f.PlatformAudit,
 };
@@ -168,6 +168,7 @@ export default function Admin({ initialSection }: { initialSection?: string } = 
     switch (sectionId) {
       case 'dashboard': return <AdminDashboard />;
       case 'orders': return <OrdersManager />;
+      case 'certificates': return <CertificatesManager />;
       case 'inbox': return <InboxManager />;
       case 'agents': return <AgentsManager />;
       case 'capture': return <CaptureManager />;
@@ -180,7 +181,6 @@ export default function Admin({ initialSection }: { initialSection?: string } = 
       case 'platform-whatsapp': return <PlatformWhatsApp />;
       case 'platform-agent-tools': return <PlatformAgentTools />;
       case 'platform-ai-quality': return <PlatformAIQuality />;
-      case 'platform-branding': return <PlatformBranding />;
       case 'platform-email': return <PlatformEmail />;
       case 'platform-audit': return <PlatformAudit />;
       default: return <AdminDashboard />;

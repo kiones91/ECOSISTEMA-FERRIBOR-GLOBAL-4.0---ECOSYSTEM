@@ -1,38 +1,67 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-    --cursor-size: 18px;
-    --cursor-hover-size: 55px;
     --primary-red: #dc2626;
-    /* Vermelho Logo FerriBor */
     --primary-red-hover: #b91c1c;
     --bg-viewport: #F8FAF9;
     --bg-grid-line: rgba(15, 23, 42, 0.04);
-
-    /* Stack Carousel CSS Custom Properties */
-    --_offset-steps: 2.2rem;
-    --_scale-steps: 8;
-    --_opacity-steps: 25;
-    --_offset-steps-two: calc(var(--_offset-steps) * -1);
-    --_offset-steps-three: calc(var(--_offset-steps) * -2);
-    --scale-steps-two: calc(1 - var(--_scale-steps) * 0.01);
-    --scale-steps-three: calc(1 - var(--_scale-steps) * 0.02);
-    --opacity-steps-two: calc(1 - var(--_opacity-steps) * 0.02);
-    --opacity-steps-three: calc(1 - var(--_opacity-steps) * 0.04);
 }
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #0c0f12;
-    cursor: none;
+    background-color: #F8FAF9;
+    background-image:
+        radial-gradient(circle at 70% 10%, rgba(220, 38, 38, 0.06), transparent 34rem),
+        radial-gradient(circle at 15% 45%, rgba(15, 23, 42, 0.03), transparent 26rem),
+        radial-gradient(circle at 85% 80%, rgba(220, 38, 38, 0.04), transparent 28rem);
     overflow-y: auto;
     overflow-x: hidden;
     color: #0f172a;
-    /* Slate 900 */
+}
+
+.aura-noise {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(15, 23, 42, 0.07) 1px, transparent 1px);
+    background-size: 4px 4px;
+    mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+}
+
+.aura-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 84%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 84%, transparent);
+}
+
+/* Hero scroll-video text legibility over the dark frames */
+.hero-type {
+    text-shadow: 0 2px 30px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.text-outline-light {
+    -webkit-text-stroke: 1.5px #f3f0e8;
+    color: transparent;
+}
+
+@keyframes scroll-line {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+.animate-scroll-line {
+    animation: scroll-line 1.5s cubic-bezier(0.77, 0, 0.175, 1) infinite;
 }
 
 h1,

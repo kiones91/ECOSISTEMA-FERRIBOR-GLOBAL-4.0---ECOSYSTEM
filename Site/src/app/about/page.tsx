@@ -19,7 +19,7 @@ const certifications = [
 ];
 
 const stats = [
-	{ value: "20+", label: "Anos de experiência" },
+	{ value: "12+", label: "Anos de experiência" },
 	{ value: "5.000+", label: "Projetos entregues" },
 	{ value: "4", label: "Setores industriais" },
 	{ value: "6", label: "Países atendidos" },
@@ -38,7 +38,7 @@ export default function AboutPage() {
 	}, []);
 
 	return (
-		<div className="relative w-full max-w-[1440px] min-h-screen mx-auto bg-[#F8FAF9] border-x border-t border-[#2f3136]/30 xl:border-x-[16px] xl:border-t-[16px] xl:border-[#2f3136] rounded-t-[32px] xl:rounded-t-[48px] shadow-[0_0_50px_rgba(0,0,0,0.8)] flex flex-col z-10 overflow-hidden">
+		<div className="relative w-full max-w-[1440px] min-h-screen mx-auto bg-white/80 backdrop-blur-sm border border-red-500/20 rounded-t-[32px] xl:rounded-t-[48px] shadow-[0_0_20px_rgba(220,38,38,0.08),0_0_60px_rgba(220,38,38,0.03)] flex flex-col z-10 overflow-hidden">
 
 			{/* Header */}
 			<nav className="sticky top-4 mx-4 md:mx-8 z-50 flex items-center justify-between gap-4 transition-all duration-300">
@@ -70,7 +70,7 @@ export default function AboutPage() {
 						<span className="text-[10px] font-bold tracking-widest uppercase text-slate-400">Sobre Nós</span>
 					</div>
 					<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tighter text-slate-900 mb-6">
-						Mais de 20 anos<br />
+						Desde 2014<br />
 						<span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-black">transformando borracha em solução.</span>
 					</h1>
 					<p className="text-sm md:text-base text-slate-500 max-w-2xl mx-auto leading-relaxed">
@@ -100,10 +100,10 @@ export default function AboutPage() {
 						</h2>
 						<div className="space-y-4 text-sm text-slate-600 leading-relaxed">
 							<p>
-								Fundada em Santa Gertrudes, São Paulo, a FerriBor nasceu da paixão por elastômeros e da necessidade de fornecer soluções técnicas de alta precisão para a indústria brasileira.
+								Constituída em 20 de Março de 2014 em Santa Gertrudes, São Paulo, a FerriBor nasceu da paixão por elastômeros e da necessidade de fornecer soluções técnicas de alta precisão para a indústria brasileira.
 							</p>
 							<p>
-								Ao longo de mais de duas décadas, investimos continuamente em tecnologia de produção, laboratório próprio de ensaios e capacitação técnica da nossa equipe, consolidando-nos como referência em artefatos de borracha industrial.
+								Ao longo de mais de uma década, investimos continuamente em tecnologia de produção, laboratório próprio de ensaios e capacitação técnica da nossa equipe, consolidando-nos como referência em artefatos de borracha industrial.
 							</p>
 							<p>
 								Hoje, atendemos clientes em 6 países da América Latina, oferecendo desde vedações especiais até revestimentos de rolos com usinagem de precisão decimal.
@@ -143,6 +143,30 @@ export default function AboutPage() {
 								<p className="text-xs text-slate-500 leading-relaxed">{v.desc}</p>
 							</div>
 						))}
+					</div>
+				</div>
+			</section>
+
+			{/* Mission & Vision */}
+			<section className="relative z-10 py-16 lg:py-20 px-6 md:px-12 border-b border-slate-900/5">
+				<div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+					<div className="glass-panel-light rounded-2xl p-8 border border-white/40 bg-white/40 backdrop-blur-xl reveal-item">
+						<div className="w-10 h-10 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-600 mb-4">
+							<i className="iconify text-lg" data-icon="lucide:target"></i>
+						</div>
+						<h3 className="text-lg font-bold text-slate-900 mb-3">Missão</h3>
+						<p className="text-sm text-slate-600 leading-relaxed">
+							Garantir a qualidade elevada dos nossos produtos e serviços, com base na nossa competência e experiência aliada ao profissionalismo, superando as expectativas dos clientes e garantindo sua fidelização. Utilizar-se com respeito e conscientização dos Recursos Naturais e promovendo um ambiente seguro aos nossos Colaboradores.
+						</p>
+					</div>
+					<div className="glass-panel-light rounded-2xl p-8 border border-white/40 bg-white/40 backdrop-blur-xl reveal-item" style={{ animationDelay: '0.1s' }}>
+						<div className="w-10 h-10 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-600 mb-4">
+							<i className="iconify text-lg" data-icon="lucide:eye"></i>
+						</div>
+						<h3 className="text-lg font-bold text-slate-900 mb-3">Visão</h3>
+						<p className="text-sm text-slate-600 leading-relaxed">
+							Ser reconhecida no ramo de atividade, pela capacidade de apresentar novas soluções munida de capacidade técnica e respeito aos nossos clientes.
+						</p>
 					</div>
 				</div>
 			</section>

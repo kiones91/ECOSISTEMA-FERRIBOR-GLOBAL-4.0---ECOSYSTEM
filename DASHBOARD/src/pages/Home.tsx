@@ -7,7 +7,7 @@ const tabs = [
   { id: "pedidos", label: "Pedidos" },
   { id: "recompra", label: "Recompra" },
   { id: "credit", label: "FerriBor Credit" },
-  { id: "circular", label: "Circular / ESG" },
+  { id: "circular", label: "ESG" },
   { id: "documentos", label: "Documentos" },
 ] as const;
 
@@ -931,6 +931,175 @@ function PedidosTab({ d }: { d: boolean }) {
 }
 
 function RecompraTab({ d }: { d: boolean }) {
+  const [view, setView] = useState<"home" | "list" | "form">("home");
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [formItems, setFormItems] = useState<{ product_name: string; quantity: number; unit: string }[]>([]);
+  const [deadline, setDeadline] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const fetchOrders = async () => {
+    setLoading(true);
+    const { data } = await supabase
+      .from("orders")
+      .select("*, order_items(*)")
+      .order("created_at", { ascending: false });
+    setOrders(data || []);
+    setLoading(false);
+    setView("list");
+  };
+
+  const startRecompra = (order: any) => {
+    setSelectedOrder(order);
+    const items = (order.order_items || order.items || []).map((i: any) => ({
+      product_name: i.product_name,
+      quantity: i.quantity,
+      unit: i.unit || "un",
+    }));
+    setFormItems(items);
+    setDeadline("");
+    setView("form");
+  };
+
+  const updateItem = (idx: number, field: string, value: any) => {
+    setFormItems((prev) => prev.map((item, i) => (i === idx ? { ...item, [field]: value } : item)));
+  };
+
+  const removeItem = (idx: number) => {
+    setFormItems((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  const addItem = () => {
+    setFormItems((prev) => [...prev, { product_name: "", quantity: 1, unit: "un" }]);
+  };
+
+  const handleSubmit = async () => {
+    if (formItems.length === 0) return;
+    setSubmitting(true);
+    const { error } = await supabase.from("orders").insert({
+      client_id: selectedOrder.client_id,
+      client_name: selectedOrder.client_name,
+      client_company: selectedOrder.client_company,
+      client_cpf_cnpj: selectedOrder.client_cpf_cnpj,
+      client_email: selectedOrder.client_email,
+      client_phone: selectedOrder.client_phone,
+      shipping_address: selectedOrder.shipping_address,
+      status: "pending",
+      delivery_deadline: deadline || null,
+      notes: `Recompra do pedido #${selectedOrder.order_number || selectedOrder.id.slice(0, 8)}`,
+    });
+    if (!error) {
+      setView("home");
+      setSelectedOrder(null);
+    }
+    setSubmitting(false);
+  };
+
+  if (view === "list") {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className={`text-lg font-semibold ${d ? "text-white" : "text-neutral-900"}`}>Pedidos disponíveis para recompra</h2>
+          <button onClick={() => setView("home")} className={`text-xs ${d ? "text-neutral-400 hover:text-white" : "text-neutral-600 hover:text-neutral-900"} transition`}>
+            ← Voltar
+          </button>
+        </div>
+        {loading ? (
+          <p className={`text-sm ${d ? "text-neutral-500" : "text-neutral-600"}`}>Carregando pedidos...</p>
+        ) : orders.length === 0 ? (
+          <p className={`text-sm ${d ? "text-neutral-500" : "text-neutral-600"}`}>Nenhum pedido encontrado.</p>
+        ) : (
+          <div className="space-y-2">
+            {orders.map((order) => (
+              <div key={order.id} className={`flex items-center justify-between rounded-xl border px-4 py-3 ${d ? "border-white/10 bg-white/[0.03]" : "border-neutral-200 bg-neutral-50"}`}>
+                <div>
+                  <p className={`text-sm font-medium ${d ? "text-white" : "text-neutral-900"}`}>
+                    Pedido #{order.order_number || order.id.slice(0, 8)}
+                  </p>
+                  <p className={`text-xs ${d ? "text-neutral-500" : "text-neutral-600"}`}>
+                    {(order.order_items || []).length} itens · {new Date(order.created_at).toLocaleDateString("pt-BR")}
+                  </p>
+                </div>
+                <button
+                  onClick={() => startRecompra(order)}
+                  className="rounded-lg bg-red-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-red-500"
+                >
+                  Recompra
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  if (view === "form" && selectedOrder) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className={`text-lg font-semibold ${d ? "text-white" : "text-neutral-900"}`}>
+            Recompra — Pedido #{selectedOrder.order_number || selectedOrder.id.slice(0, 8)}
+          </h2>
+          <button onClick={() => setView("list")} className={`text-xs ${d ? "text-neutral-400 hover:text-white" : "text-neutral-600 hover:text-neutral-900"} transition`}>
+            ← Voltar
+          </button>
+        </div>
+
+        <div className={`rounded-xl border p-4 ${d ? "border-white/10 bg-white/[0.03]" : "border-neutral-200 bg-neutral-50"}`}>
+          <p className={`text-xs font-medium uppercase tracking-wide mb-3 ${d ? "text-neutral-400" : "text-neutral-600"}`}>Itens do pedido</p>
+          <div className="space-y-2">
+            {formItems.map((item, idx) => (
+              <div key={idx} className={`flex items-center gap-2 rounded-lg border px-3 py-2 ${d ? "border-white/10 bg-white/[0.02]" : "border-neutral-200 bg-white"}`}>
+                <input
+                  value={item.product_name}
+                  onChange={(e) => updateItem(idx, "product_name", e.target.value)}
+                  placeholder="Nome do produto"
+                  className={`flex-1 bg-transparent text-sm outline-none ${d ? "text-white placeholder-neutral-600" : "text-neutral-900 placeholder-neutral-400"}`}
+                />
+                <input
+                  type="number"
+                  min={1}
+                  value={item.quantity}
+                  onChange={(e) => updateItem(idx, "quantity", Number(e.target.value))}
+                  className={`w-16 rounded-md border px-2 py-1 text-center text-sm outline-none ${d ? "border-white/10 bg-white/5 text-white" : "border-neutral-200 bg-neutral-100 text-neutral-900"}`}
+                />
+                <input
+                  value={item.unit}
+                  onChange={(e) => updateItem(idx, "unit", e.target.value)}
+                  className={`w-14 rounded-md border px-2 py-1 text-center text-xs outline-none ${d ? "border-white/10 bg-white/5 text-white" : "border-neutral-200 bg-neutral-100 text-neutral-900"}`}
+                />
+                <button onClick={() => removeItem(idx)} className="text-red-500 hover:text-red-400 text-sm">✕</button>
+              </div>
+            ))}
+          </div>
+          <button onClick={addItem} className={`mt-2 text-xs ${d ? "text-neutral-400 hover:text-white" : "text-neutral-600 hover:text-neutral-900"} transition`}>
+            + Adicionar item
+          </button>
+        </div>
+
+        <div className={`rounded-xl border p-4 ${d ? "border-white/10 bg-white/[0.03]" : "border-neutral-200 bg-neutral-50"}`}>
+          <label className={`text-xs font-medium uppercase tracking-wide ${d ? "text-neutral-400" : "text-neutral-600"}`}>Prazo de entrega</label>
+          <input
+            type="date"
+            value={deadline}
+            onChange={(e) => setDeadline(e.target.value)}
+            className={`mt-2 w-full rounded-lg border px-3 py-2 text-sm outline-none ${d ? "border-white/10 bg-white/5 text-white" : "border-neutral-200 bg-white text-neutral-900"}`}
+          />
+        </div>
+
+        <button
+          onClick={handleSubmit}
+          disabled={submitting || formItems.length === 0}
+          className="w-full rounded-xl bg-red-600 py-3 text-sm font-medium text-white transition hover:bg-red-500 disabled:opacity-50"
+        >
+          {submitting ? "Enviando..." : "Confirmar Recompra"}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-8 lg:grid-cols-12">
       <Card d={d} accent className="md:col-span-8 lg:col-span-6 min-h-[240px] flex flex-col justify-between">
@@ -957,7 +1126,7 @@ function RecompraTab({ d }: { d: boolean }) {
           <h2 className={`text-lg font-semibold tracking-tight ${d ? "text-white" : "text-neutral-900"}`}>Recomprar pedido anterior</h2>
         </div>
         <p className={`text-xs mb-4 ${d ? "text-neutral-500" : "text-neutral-600"}`}>Selecione um pedido anterior para recompra com 1 clique.</p>
-        <button className="w-full rounded-xl bg-red-600 py-3 text-sm font-medium text-white transition hover:bg-red-500">
+        <button onClick={fetchOrders} className="w-full rounded-xl bg-red-600 py-3 text-sm font-medium text-white transition hover:bg-red-500">
           Ver pedidos disponíveis
         </button>
       </Card>

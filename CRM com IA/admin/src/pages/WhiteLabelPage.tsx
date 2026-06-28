@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import brandLogo from '@/assets/logo-light.png';
+import brandLogo from '@/assets/branding/logo-light.png';
 import './whitelabel.css';
 
 const CHECKOUT_URL = 'https://checkout.doppus.app/30426346/';

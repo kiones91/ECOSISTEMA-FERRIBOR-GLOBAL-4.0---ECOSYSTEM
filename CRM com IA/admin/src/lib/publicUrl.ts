@@ -1,15 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { readCachedBrandingSync } from '@/hooks/usePlatformBranding';
+import { BRANDING } from '@/config/branding';
 
-const FALLBACK_PUBLIC_APP_URL = 'https://app.buffallos.com.br';
+const FALLBACK_PUBLIC_APP_URL = BRANDING.public_app_url;
 
 const BLOCKED_HOST =
   /(^|\.)lovableproject\.com$|(^|\.)lovable\.app$|(^|\.)lovable\.dev$|^localhost$|^127\.0\.0\.1$/i;
 
 const LEGACY_ONLINE_HOST = /^(app\.)?buffallos\.online$/i;
 
-/** URL explícita (env / branding) — converte .online legado para .com.br */
 function normalizeConfiguredUrl(value?: string | null): string | null {
   const raw = value?.trim().replace(/\/+$/, '');
   if (!raw) return null;
@@ -23,7 +20,6 @@ function normalizeConfiguredUrl(value?: string | null): string | null {
   }
 }
 
-/** Origem inferida do browser — redireciona domínio legado .online para .com.br */
 function canonicalizeOrigin(origin: string): string {
   try {
     const url = new URL(origin);
@@ -38,7 +34,7 @@ function canonicalizeOrigin(origin: string): string {
 function resolveExplicitPublicUrl(): string | null {
   return (
     normalizeConfiguredUrl(import.meta.env.VITE_PUBLIC_APP_URL) ||
-    normalizeConfiguredUrl((readCachedBrandingSync() as { public_app_url?: string })?.public_app_url)
+    normalizeConfiguredUrl(BRANDING.public_app_url)
   );
 }
 
@@ -69,18 +65,5 @@ export function getPublicAppUrl(configuredUrl?: string | null): string {
 }
 
 export function usePublicAppUrl() {
-  return useQuery({
-    queryKey: ['public-app-url'],
-    queryFn: async () => {
-      const { data } = await (supabase as any)
-        .from('platform_branding_public')
-        .select('public_app_url')
-        .limit(1)
-        .maybeSingle();
-      return getPublicAppUrl(data?.public_app_url);
-    },
-    initialData: getPublicAppUrl(),
-    staleTime: 1000 * 60 * 30,
-    gcTime: 1000 * 60 * 60,
-  });
+  return { data: getPublicAppUrl() };
 }
