@@ -20,7 +20,7 @@ mkdir -p "$OUT"
 
 echo "==> 1/4 Build do Site (Next.js export) -> /"
 cd "$ROOT/Site"
-npm ci
+npm ci --legacy-peer-deps
 npm run build
 cp -r out/. "$OUT/"
 
@@ -31,14 +31,14 @@ cp -r "$ROOT/proposta comercial/assets" "$OUT/proposta/assets"
 
 echo "==> 3/4 Build do CRM (base /crm/) -> /crm"
 cd "$ROOT/CRM com IA/admin"
-npm ci
+npm ci --legacy-peer-deps
 VITE_BASE_PATH=/crm/ npm run build
 mkdir -p "$OUT/crm"
 cp -r "$ROOT/dist/admin/." "$OUT/crm/"
 
 echo "==> 4/4 Build do Dashboard (base /cliente/) -> /cliente"
 cd "$ROOT/DASHBOARD"
-npm ci
+npm ci --legacy-peer-deps
 VITE_BASE_PATH=/cliente/ npm run build
 mkdir -p "$OUT/cliente"
 cp -r dist/. "$OUT/cliente/"
