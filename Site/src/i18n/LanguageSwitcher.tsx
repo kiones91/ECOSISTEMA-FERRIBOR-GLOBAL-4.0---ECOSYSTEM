@@ -30,7 +30,7 @@ export function LanguageSwitcher() {
 				aria-label="Selecionar idioma"
 				aria-haspopup="listbox"
 				aria-expanded={open}
-				className="flex items-center gap-2 rounded-full border border-white/40 bg-white/10 backdrop-blur-md px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white shadow-[0_2px_12px_rgba(0,0,0,0.15)] hover:bg-white/20 hover:border-white/60 transition-all duration-300"
+				className="flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/40 bg-white/10 backdrop-blur-md px-2.5 py-1.5 sm:px-3 sm:py-2 text-[10px] sm:text-xs font-bold uppercase tracking-[0.12em] text-white shadow-[0_2px_12px_rgba(0,0,0,0.15)] hover:bg-white/20 hover:border-white/60 transition-all duration-300"
 			>
 				<i className="iconify text-base" data-icon={LANG_META[lang].flag} style={{ borderRadius: '50%', overflow: 'hidden' }}></i>
 				<span>{LANG_META[lang].label}</span>

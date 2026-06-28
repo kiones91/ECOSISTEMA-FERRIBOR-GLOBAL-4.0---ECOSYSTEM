@@ -205,15 +205,15 @@ export default function HomePage() {
 			</div>
 
 			{/* Fixed hero text overlay — pinned during scrub, fades out */}
-			<div ref={heroContentRef} className="fixed inset-0 z-[5] flex items-center px-6 md:px-12 pointer-events-none">
+			<div ref={heroContentRef} className="fixed inset-0 z-[5] flex items-center pt-24 pb-12 sm:pt-32 sm:pb-16 px-6 md:px-12 pointer-events-none">
 				<div className="w-full max-w-[1440px] mx-auto">
 					<div className="max-w-3xl pointer-events-auto">
-						<h1 className="hero-type text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tighter text-[#f3f0e8] mb-8 font-heading">
+						<h1 className="hero-type text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tighter text-[#f3f0e8] mb-6 font-heading">
 							{t('hero.title1')}<br />
 							<span className="text-outline-light">{t('hero.title2')} </span>
 							<span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300 font-extrabold">{t('hero.title3')}</span>
 						</h1>
-						<p className="leading-relaxed text-base md:text-lg text-[#f3f0e8] max-w-2xl font-normal" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.7)' }}>
+						<p className="leading-relaxed text-xs sm:text-sm md:text-base text-[#f3f0e8] max-w-2xl font-normal" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.7)' }}>
 							{t('hero.paragraph')}
 						</p>
 					</div>
@@ -233,35 +233,35 @@ export default function HomePage() {
 				
 
 				{/* Header */}
-				<header className="fixed top-0 left-0 right-0 z-30 mx-auto flex w-full max-w-[92rem] items-center justify-between px-5 py-6 sm:px-8 lg:px-10 xl:px-12">
+				<header className="fixed top-0 left-0 right-0 z-30 mx-auto flex w-full max-w-[92rem] items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-8 lg:py-5 xl:px-10">
 					{/* Logo */}
 					<a className="flex items-center relative z-10" href="#inicio" aria-label="Voltar para o início">
 						<Logo3D />
 					</a>
 
 					{/* Center Nav Pill */}
-					<nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-full border border-slate-900/[0.08] bg-slate-900/[0.03] px-3 py-2 text-sm font-bold uppercase tracking-[0.12em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur-xl lg:flex">
-						<a className="group/nav relative overflow-hidden rounded-full px-5 py-2.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/">
+					<nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-0.5 rounded-full border border-slate-900/[0.08] bg-slate-900/[0.03] px-2 py-1.5 text-xs font-bold uppercase tracking-[0.1em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur-xl lg:flex">
+						<a className="group/nav relative overflow-hidden rounded-full px-3.5 py-1.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/">
 							<span className="absolute inset-0 rounded-full bg-red-600/0 transition-all duration-500 group-hover/nav:bg-red-600/[0.07]"></span>
 							<span className="absolute bottom-0 left-1/2 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-red-500 to-transparent transition-all duration-500 group-hover/nav:w-3/4"></span>
 							<span className="relative">{t('nav.inicio')}</span>
 						</a>
-						<a className="group/nav relative overflow-hidden rounded-full px-5 py-2.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/about">
+						<a className="group/nav relative overflow-hidden rounded-full px-3.5 py-1.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/about">
 							<span className="absolute inset-0 rounded-full bg-red-600/0 transition-all duration-500 group-hover/nav:bg-red-600/[0.07]"></span>
 							<span className="absolute bottom-0 left-1/2 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-red-500 to-transparent transition-all duration-500 group-hover/nav:w-3/4"></span>
 							<span className="relative">{t('nav.empresa')}</span>
 						</a>
-						<a className="group/nav relative overflow-hidden rounded-full px-5 py-2.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/services">
+						<a className="group/nav relative overflow-hidden rounded-full px-3.5 py-1.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/services">
 							<span className="absolute inset-0 rounded-full bg-red-600/0 transition-all duration-500 group-hover/nav:bg-red-600/[0.07]"></span>
 							<span className="absolute bottom-0 left-1/2 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-red-500 to-transparent transition-all duration-500 group-hover/nav:w-3/4"></span>
 							<span className="relative">{t('nav.servicos')}</span>
 						</a>
-						<a className="group/nav relative overflow-hidden rounded-full px-5 py-2.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/catalog">
+						<a className="group/nav relative overflow-hidden rounded-full px-3.5 py-1.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/catalog">
 							<span className="absolute inset-0 rounded-full bg-red-600/0 transition-all duration-500 group-hover/nav:bg-red-600/[0.07]"></span>
 							<span className="absolute bottom-0 left-1/2 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-red-500 to-transparent transition-all duration-500 group-hover/nav:w-3/4"></span>
 							<span className="relative">{t('nav.catalogo')}</span>
 						</a>
-						<a className="group/nav relative overflow-hidden rounded-full px-5 py-2.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/blog">
+						<a className="group/nav relative overflow-hidden rounded-full px-3.5 py-1.5 transition-all duration-500 hover:text-red-600 hover:shadow-[0_0_28px_rgba(220,38,38,0.18)]" href="/blog">
 							<span className="absolute inset-0 rounded-full bg-red-600/0 transition-all duration-500 group-hover/nav:bg-red-600/[0.07]"></span>
 							<span className="absolute bottom-0 left-1/2 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-red-500 to-transparent transition-all duration-500 group-hover/nav:w-3/4"></span>
 							<span className="relative">{t('nav.contato')}</span>
@@ -269,9 +269,9 @@ export default function HomePage() {
 					</nav>
 
 					{/* Portal button + Language Switcher */}
-					<div className="relative z-10 flex items-center gap-3">
+					<div className="relative z-10 flex items-center gap-2 sm:gap-3">
 						<LanguageSwitcher />
-						<a href={DASHBOARD_URL} className="text-sm font-bold uppercase tracking-[0.12em] px-7 py-3 bg-white text-black rounded-full border border-white/60 shadow-[0_2px_12px_rgba(0,0,0,0.15)] hover:bg-white/20 hover:backdrop-blur-md hover:border-white/40 hover:text-red-600 transition-all duration-300 text-center inline-block">
+						<a href={DASHBOARD_URL} className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.12em] px-4 py-2 sm:px-6 sm:py-2.5 bg-white text-black rounded-full border border-white/60 shadow-[0_2px_12px_rgba(0,0,0,0.15)] hover:bg-white/20 hover:backdrop-blur-md hover:border-white/40 hover:text-red-600 transition-all duration-300 text-center inline-block">
 							{t('cta.portalCliente')}
 						</a>
 					</div>

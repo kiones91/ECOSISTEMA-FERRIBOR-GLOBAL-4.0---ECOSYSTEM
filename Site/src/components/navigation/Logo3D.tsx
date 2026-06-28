@@ -9,7 +9,7 @@ export function Logo3D() {
 				width={120}
 				height={120}
 				draggable={false}
-				className="h-[80px] md:h-[100px] lg:h-[120px] w-auto object-contain select-none pointer-events-none"
+				className="h-[45px] sm:h-[55px] md:h-[65px] lg:h-[80px] w-auto object-contain select-none pointer-events-none"
 			/>
 		</div>
 	);
