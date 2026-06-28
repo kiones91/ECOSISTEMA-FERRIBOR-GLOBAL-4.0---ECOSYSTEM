@@ -357,9 +357,370 @@
   .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s var(--easing-smooth), transform 0.7s var(--easing-smooth); }
   .reveal.in { opacity: 1; transform: none; }
 
-  @media (max-width: 560px) {
-    .lockup { gap: 18px; }
-    .lockup-x { display: none; }
+  /* ============ PRESENTATION SECTIONS ============ */
+  .proposal-section {
+    position: relative;
+    z-index: 2;
+    padding: clamp(60px, 10vw, 110px) 0;
+    border-top: 1px solid var(--border-dim);
+    background: var(--bg-base);
+  }
+  .proposal-section:nth-child(even) {
+    background: var(--bg-alt);
+  }
+  .section-header {
+    max-width: 820px;
+    margin-bottom: clamp(40px, 6vw, 64px);
+  }
+  .section-header .eyebrow-small {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fb-red-bright);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .section-header h2 {
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 18px;
+  }
+  .section-header h2 .accent {
+    background: var(--grad-red);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .section-header p {
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    color: var(--text-dim);
+    line-height: 1.65;
+  }
+
+  /* Main Quote Card */
+  .ecosystem-quote-card {
+    background: linear-gradient(135deg, rgba(225, 29, 42, 0.05) 0%, rgba(225, 29, 42, 0) 100%);
+    border: 1px solid rgba(225, 29, 42, 0.12);
+    border-radius: var(--radius-lg);
+    padding: clamp(30px, 6vw, 54px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    margin-bottom: 56px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  }
+  .ecosystem-quote-card p {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.5vw, 2.1rem);
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--text-main);
+    text-align: center;
+  }
+
+  /* Ecosystem Layers */
+  .ecosystem-layers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .layer-card {
+    background: var(--surface-1);
+    border: 1px solid var(--border-dim);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    transition: all 0.3s var(--easing-smooth);
+  }
+  .layer-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--border-light);
+    background: var(--surface-2);
+  }
+  .layer-card .layer-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--fb-red-bright);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 14px;
+  }
+  .layer-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 14px;
+  }
+  .layer-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* Pillars of Ecosystem */
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+  .pillars-grid .pillar-card:nth-child(5) {
+    grid-column: span 2;
+  }
+  .pillar-card {
+    background: var(--surface-1);
+    border: 1px solid var(--border-dim);
+    border-radius: var(--radius-lg);
+    padding: clamp(24px, 4vw, 44px);
+    transition: all 0.3s var(--easing-smooth);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .pillar-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.4);
+  }
+  .pillar-header {
+    margin-bottom: 24px;
+  }
+  .pillar-card .pillar-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid var(--border-dim);
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    display: inline-block;
+    margin-bottom: 18px;
+  }
+  .pillar-card h3 {
+    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+    margin-bottom: 12px;
+  }
+  .pillar-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .pillar-list li {
+    position: relative;
+    padding-left: 24px;
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .pillar-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--fb-red-bright);
+    font-weight: bold;
+  }
+
+  /* Interactive Calculator */
+  .calculator-card {
+    background: linear-gradient(135deg, rgba(22, 24, 28, 0.8) 0%, rgba(13, 15, 18, 0.9) 100%);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: clamp(24px, 5vw, 48px);
+    box-shadow: var(--shadow-card);
+  }
+  .calc-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: clamp(24px, 6vw, 64px);
+    align-items: center;
+  }
+  .calc-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .input-group label {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    display: flex;
+    justify-content: space-between;
+  }
+  .input-group label span {
+    font-family: var(--font-mono);
+    color: var(--fb-red-bright);
+    font-weight: 600;
+  }
+  .input-group input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: var(--radius-pill);
+    background: var(--border-strong);
+    outline: none;
+  }
+  .input-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--fb-red-bright);
+    cursor: pointer;
+    box-shadow: 0 0 12px var(--fb-red-bright);
+    transition: transform 0.1s;
+  }
+  .input-group input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+  }
+  .calc-results {
+    background: rgba(225, 29, 42, 0.03);
+    border: 1px solid rgba(225, 29, 42, 0.15);
+    border-radius: var(--radius-md);
+    padding: clamp(24px, 4vw, 38px);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .result-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .result-item .result-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+  .result-item .result-val {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1;
+    color: var(--text-main);
+  }
+  .result-item.highlight .result-val {
+    background: var(--grad-red);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Cases Grid */
+  .cases-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+  .case-card {
+    background: var(--surface-1);
+    border: 1px solid var(--border-dim);
+    border-radius: var(--radius-lg);
+    padding: 38px;
+    transition: all 0.3s var(--easing-smooth);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .case-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-light);
+  }
+  .case-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fb-red-bright);
+    margin-bottom: 18px;
+    display: block;
+  }
+  .case-metric {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 4vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1;
+    color: var(--text-main);
+    margin-bottom: 12px;
+  }
+  .case-card h4 {
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+  }
+  .case-card p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .case-author {
+    border-top: 1px solid var(--border-dim);
+    padding-top: 18px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .case-author strong {
+    color: var(--text-dim);
+  }
+
+  /* Timeline Roadmap */
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    position: relative;
+  }
+  .timeline-card {
+    background: var(--surface-1);
+    border: 1px solid var(--border-dim);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    position: relative;
+    transition: all 0.3s var(--easing-smooth);
+  }
+  .timeline-card:hover {
+    border-color: rgba(225, 29, 42, 0.3);
+    background: var(--surface-2);
+  }
+  .timeline-card .step-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--fb-red-bright);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .timeline-card h4 {
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+  }
+  .timeline-card .timeline-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 960px) {
+    .ecosystem-layers-grid, .pillars-grid, .cases-grid, .timeline-grid {
+      grid-template-columns: 1fr;
+    }
+    .pillars-grid .pillar-card:nth-child(5) {
+      grid-column: span 1;
+    }
+    .calc-grid {
+      grid-template-columns: 1fr;
+      gap: 38px;
+    }
   }
 </style>
 </head>
@@ -380,7 +741,7 @@
 
     <!-- Logo lockup: FERRIBOR no centro -->
     <div class="client-hero-brand reveal">
-      <img class="client-hero-logo" src="assets/ferribor-logo.png" alt="FerriBor" />
+      <img class="client-hero-logo" src="assets/logo.png" alt="FerriBor" />
       <p class="client-note">Ecossistema Digital Industrial — Proposta de Posicionamento Tecnológico</p>
     </div>
 
@@ -422,11 +783,250 @@
   <div class="scroll-cue">Role para explorar</div>
 </header>
 
-<!-- placeholder anchor para próximas dobras -->
-<section id="ecossistema" style="position:relative;z-index:1;min-height:30vh;display:grid;place-items:center;border-top:1px solid var(--border-dim);">
-  <p style="font-family:var(--font-mono);font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);">
-    Próximas dobras da apresentação · em construção
-  </p>
+<!-- ECOSSISTEMA OVERVIEW -->
+<section id="ecossistema" class="proposal-section">
+  <div class="container">
+    <div class="ecosystem-quote-card reveal">
+      <p>
+        “Não entregamos apenas um site ou um sistema. Entregamos um ecossistema completo que capta novos clientes, automatiza o atendimento, fideliza com recompra e logística reversa, e ainda gera certificados ESG — tudo integrado e pensado para escalar suas vendas na América Latina.”
+      </p>
+    </div>
+
+    <div class="section-header reveal">
+      <span class="eyebrow-small">Arquitetura Integrada</span>
+      <h2>A Engenharia do <span class="accent">Sucesso Comercial</span></h2>
+      <p>A estrutura é dividida em três camadas estratégicas e complementares, operando em sincronia para maximizar o ciclo de vida do seu cliente B2B.</p>
+    </div>
+
+    <div class="ecosystem-layers-grid reveal">
+      <div class="layer-card">
+        <span class="layer-num">Camada 01</span>
+        <h3>Aquisição Digital</h3>
+        <p>Atração de novos leads internacionais através do Site Institucional Multilíngue altamente otimizado para SEO, com suporte a visualização técnica 3D e estimativas rápidas.</p>
+      </div>
+      <div class="layer-card">
+        <span class="layer-num">Camada 02</span>
+        <h3>Operação Inteligente</h3>
+        <p>Automação do atendimento de leads e cotações complexas pelo CRM poliglota com agentes de IA, qualificando oportunidades e gerando orçamentos sem fricção.</p>
+      </div>
+      <div class="layer-card">
+        <span class="layer-num">Camada 03</span>
+        <h3>Fidelização & Recorrência</h3>
+        <p>Retenção de clientes recorrentes por meio do Dashboard/Extranet e PWA mobile, facilitando a recompra programada, logística reversa (ESG) e distribuição de cashback.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILARES DO ECOSSISTEMA -->
+<section id="pilares" class="proposal-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow-small">O Que Entregamos</span>
+      <h2>Os 5 Pilares do <span class="accent">Ecossistema</span></h2>
+      <p>Detalhes completos e organizados de cada módulo técnico a ser desenvolvido para a FerriBor.</p>
+    </div>
+
+    <div class="pillars-grid reveal">
+      <!-- Pilar 1 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-tag">Aquisição</span>
+          <h3>01. Site Multilíngue</h3>
+        </div>
+        <ul class="pillar-list">
+          <li>Site moderno, ultrarápido e otimizado para SEO internacional (foco na América Latina).</li>
+          <li>Suporte completo a 4 idiomas (PT, EN, ES, FR) com detecção automática inteligente.</li>
+          <li>Visualizador 3D interativo para especificação geométrica de elastômeros.</li>
+          <li><strong>SmartSpec:</strong> IA integrada para análise de arquivos técnicos (PDF, STEP) e recomendação ágil.</li>
+          <li>Calculadora integrada de ROI e OEE (geradora de propostas em PDF).</li>
+        </ul>
+      </div>
+
+      <!-- Pilar 2 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-tag">Operação</span>
+          <h3>02. CRM com IA</h3>
+        </div>
+        <ul class="pillar-list">
+          <li>Atendimento Omnichannel centralizado (WhatsApp via QR Code, Webchat e e-mail).</li>
+          <li>Agentes virtuais poliglotas que respondem aos leads de forma autônoma nos 4 idiomas.</li>
+          <li>Triagem e qualificação de oportunidades comerciais automatizada.</li>
+          <li>Formulário inteligente com extração automatizada de cotações de projetos.</li>
+          <li>Dashboard em tempo real para controle do pipeline comercial da equipe interna.</li>
+        </ul>
+      </div>
+
+      <!-- Pilar 3 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-tag">Fidelização</span>
+          <h3>03. Portal do Cliente B2B</h3>
+        </div>
+        <ul class="pillar-list">
+          <li>Extranet exclusiva integrada ao PWA para visualização rápida de pedidos.</li>
+          <li>Rastreamento de produção e entrega em tempo real (Track & Trace industrial).</li>
+          <li>Recompra automática de peças com 1 clique, prevenindo rupturas operacionais.</li>
+          <li><strong>FerriBor Credit:</strong> cashback financeiro e créditos por indicações B2B.</li>
+          <li><strong>FerriBor Circular:</strong> retorno sustentável de elastômeros usados com descontos automáticos.</li>
+          <li>Emissão instantânea de certificados de conformidade ESG e garantias.</li>
+        </ul>
+      </div>
+
+      <!-- Pilar 4 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-tag">Infraestrutura</span>
+          <h3>04. Segurança & Cloud</h3>
+        </div>
+        <ul class="pillar-list">
+          <li>Hospedagem profissional de alto desempenho utilizando a rede global Cloudflare.</li>
+          <li>Integração robusta com bancos de dados e APIs de IA (GPT-4o e Claude 3.5 Sonnet).</li>
+          <li>Segurança avançada em conformidade com as diretivas LGPD e GDPR (2FA, dados encriptados).</li>
+          <li>Suporte técnico especializado com manutenção evolutiva por 3 meses pós go-live.</li>
+        </ul>
+      </div>
+
+      <!-- Pilar 5 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-tag">Diferencial</span>
+          <h3>05. Growth & Marketing Digital Industrial</h3>
+        </div>
+        <ul class="pillar-list">
+          <li>Posicionamento estratégico focado em mineradoras, cerâmicas e agro na América Latina.</li>
+          <li>Geração de tráfego orgânico qualificado via SEO técnico e conteúdo de engenharia de aplicação.</li>
+          <li>Dashboards gerenciais unificados de conversão comercial.</li>
+          <li>Consultoria e acompanhamento estratégico contínuo de Growth durante a execução.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERACTIVE DOWNTIME CALCULATOR -->
+<section id="calculadora" class="proposal-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow-small">Ferramenta Interativa</span>
+      <h2>Calculadora de <span class="accent">Economia de Downtime</span></h2>
+      <p>Simule a economia financeira anual estimada ao implantar a recompra preventiva da FerriBor, evitando paradas de máquina não planejadas em indústrias pesadas.</p>
+    </div>
+
+    <div class="calculator-card reveal">
+      <div class="calc-grid">
+        <div class="calc-inputs">
+          <div class="input-group">
+            <label for="calc-cost">Custo da Hora Parada: <span id="val-cost">R$ 10.000</span></label>
+            <input type="range" id="calc-cost" min="1000" max="50000" step="1000" value="10000" />
+          </div>
+
+          <div class="input-group">
+            <label for="calc-outages">Horas de Parada por Ano: <span id="val-outages">15h</span></label>
+            <input type="range" id="calc-outages" min="1" max="100" step="1" value="15" />
+          </div>
+
+          <div class="input-group">
+            <label for="calc-reduction">Redução Estimada de Downtime: <span id="val-reduction">50%</span></label>
+            <input type="range" id="calc-reduction" min="10" max="90" step="5" value="50" />
+          </div>
+        </div>
+
+        <div class="calc-results">
+          <div class="result-item">
+            <span class="result-label">Custo Anual de Parada Atual</span>
+            <span class="result-val" id="res-current-cost">R$ 150.000</span>
+          </div>
+
+          <div class="result-item highlight">
+            <span class="result-label">Economia Anual com o Ecossistema</span>
+            <span class="result-val" id="res-savings">R$ 75.000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ESTUDOS DE CASO / CASES -->
+<section id="cases" class="proposal-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow-small">Cases de Sucesso</span>
+      <h2>Histórias de Impacto e <span class="accent">Resultados B2B</span></h2>
+      <p>Como ajudamos indústrias de grande porte a eliminarem perdas operacionais através da inteligência aplicada a elastômeros.</p>
+    </div>
+
+    <div class="cases-grid reveal">
+      <!-- Case 1 -->
+      <div class="case-card">
+        <div>
+          <span class="case-tag">Mineração</span>
+          <div class="case-metric">-45% de downtime</div>
+          <h4>Mineração Aconcágua (Chile)</h4>
+          <p>O monitoramento de desgaste de revestimentos de borracha integrados ao SmartSpec permitiu a troca de componentes de calha no momento exato antes da falha. A empresa reduziu de 54 horas para apenas 29 horas de paradas não programadas no ano.</p>
+        </div>
+        <div class="case-author">
+          Economia estimada de <strong>R$ 450.000/ano</strong> · Área Técnica
+        </div>
+      </div>
+
+      <!-- Case 2 -->
+      <div class="case-card">
+        <div>
+          <span class="case-tag">Agronegócio</span>
+          <div class="case-metric">1-Click Reorder</div>
+          <h4>AgroIndustrial Pampa (Argentina)</h4>
+          <p>Substituição de processos de compras manuais por um portal automatizado de recompra recorrente de vedações de silos. O tempo de emissão de pedidos de reposição técnica foi reduzido de 12 dias úteis para aprovação imediata no celular do gerente.</p>
+        </div>
+        <div class="case-author">
+          Ciclo de compras reduzido em <strong>85%</strong> · Área de Suprimentos
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP CRONOGRAMA -->
+<section id="roadmap" class="proposal-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow-small">Cronograma</span>
+      <h2>Roadmap de <span class="accent">Implementação</span></h2>
+      <p>Nosso plano de trabalho estruturado e incremental para garantir entregas com baixo risco técnico e máximo alinhamento comercial.</p>
+    </div>
+
+    <div class="timeline-grid reveal">
+      <!-- Q1 -->
+      <div class="timeline-card">
+        <span class="step-num">Mês 1 a 3 · Q1</span>
+        <h4>Fundação & i18n</h4>
+        <p class="timeline-desc">Site institucional multilíngue operacional, SEO estrutural para América Latina e bases do CRM Omnichannel poliglota integradas.</p>
+      </div>
+
+      <!-- Q2 -->
+      <div class="timeline-card">
+        <span class="step-num">Mês 4 a 6 · Q2</span>
+        <h4>SmartSpec & 3D</h4>
+        <p class="timeline-desc">Visualizador industrial 3D de elastômeros, inteligência de reconhecimento SmartSpec e calculadoras de ROI e OEE em produção.</p>
+      </div>
+
+      <!-- Q3 -->
+      <div class="timeline-card">
+        <span class="step-num">Mês 7 a 9 · Q3</span>
+        <h4>Extranet & Recompra</h4>
+        <p class="timeline-desc">Dashboard do Portal do Cliente, login seguro, Track & Trace de fabricação, PWA offline para minas e FerriBor Credit (cashback).</p>
+      </div>
+
+      <!-- Q4 -->
+      <div class="timeline-card">
+        <span class="step-num">Mês 10 a 12 · Q4</span>
+        <h4>ESG & EDI</h4>
+        <p class="timeline-desc">FerriBor Circular (Logística reversa), emissão automática de laudos e certificados ESG integrados à API, e conexão de dados ERP.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <script>
@@ -446,6 +1046,45 @@
   };
   updateScrollState();
   window.addEventListener('scroll', updateScrollState, { passive: true });
+
+  // interactive downtime calculator logic
+  const costInput = document.getElementById('calc-cost');
+  const outagesInput = document.getElementById('calc-outages');
+  const reductionInput = document.getElementById('calc-reduction');
+
+  const costVal = document.getElementById('val-cost');
+  const outagesVal = document.getElementById('val-outages');
+  const reductionVal = document.getElementById('val-reduction');
+
+  const currentCostResult = document.getElementById('res-current-cost');
+  const savingsResult = document.getElementById('res-savings');
+
+  const formatCurrency = (val) => {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(val);
+  };
+
+  const calculateDowntime = () => {
+    const cost = parseFloat(costInput.value);
+    const outages = parseFloat(outagesInput.value);
+    const reduction = parseFloat(reductionInput.value) / 100;
+
+    costVal.textContent = formatCurrency(cost);
+    outagesVal.textContent = `${outages}h`;
+    reductionVal.textContent = `${Math.round(reduction * 100)}%`;
+
+    const currentCost = cost * outages;
+    const savings = currentCost * reduction;
+
+    currentCostResult.textContent = formatCurrency(currentCost);
+    savingsResult.textContent = formatCurrency(savings);
+  };
+
+  if (costInput && outagesInput && reductionInput) {
+    costInput.addEventListener('input', calculateDowntime);
+    outagesInput.addEventListener('input', calculateDowntime);
+    reductionInput.addEventListener('input', calculateDowntime);
+    calculateDowntime();
+  }
 </script>
 
 </body>
