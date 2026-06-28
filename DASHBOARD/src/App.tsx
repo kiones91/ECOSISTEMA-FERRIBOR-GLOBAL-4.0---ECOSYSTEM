@@ -4,6 +4,7 @@ import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import Auth from "@/pages/Auth";
 import Home from "@/pages/Home";
+import { LanguageProvider } from "@/i18n/LanguageContext";
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -29,18 +30,20 @@ export default function App() {
   }
 
   return (
-    <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, "") || "/"}>
-      <Routes>
-        <Route
-          path="/"
-          element={session ? <Home session={session} /> : <Navigate to="/auth" replace />}
-        />
-        <Route
-          path="/auth"
-          element={session ? <Navigate to="/" replace /> : <Auth />}
-        />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <LanguageProvider>
+      <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, "") || "/"}>
+        <Routes>
+          <Route
+            path="/"
+            element={session ? <Home session={session} /> : <Navigate to="/auth" replace />}
+          />
+          <Route
+            path="/auth"
+            element={session ? <Navigate to="/" replace /> : <Auth />}
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </LanguageProvider>
   );
 }

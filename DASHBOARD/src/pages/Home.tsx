@@ -2,6 +2,8 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import { getOrCreateConversation, getMessages, sendMessage, subscribeToMessages, type Message } from "@/lib/chat";
+import { useI18n } from "@/i18n/LanguageContext";
+import { LanguageSwitcher } from "@/i18n/LanguageSwitcher";
 
 const tabs = [
   { id: "pedidos", label: "Pedidos" },
@@ -22,6 +24,7 @@ type Attachment = {
 };
 
 export default function Home({ session }: { session: Session }) {
+  const { t } = useI18n();
   const [nome, setNome] = useState<string>("");
   const [activeTab, setActiveTab] = useState<TabId>("pedidos");
   const [message, setMessage] = useState("");
@@ -162,7 +165,7 @@ export default function Home({ session }: { session: Session }) {
           <div className="flex items-center gap-4">
             <div className="text-right">
               <p className={`text-sm font-medium ${d ? "text-neutral-200" : "text-neutral-800"}`}>{nome}</p>
-              <p className={`text-[11px] ${d ? "text-neutral-500" : "text-neutral-600"}`}>Portal do Cliente</p>
+              <p className={`text-[11px] ${d ? "text-neutral-500" : "text-neutral-600"}`}>{t('common.portalCliente')}</p>
             </div>
             <div className="relative">
               <div className={`flex h-9 w-9 items-center justify-center rounded-xl border ${d ? "border-white/10 bg-white/5" : "border-neutral-200 bg-neutral-100"}`}>
@@ -175,7 +178,7 @@ export default function Home({ session }: { session: Session }) {
             <button
               onClick={() => setDarkMode(!darkMode)}
               className={`rounded-lg border p-2 transition ${d ? "border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10" : "border-neutral-200 bg-neutral-100 text-neutral-600 hover:bg-neutral-200"}`}
-              title={d ? "Modo claro" : "Modo escuro"}
+              title={d ? t('common.lightMode') : t('common.darkMode')}
             >
               {d ? (
                 <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -187,11 +190,12 @@ export default function Home({ session }: { session: Session }) {
                 </svg>
               )}
             </button>
+            <LanguageSwitcher dark={d} />
             <button
               onClick={handleLogout}
               className={`rounded-lg border px-3 py-1.5 text-sm transition ${d ? "border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10" : "border-neutral-200 text-neutral-600 hover:bg-neutral-100"}`}
             >
-              Sair
+              {t('common.logout')}
             </button>
           </div>
         </div>
@@ -208,7 +212,7 @@ export default function Home({ session }: { session: Session }) {
                   : "border-transparent text-neutral-500 hover:border-neutral-300 hover:text-neutral-700"
               }`}
             >
-              {tab.label}
+              {t(`tabs.${tab.id}`)}
             </button>
           ))}
         </nav>
@@ -227,13 +231,13 @@ export default function Home({ session }: { session: Session }) {
         >
           <div className={`flex items-center justify-between border-b px-5 py-4 ${d ? "border-white/10" : "border-neutral-200"}`}>
             <div>
-              <h2 className={`text-sm font-semibold ${d ? "text-white" : "text-neutral-800"}`}>Mensagens</h2>
-              <p className={`text-xs ${d ? "text-neutral-500" : "text-neutral-600"}`}>Chat com suporte FerriBor</p>
+              <h2 className={`text-sm font-semibold ${d ? "text-white" : "text-neutral-800"}`}>{t('chat.title')}</h2>
+              <p className={`text-xs ${d ? "text-neutral-500" : "text-neutral-600"}`}>{t('chat.subtitle')}</p>
             </div>
             <button
               onClick={() => fileInputRef.current?.click()}
               className={`rounded-lg border p-2 transition ${d ? "border-white/10 bg-neutral-800 text-neutral-400 hover:bg-neutral-700 hover:text-neutral-200" : "border-neutral-200 bg-white text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600"}`}
-              title="Anexar arquivo"
+              title={t('chat.attach')}
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
@@ -249,8 +253,8 @@ export default function Home({ session }: { session: Session }) {
                   <svg className="mx-auto h-8 w-8 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
                   </svg>
-                  <p className="mt-2 text-sm font-medium text-red-400">Solte aqui</p>
-                  <p className={`mt-1 text-xs ${d ? "text-neutral-500" : "text-neutral-600"}`}>Imagens, PDFs, relatórios...</p>
+                  <p className="mt-2 text-sm font-medium text-red-400">{t('chat.dropzone.title')}</p>
+                  <p className={`mt-1 text-xs ${d ? "text-neutral-500" : "text-neutral-600"}`}>{t('chat.dropzone.subtitle')}</p>
                 </div>
               </div>
             ) : messages.length === 0 ? (
@@ -259,8 +263,8 @@ export default function Home({ session }: { session: Session }) {
                   <svg className={`mx-auto h-8 w-8 ${d ? "text-neutral-700" : "text-neutral-300"}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                   </svg>
-                  <p className={`mt-3 text-sm ${d ? "text-neutral-500" : "text-neutral-600"}`}>Envie sua primeira mensagem.</p>
-                  <p className={`mt-1 text-xs ${d ? "text-neutral-600" : "text-neutral-500"}`}>Arraste arquivos ou digite abaixo</p>
+                  <p className={`mt-3 text-sm ${d ? "text-neutral-500" : "text-neutral-600"}`}>{t('chat.empty.title')}</p>
+                  <p className={`mt-1 text-xs ${d ? "text-neutral-600" : "text-neutral-500"}`}>{t('chat.empty.subtitle')}</p>
                 </div>
               </div>
             ) : (
@@ -325,7 +329,7 @@ export default function Home({ session }: { session: Session }) {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }}
-                placeholder="Escreva sua mensagem..."
+                placeholder={t('chat.placeholder')}
                 className={`flex-1 rounded-xl border px-4 py-2.5 text-sm outline-none transition ${d ? "border-white/10 bg-neutral-800 text-white placeholder:text-neutral-500 focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30" : "border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus:border-red-500 focus:ring-1 focus:ring-red-200"}`}
               />
               <button
@@ -333,7 +337,7 @@ export default function Home({ session }: { session: Session }) {
                 disabled={sending || (!message.trim() && attachments.length === 0)}
                 className="rounded-xl bg-red-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {sending ? "..." : "Enviar"}
+                {sending ? "..." : t('chat.send')}
               </button>
             </div>
           </div>
@@ -386,6 +390,7 @@ const AVAILABLE_PRODUCTS = [
 ];
 
 function PedidosTab({ d }: { d: boolean }) {
+  const { t } = useI18n();
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showWizard, setShowWizard] = useState(false);
@@ -491,16 +496,16 @@ function PedidosTab({ d }: { d: boolean }) {
   };
 
   const statusLabels: Record<string, string> = {
-    pending: 'Aguardando aprovação',
-    approved: 'Aprovado',
-    in_vulcanization: 'Em vulcanização',
-    in_production: 'Em produção',
-    in_expedition: 'Em expedição',
-    in_transit: 'Em rota de entrega',
-    at_carrier: 'Na transportadora',
-    delivered: 'Entregue',
-    rejected: 'Rejeitado',
-    cancelled: 'Cancelado',
+    pending: t('orders.status.pending'),
+    approved: t('orders.status.approved'),
+    in_vulcanization: t('orders.status.in_vulcanization'),
+    in_production: t('orders.status.in_production'),
+    in_expedition: t('orders.status.in_expedition'),
+    in_transit: t('orders.status.in_transit'),
+    at_carrier: t('orders.status.at_carrier'),
+    delivered: t('orders.status.delivered'),
+    rejected: t('orders.status.rejected'),
+    cancelled: t('orders.status.cancelled'),
   };
 
   const statusColors: Record<string, string> = {
@@ -518,18 +523,23 @@ function PedidosTab({ d }: { d: boolean }) {
 
   const activeOrders = orders.filter(o => !['delivered', 'rejected', 'cancelled'].includes(o.status));
   const lastOrder = orders[0];
-  const stepLabels = ['Produtos', 'Entrega', 'Confirmação', 'Prazo'];
+  const stepLabels = [
+    t('orders.wizard.steps.products'),
+    t('orders.wizard.steps.delivery'),
+    t('orders.wizard.steps.confirmation'),
+    t('orders.wizard.steps.deadline')
+  ];
 
   return (
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className={`text-lg font-semibold ${d ? "text-white" : "text-neutral-900"}`}>Meus Pedidos</h2>
+        <h2 className={`text-lg font-semibold ${d ? "text-white" : "text-neutral-900"}`}>{t('orders.title')}</h2>
         <button
           onClick={() => { setShowWizard(!showWizard); setStep(1); setCart([]); }}
           className="rounded-xl bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-500"
         >
-          {showWizard ? 'Cancelar' : 'Fazer Compra'}
+          {showWizard ? t('orders.btnCancel') : t('orders.btnBuy')}
         </button>
       </div>
 
@@ -552,44 +562,44 @@ function PedidosTab({ d }: { d: boolean }) {
           {/* Step 1: Produtos */}
           {step === 1 && (
             <div className="space-y-4">
-              <h3 className={`text-sm font-semibold ${d ? "text-white" : "text-neutral-900"}`}>Adicionar Produtos</h3>
+              <h3 className={`text-sm font-semibold ${d ? "text-white" : "text-neutral-900"}`}>{t('orders.wizard.addProductTitle')}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div className="md:col-span-2">
-                  <label className={`text-xs font-medium ${d ? "text-neutral-400" : "text-neutral-600"}`}>Produto *</label>
+                  <label className={`text-xs font-medium ${d ? "text-neutral-400" : "text-neutral-600"}`}>{t('orders.wizard.fieldProduct')}</label>
                   <select value={currentItem.product_name} onChange={e => { const p = AVAILABLE_PRODUCTS.find(x => x.name === e.target.value); setCurrentItem(c => ({ ...c, product_name: e.target.value, unit_price: p?.unit_price || 0 })); }} className={`mt-1 w-full rounded-xl border px-3 py-2.5 text-sm outline-none ${d ? "border-white/10 bg-neutral-800 text-white" : "border-neutral-200 bg-white text-neutral-900"}`}>
-                    <option value="">Selecione um produto...</option>
+                    <option value="">{t('orders.wizard.productPlaceholder')}</option>
                     {AVAILABLE_PRODUCTS.map(p => <option key={p.name} value={p.name}>{p.name}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className={`text-xs font-medium ${d ? "text-neutral-400" : "text-neutral-600"}`}>Quantidade</label>
+                  <label className={`text-xs font-medium ${d ? "text-neutral-400" : "text-neutral-600"}`}>{t('orders.wizard.fieldQty')}</label>
                   <input type="number" min={1} value={currentItem.quantity} onChange={e => setCurrentItem(c => ({ ...c, quantity: parseInt(e.target.value) || 1 }))} className={`mt-1 w-full rounded-xl border px-3 py-2.5 text-sm outline-none ${d ? "border-white/10 bg-neutral-800 text-white" : "border-neutral-200 bg-white text-neutral-900"}`} />
                 </div>
                 <div>
-                  <label className={`text-xs font-medium ${d ? "text-neutral-400" : "text-neutral-600"}`}>Unidade</label>
+                  <label className={`text-xs font-medium ${d ? "text-neutral-400" : "text-neutral-600"}`}>{t('orders.wizard.fieldUnit')}</label>
                   <select value={currentItem.unit} onChange={e => setCurrentItem(c => ({ ...c, unit: e.target.value }))} className={`mt-1 w-full rounded-xl border px-3 py-2.5 text-sm outline-none ${d ? "border-white/10 bg-neutral-800 text-white" : "border-neutral-200 bg-white text-neutral-900"}`}>
-                    <option value="un">Unidade(s)</option>
-                    <option value="m">Metro(s)</option>
-                    <option value="kg">Kg</option>
-                    <option value="rolo">Rolo(s)</option>
+                    <option value="un">{t('orders.wizard.units.un')}</option>
+                    <option value="m">{t('orders.wizard.units.m')}</option>
+                    <option value="kg">{t('orders.wizard.units.kg')}</option>
+                    <option value="rolo">{t('orders.wizard.units.rolo')}</option>
                   </select>
                 </div>
                 <div className="md:col-span-2">
-                  <label className={`text-xs font-medium ${d ? "text-neutral-400" : "text-neutral-600"}`}>Especificações</label>
-                  <input type="text" value={currentItem.specifications} onChange={e => setCurrentItem(c => ({ ...c, specifications: e.target.value }))} placeholder="Dimensões, material, dureza..." className={`mt-1 w-full rounded-xl border px-3 py-2.5 text-sm outline-none ${d ? "border-white/10 bg-neutral-800 text-white placeholder:text-neutral-500" : "border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400"}`} />
+                  <label className={`text-xs font-medium ${d ? "text-neutral-400" : "text-neutral-600"}`}>{t('orders.wizard.fieldSpecs')}</label>
+                  <input type="text" value={currentItem.specifications} onChange={e => setCurrentItem(c => ({ ...c, specifications: e.target.value }))} placeholder={t('orders.wizard.specsPlaceholder')} className={`mt-1 w-full rounded-xl border px-3 py-2.5 text-sm outline-none ${d ? "border-white/10 bg-neutral-800 text-white placeholder:text-neutral-500" : "border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400"}`} />
                 </div>
               </div>
               {currentItem.product_name && (
                 <div className={`flex items-center justify-between rounded-xl px-4 py-2 ${d ? "bg-white/5 border border-white/10" : "bg-neutral-50 border border-neutral-100"}`}>
-                  <span className={`text-sm ${d ? "text-neutral-300" : "text-neutral-700"}`}>Valor unitário: R$ {currentItem.unit_price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-                  <span className={`text-sm font-semibold ${d ? "text-white" : "text-neutral-900"}`}>Total: R$ {(currentItem.quantity * currentItem.unit_price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                  <span className={`text-sm ${d ? "text-neutral-300" : "text-neutral-700"}`}>{t('orders.wizard.unitPrice')} R$ {currentItem.unit_price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                  <span className={`text-sm font-semibold ${d ? "text-white" : "text-neutral-900"}`}>{t('orders.wizard.total')} R$ {(currentItem.quantity * currentItem.unit_price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
                 </div>
               )}
-              <button onClick={addItemToCart} disabled={!currentItem.product_name} className={`w-full rounded-xl border py-2.5 text-sm font-medium transition ${d ? "border-white/10 text-neutral-200 hover:bg-white/5 disabled:opacity-30" : "border-neutral-200 text-neutral-700 hover:bg-neutral-50 disabled:opacity-30"}`}>+ Adicionar ao pedido</button>
+              <button onClick={addItemToCart} disabled={!currentItem.product_name} className={`w-full rounded-xl border py-2.5 text-sm font-medium transition ${d ? "border-white/10 text-neutral-200 hover:bg-white/5 disabled:opacity-30" : "border-neutral-200 text-neutral-700 hover:bg-neutral-50 disabled:opacity-30"}`}>{t('orders.wizard.btnAdd')}</button>
 
               {cart.length > 0 && (
                 <div className="space-y-2">
-                  <p className={`text-xs font-medium ${d ? "text-neutral-400" : "text-neutral-600"}`}>Itens no pedido:</p>
+                  <p className={`text-xs font-medium ${d ? "text-neutral-400" : "text-neutral-600"}`}>{t('orders.wizard.itemsTitle')}</p>
                   {cart.map((item, i) => (
                     <div key={i} className={`flex items-center justify-between rounded-xl px-3 py-2 ${d ? "bg-white/5 border border-white/10" : "bg-neutral-50 border border-neutral-100"}`}>
                       <span className={`text-sm ${d ? "text-neutral-200" : "text-neutral-700"}`}>{item.quantity}x {item.product_name}</span>
@@ -599,38 +609,38 @@ function PedidosTab({ d }: { d: boolean }) {
                       </div>
                     </div>
                   ))}
-                  <div className={`text-right text-sm font-bold pt-2 border-t ${d ? "border-white/10 text-white" : "border-neutral-200 text-neutral-900"}`}>Total: R$ {cartTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</div>
+                  <div className={`text-right text-sm font-bold pt-2 border-t ${d ? "border-white/10 text-white" : "border-neutral-200 text-neutral-900"}`}>{t('orders.wizard.total')} R$ {cartTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</div>
                 </div>
               )}
-              <button onClick={() => setStep(2)} disabled={cart.length === 0} className="w-full rounded-xl bg-red-600 py-3 text-sm font-medium text-white transition hover:bg-red-500 disabled:opacity-50">Próximo: Entrega</button>
+              <button onClick={() => setStep(2)} disabled={cart.length === 0} className="w-full rounded-xl bg-red-600 py-3 text-sm font-medium text-white transition hover:bg-red-500 disabled:opacity-50">{t('orders.wizard.btnNextDelivery')}</button>
             </div>
           )}
 
           {/* Step 2: Entrega */}
           {step === 2 && (
             <div className="space-y-4">
-              <h3 className={`text-sm font-semibold ${d ? "text-white" : "text-neutral-900"}`}>Endereço de Entrega</h3>
+              <h3 className={`text-sm font-semibold ${d ? "text-white" : "text-neutral-900"}`}>{t('orders.wizard.deliveryTitle')}</h3>
               <div className="flex gap-3">
-                <button onClick={() => setAddressType('same')} className={`flex-1 rounded-xl border py-3 text-sm font-medium transition ${addressType === 'same' ? 'bg-red-600 text-white border-red-600' : d ? 'border-white/10 text-neutral-300 hover:bg-white/5' : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'}`}>Mesmo endereço</button>
-                <button onClick={() => setAddressType('new')} className={`flex-1 rounded-xl border py-3 text-sm font-medium transition ${addressType === 'new' ? 'bg-red-600 text-white border-red-600' : d ? 'border-white/10 text-neutral-300 hover:bg-white/5' : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'}`}>Novo endereço</button>
+                <button onClick={() => setAddressType('same')} className={`flex-1 rounded-xl border py-3 text-sm font-medium transition ${addressType === 'same' ? 'bg-red-600 text-white border-red-600' : d ? 'border-white/10 text-neutral-300 hover:bg-white/5' : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'}`}>{t('orders.wizard.btnSameAddress')}</button>
+                <button onClick={() => setAddressType('new')} className={`flex-1 rounded-xl border py-3 text-sm font-medium transition ${addressType === 'new' ? 'bg-red-600 text-white border-red-600' : d ? 'border-white/10 text-neutral-300 hover:bg-white/5' : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'}`}>{t('orders.wizard.btnNewAddress')}</button>
               </div>
               {addressType === 'same' && profile?.endereco_completo && (
                 <div className={`rounded-xl px-4 py-3 ${d ? "bg-white/5 border border-white/10" : "bg-neutral-50 border border-neutral-100"}`}>
-                  <p className={`text-xs ${d ? "text-neutral-400" : "text-neutral-600"}`}>Endereço cadastrado:</p>
+                  <p className={`text-xs ${d ? "text-neutral-400" : "text-neutral-600"}`}>{t('orders.wizard.registeredAddress')}</p>
                   <p className={`text-sm mt-1 ${d ? "text-white" : "text-neutral-900"}`}>{profile.endereco_completo}</p>
                 </div>
               )}
               {addressType === 'same' && !profile?.endereco_completo && (
                 <div className={`rounded-xl px-4 py-3 ${d ? "bg-yellow-500/10 border border-yellow-500/20" : "bg-yellow-50 border border-yellow-200"}`}>
-                  <p className={`text-xs text-yellow-600`}>Nenhum endereço cadastrado. Por favor, informe um novo endereço.</p>
+                  <p className={`text-xs text-yellow-600`}>{t('orders.wizard.noAddress')}</p>
                 </div>
               )}
               {(addressType === 'new' || (addressType === 'same' && !profile?.endereco_completo)) && (
-                <textarea value={newAddress} onChange={e => setNewAddress(e.target.value)} placeholder="Rua, número, complemento, bairro, cidade, estado, CEP..." rows={3} className={`w-full rounded-xl border px-3 py-2.5 text-sm outline-none resize-none ${d ? "border-white/10 bg-neutral-800 text-white placeholder:text-neutral-500" : "border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400"}`} />
+                <textarea value={newAddress} onChange={e => setNewAddress(e.target.value)} placeholder={t('orders.wizard.newAddressPlaceholder')} rows={3} className={`w-full rounded-xl border px-3 py-2.5 text-sm outline-none resize-none ${d ? "border-white/10 bg-neutral-800 text-white placeholder:text-neutral-500" : "border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400"}`} />
               )}
               <div className="flex gap-3">
-                <button onClick={() => setStep(1)} className={`flex-1 rounded-xl border py-3 text-sm font-medium transition ${d ? "border-white/10 text-neutral-300 hover:bg-white/5" : "border-neutral-200 text-neutral-700 hover:bg-neutral-50"}`}>Voltar</button>
-                <button onClick={() => setStep(3)} className="flex-1 rounded-xl bg-red-600 py-3 text-sm font-medium text-white transition hover:bg-red-500">Próximo: Confirmação</button>
+                <button onClick={() => setStep(1)} className={`flex-1 rounded-xl border py-3 text-sm font-medium transition ${d ? "border-white/10 text-neutral-300 hover:bg-white/5" : "border-neutral-200 text-neutral-700 hover:bg-neutral-50"}`}>{t('orders.wizard.btnBack')}</button>
+                <button onClick={() => setStep(3)} className="flex-1 rounded-xl bg-red-600 py-3 text-sm font-medium text-white transition hover:bg-red-500">{t('orders.wizard.btnNextConf')}</button>
               </div>
             </div>
           )}
@@ -638,23 +648,23 @@ function PedidosTab({ d }: { d: boolean }) {
           {/* Step 3: Confirmação (NF preview) */}
           {step === 3 && (
             <div className="space-y-4">
-              <h3 className={`text-sm font-semibold ${d ? "text-white" : "text-neutral-900"}`}>Confirmação do Pedido</h3>
+              <h3 className={`text-sm font-semibold ${d ? "text-white" : "text-neutral-900"}`}>{t('orders.wizard.confTitle')}</h3>
               <div className={`rounded-xl border p-4 space-y-3 ${d ? "border-white/10 bg-white/[0.03]" : "border-neutral-200 bg-neutral-50"}`}>
                 <div className="flex justify-between items-start">
                   <div>
-                    <p className={`text-[10px] uppercase tracking-wider ${d ? "text-neutral-500" : "text-neutral-400"}`}>Comprador</p>
+                    <p className={`text-[10px] uppercase tracking-wider ${d ? "text-neutral-500" : "text-neutral-400"}`}>{t('orders.wizard.buyer')}</p>
                     <p className={`text-sm font-medium ${d ? "text-white" : "text-neutral-900"}`}>{profile?.nome || '—'}</p>
                     <p className={`text-xs ${d ? "text-neutral-400" : "text-neutral-600"}`}>{profile?.empresa || ''}</p>
                   </div>
                   <div className="text-right">
-                    <p className={`text-[10px] uppercase tracking-wider ${d ? "text-neutral-500" : "text-neutral-400"}`}>CNPJ</p>
-                    <p className={`text-sm ${d ? "text-neutral-300" : "text-neutral-700"}`}>{profile?.cpf_cnpj || 'Não informado'}</p>
+                    <p className={`text-[10px] uppercase tracking-wider ${d ? "text-neutral-500" : "text-neutral-400"}`}>{t('orders.wizard.cnpj')}</p>
+                    <p className={`text-sm ${d ? "text-neutral-300" : "text-neutral-700"}`}>{profile?.cpf_cnpj || '—'}</p>
                   </div>
                 </div>
                 <div className={`border-t pt-3 ${d ? "border-white/10" : "border-neutral-200"}`}>
-                  <p className={`text-[10px] uppercase tracking-wider mb-2 ${d ? "text-neutral-500" : "text-neutral-400"}`}>Itens</p>
+                  <p className={`text-[10px] uppercase tracking-wider mb-2 ${d ? "text-neutral-500" : "text-neutral-400"}`}>{t('orders.wizard.steps.products')}</p>
                   <table className="w-full text-xs">
-                    <thead><tr className={d ? "text-neutral-400" : "text-neutral-500"}><th className="text-left py-1">Produto</th><th className="text-center py-1">Qtd</th><th className="text-right py-1">Unit.</th><th className="text-right py-1">Total</th></tr></thead>
+                    <thead><tr className={d ? "text-neutral-400" : "text-neutral-500"}><th className="text-left py-1">{t('orders.wizard.fieldProduct')}</th><th className="text-center py-1">Qtd</th><th className="text-right py-1">Unit.</th><th className="text-right py-1">Total</th></tr></thead>
                     <tbody>
                       {cart.map((item, i) => (
                         <tr key={i} className={d ? "text-neutral-200" : "text-neutral-700"}>
@@ -668,17 +678,17 @@ function PedidosTab({ d }: { d: boolean }) {
                   </table>
                 </div>
                 <div className={`border-t pt-2 flex justify-between ${d ? "border-white/10" : "border-neutral-200"}`}>
-                  <span className={`text-sm font-bold ${d ? "text-white" : "text-neutral-900"}`}>Total</span>
+                  <span className={`text-sm font-bold ${d ? "text-white" : "text-neutral-900"}`}>{t('orders.wizard.total')}</span>
                   <span className={`text-sm font-bold ${d ? "text-white" : "text-neutral-900"}`}>R$ {cartTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
                 </div>
                 <div className={`border-t pt-2 ${d ? "border-white/10" : "border-neutral-200"}`}>
-                  <p className={`text-[10px] uppercase tracking-wider ${d ? "text-neutral-500" : "text-neutral-400"}`}>Entrega</p>
-                  <p className={`text-xs mt-1 ${d ? "text-neutral-300" : "text-neutral-700"}`}>{addressType === 'same' ? (profile?.endereco_completo || newAddress || 'Não informado') : (newAddress || 'Não informado')}</p>
+                  <p className={`text-[10px] uppercase tracking-wider ${d ? "text-neutral-500" : "text-neutral-400"}`}>{t('orders.wizard.steps.delivery')}</p>
+                  <p className={`text-xs mt-1 ${d ? "text-neutral-300" : "text-neutral-700"}`}>{addressType === 'same' ? (profile?.endereco_completo || newAddress || '—') : (newAddress || '—')}</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <button onClick={() => setStep(2)} className={`flex-1 rounded-xl border py-3 text-sm font-medium transition ${d ? "border-white/10 text-neutral-300 hover:bg-white/5" : "border-neutral-200 text-neutral-700 hover:bg-neutral-50"}`}>Voltar</button>
-                <button onClick={() => setStep(4)} className="flex-1 rounded-xl bg-red-600 py-3 text-sm font-medium text-white transition hover:bg-red-500">Próximo: Prazo</button>
+                <button onClick={() => setStep(2)} className={`flex-1 rounded-xl border py-3 text-sm font-medium transition ${d ? "border-white/10 text-neutral-300 hover:bg-white/5" : "border-neutral-200 text-neutral-700 hover:bg-neutral-50"}`}>{t('orders.wizard.btnBack')}</button>
+                <button onClick={() => setStep(4)} className="flex-1 rounded-xl bg-red-600 py-3 text-sm font-medium text-white transition hover:bg-red-500">{t('orders.wizard.btnNextConf')}</button>
               </div>
             </div>
           )}
@@ -686,24 +696,24 @@ function PedidosTab({ d }: { d: boolean }) {
           {/* Step 4: Prazo */}
           {step === 4 && (
             <div className="space-y-4">
-              <h3 className={`text-sm font-semibold ${d ? "text-white" : "text-neutral-900"}`}>Prazo de Entrega</h3>
-              <p className={`text-xs ${d ? "text-neutral-400" : "text-neutral-600"}`}>Selecione a urgência do seu pedido:</p>
+              <h3 className={`text-sm font-semibold ${d ? "text-white" : "text-neutral-900"}`}>{t('orders.wizard.deadlineTitle')}</h3>
+              <p className={`text-xs ${d ? "text-neutral-400" : "text-neutral-600"}`}>{t('orders.wizard.deadlineSub')}</p>
               <div className="flex gap-3">
                 <button onClick={() => setPriority('urgent')} className={`flex-1 rounded-xl border py-4 text-center transition ${priority === 'urgent' ? 'bg-orange-500 text-white border-orange-500' : d ? 'border-white/10 text-neutral-300 hover:bg-white/5' : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'}`}>
                   <span className="block text-lg mb-1">{'⚡'}</span>
-                  <span className="text-sm font-semibold">URGÊNCIA</span>
-                  <span className={`block text-[10px] mt-1 ${priority === 'urgent' ? 'text-orange-100' : d ? 'text-neutral-500' : 'text-neutral-500'}`}>Prioridade máxima</span>
+                  <span className="text-sm font-semibold">{t('orders.wizard.urgency')}</span>
+                  <span className={`block text-[10px] mt-1 ${priority === 'urgent' ? 'text-orange-100' : d ? 'text-neutral-500' : 'text-neutral-500'}`}>{t('orders.wizard.urgencySub')}</span>
                 </button>
                 <button onClick={() => setPriority('normal')} className={`flex-1 rounded-xl border py-4 text-center transition ${priority === 'normal' ? 'bg-blue-500 text-white border-blue-500' : d ? 'border-white/10 text-neutral-300 hover:bg-white/5' : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'}`}>
                   <span className="block text-lg mb-1">{'\u{1F4E6}'}</span>
-                  <span className="text-sm font-semibold">NORMAL</span>
-                  <span className={`block text-[10px] mt-1 ${priority === 'normal' ? 'text-blue-100' : d ? 'text-neutral-500' : 'text-neutral-500'}`}>Prazo padrão</span>
+                  <span className="text-sm font-semibold">{t('orders.wizard.normal')}</span>
+                  <span className={`block text-[10px] mt-1 ${priority === 'normal' ? 'text-blue-100' : d ? 'text-neutral-500' : 'text-neutral-500'}`}>{t('orders.wizard.normalSub')}</span>
                 </button>
               </div>
               <div className="flex gap-3 pt-2">
-                <button onClick={() => setStep(3)} className={`flex-1 rounded-xl border py-3 text-sm font-medium transition ${d ? "border-white/10 text-neutral-300 hover:bg-white/5" : "border-neutral-200 text-neutral-700 hover:bg-neutral-50"}`}>Voltar</button>
+                <button onClick={() => setStep(3)} className={`flex-1 rounded-xl border py-3 text-sm font-medium transition ${d ? "border-white/10 text-neutral-300 hover:bg-white/5" : "border-neutral-200 text-neutral-700 hover:bg-neutral-50"}`}>{t('orders.wizard.btnBack')}</button>
                 <button onClick={handleConfirmOrder} disabled={submitting} className="flex-1 rounded-xl bg-green-600 py-3 text-sm font-bold text-white transition hover:bg-green-500 disabled:opacity-50">
-                  {submitting ? 'Enviando...' : 'CONFIRMAR COMPRA'}
+                  {submitting ? t('orders.wizard.sending') : t('orders.wizard.btnConfirm')}
                 </button>
               </div>
             </div>
@@ -714,9 +724,9 @@ function PedidosTab({ d }: { d: boolean }) {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card d={d} accent className="min-h-[120px] flex flex-col justify-between">
-          <p className="text-xs font-medium uppercase tracking-[0.14em] text-red-100/80">Último pedido</p>
+          <p className="text-xs font-medium uppercase tracking-[0.14em] text-red-100/80">{t('orders.kpiLast')}</p>
           <p className="text-[17px] leading-snug font-semibold text-white">
-            {lastOrder?.order_items?.[0]?.product_name || 'Nenhum pedido'}
+            {lastOrder?.order_items?.[0]?.product_name || t('orders.kpiLastEmpty')}
           </p>
           {lastOrder && (
             <div className="flex items-center gap-2 text-xs text-red-100/80 pt-2 border-t border-white/20 mt-2">
@@ -726,11 +736,11 @@ function PedidosTab({ d }: { d: boolean }) {
           )}
         </Card>
         <Card d={d} className="min-h-[120px] flex flex-col justify-between">
-          <p className={`text-xs ${d ? "text-neutral-400" : "text-neutral-700"}`}>Pedidos ativos</p>
+          <p className={`text-xs ${d ? "text-neutral-400" : "text-neutral-700"}`}>{t('orders.kpiActive')}</p>
           <p className={`text-[28px] font-semibold tracking-tight ${d ? "text-white" : "text-neutral-900"}`}>{activeOrders.length}</p>
         </Card>
         <Card d={d} className="min-h-[120px] flex flex-col justify-between">
-          <p className={`text-xs ${d ? "text-neutral-400" : "text-neutral-700"}`}>Total de pedidos</p>
+          <p className={`text-xs ${d ? "text-neutral-400" : "text-neutral-700"}`}>{t('orders.kpiTotal')}</p>
           <p className={`text-[28px] font-semibold tracking-tight ${d ? "text-white" : "text-neutral-900"}`}>{orders.length}</p>
         </Card>
       </div>
@@ -738,14 +748,14 @@ function PedidosTab({ d }: { d: boolean }) {
       {/* Orders List */}
       <Card d={d} className="min-h-[200px]">
         <div className="mb-3">
-          <h3 className={`text-sm font-semibold ${d ? "text-white" : "text-neutral-900"}`}>Histórico de pedidos</h3>
+          <h3 className={`text-sm font-semibold ${d ? "text-white" : "text-neutral-900"}`}>{t('orders.history')}</h3>
         </div>
         {loading ? (
-          <p className={`text-sm ${d ? "text-neutral-500" : "text-neutral-600"}`}>Carregando...</p>
+          <p className={`text-sm ${d ? "text-neutral-500" : "text-neutral-600"}`}>{t('common.loading')}</p>
         ) : orders.length === 0 ? (
           <div className="text-center py-8">
-            <p className={`text-sm ${d ? "text-neutral-500" : "text-neutral-600"}`}>Nenhum pedido realizado ainda.</p>
-            <p className={`text-xs mt-1 ${d ? "text-neutral-600" : "text-neutral-500"}`}>Clique em "Fazer Compra" para começar.</p>
+            <p className={`text-sm ${d ? "text-neutral-500" : "text-neutral-600"}`}>{t('orders.historyEmpty')}</p>
+            <p className={`text-xs mt-1 ${d ? "text-neutral-600" : "text-neutral-500"}`}>{t('orders.historyEmptySub')}</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -775,7 +785,7 @@ function PedidosTab({ d }: { d: boolean }) {
                     onClick={() => setSelectedOrder(order)}
                     className={`rounded-lg px-2.5 py-1 text-[11px] font-medium transition ${d ? "bg-white/10 text-neutral-200 hover:bg-white/15 border border-white/10" : "bg-neutral-200 text-neutral-700 hover:bg-neutral-300 border border-neutral-300"}`}
                   >
-                    Detalhe
+                    {t('orders.detail')}
                   </button>
                 </div>
               </div>
@@ -790,7 +800,7 @@ function PedidosTab({ d }: { d: boolean }) {
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
           <div onClick={e => e.stopPropagation()} className={`relative w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-2xl border p-6 shadow-2xl ${d ? "bg-neutral-900 border-white/10" : "bg-white border-neutral-200"}`}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className={`text-lg font-bold ${d ? "text-white" : "text-neutral-900"}`}>Pedido N:{selectedOrder.order_number || '—'}</h3>
+              <h3 className={`text-lg font-bold ${d ? "text-white" : "text-neutral-900"}`}>{t('orders.detailModal.title')} {selectedOrder.order_number || '—'}</h3>
               <button onClick={() => setSelectedOrder(null)} className={`h-8 w-8 flex items-center justify-center rounded-lg ${d ? "hover:bg-white/10 text-neutral-400" : "hover:bg-neutral-100 text-neutral-500"}`}>✕</button>
             </div>
 
@@ -802,13 +812,13 @@ function PedidosTab({ d }: { d: boolean }) {
                   const certs = selectedOrder.certificates || [];
                   const pw = window.open('', '_blank');
                   if (!pw) return;
-                  pw.document.write(`<html><head><title>Pedido N:${selectedOrder.order_number || ''}</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;padding:40px;max-width:800px;margin:0 auto;color:#1a1a1a}.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #dc2626}.logo{font-size:22px;font-weight:800;color:#dc2626}.meta{text-align:right;font-size:11px;color:#666}.meta strong{color:#1a1a1a}.section{margin:16px 0}.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#dc2626;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #eee}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:6px}.field-label{font-size:9px;text-transform:uppercase;letter-spacing:0.5px;color:#888}.field-value{font-size:12px;font-weight:500}table{width:100%;border-collapse:collapse;margin:8px 0}th,td{border:1px solid #e5e5e5;padding:8px;text-align:left;font-size:11px}th{background:#f9f9f9;font-weight:600;text-transform:uppercase;font-size:9px}.total-row{font-weight:700;background:#fef2f2}.nf-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px;margin:12px 0}.cert-item{display:inline-block;padding:4px 10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:4px;margin:3px 4px 3px 0;font-size:10px}.footer{margin-top:30px;padding-top:12px;border-top:1px solid #eee;font-size:9px;color:#888;text-align:center}@media print{body{padding:20px}}</style></head><body><div class="header"><div><div class="logo">FerriBor</div><p style="font-size:10px;color:#666;margin-top:2px">Artefatos de Borracha</p></div><div class="meta"><p><strong>Pedido N:${selectedOrder.order_number || ''}</strong></p><p>Data: ${new Date(selectedOrder.created_at).toLocaleDateString('pt-BR')}</p><p>Status: ${statusLabels[selectedOrder.status] || selectedOrder.status}</p>${selectedOrder.lote ? `<p>LOTE: <strong>${selectedOrder.lote}</strong></p>` : ''}</div></div>${selectedOrder.nf_number ? `<div class="nf-box"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#475569;margin-bottom:6px">Nota Fiscal</div><div class="grid"><div class="field"><div class="field-label">Numero NF</div><div class="field-value">${selectedOrder.nf_number}</div></div><div class="field"><div class="field-label">Serie</div><div class="field-value">${selectedOrder.nf_serie || '001'}</div></div>${selectedOrder.nf_access_key ? `<div class="field" style="grid-column:1/-1"><div class="field-label">Chave de Acesso</div><div class="field-value" style="font-family:monospace;font-size:10px">${selectedOrder.nf_access_key}</div></div>` : ''}</div></div>` : ''}<div class="section"><div class="section-title">Emitente</div><div class="grid"><div class="field"><div class="field-label">Razao Social</div><div class="field-value">Ferri Fabricacao de Artefatos de Borracha Ltda</div></div><div class="field"><div class="field-label">CNPJ</div><div class="field-value">20.036.263/0001-68</div></div><div class="field"><div class="field-label">Municipio/UF</div><div class="field-value">Santa Gertrudes / SP</div></div><div class="field"><div class="field-label">CNAE</div><div class="field-value">2219-6/00</div></div></div></div><div class="section"><div class="section-title">Destinatario</div><div class="grid"><div class="field"><div class="field-label">Nome</div><div class="field-value">${selectedOrder.client_name || ''}</div></div><div class="field"><div class="field-label">Empresa</div><div class="field-value">${selectedOrder.client_company || ''}</div></div><div class="field"><div class="field-label">CNPJ/CPF</div><div class="field-value">${selectedOrder.client_cpf_cnpj || ''}</div></div><div class="field"><div class="field-label">IE</div><div class="field-value">${selectedOrder.client_ie || ''}</div></div><div class="field" style="grid-column:1/-1"><div class="field-label">Endereco</div><div class="field-value">${selectedOrder.shipping_address || ''}</div></div></div></div><div class="section"><div class="section-title">Itens</div><table><thead><tr><th>Produto</th><th>Qtd</th><th>Un.</th><th>Valor Unit.</th><th>Total</th></tr></thead><tbody>${items.map((i: any) => `<tr><td>${i.product_name}</td><td>${i.quantity}</td><td>${i.unit}</td><td>R$ ${Number(i.unit_price || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td><td>R$ ${Number(i.total_price || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td></tr>`).join('')}<tr class="total-row"><td colspan="4" style="text-align:right">TOTAL</td><td>R$ ${Number(selectedOrder.total_amount || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td></tr></tbody></table></div>${certs.length > 0 ? `<div class="section"><div class="section-title">Certificados</div>${certs.map((c: any) => `<span class="cert-item">✓ ${c.name} (${c.type})</span>`).join('')}</div>` : ''}${selectedOrder.notes ? `<div class="section"><div class="section-title">Observacoes</div><p style="font-size:12px">${selectedOrder.notes}</p></div>` : ''}<div class="footer"><p>Documento gerado pelo sistema FerriBor Global 4.0</p></div><script>window.print();</script></body></html>`);
+                  pw.document.write(`<html><head><title>${t('orders.detailModal.title')} ${selectedOrder.order_number || ''}</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;padding:40px;max-width:800px;margin:0 auto;color:#1a1a1a}.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #dc2626}.logo{font-size:22px;font-weight:800;color:#dc2626}.meta{text-align:right;font-size:11px;color:#666}.meta strong{color:#1a1a1a}.section{margin:16px 0}.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#dc2626;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #eee}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:6px}.field-label{font-size:9px;text-transform:uppercase;letter-spacing:0.5px;color:#888}.field-value{font-size:12px;font-weight:500}table{width:100%;border-collapse:collapse;margin:8px 0}th,td{border:1px solid #e5e5e5;padding:8px;text-align:left;font-size:11px}th{background:#f9f9f9;font-weight:600;text-transform:uppercase;font-size:9px}.total-row{font-weight:700;background:#fef2f2}.nf-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px;margin:12px 0}.cert-item{display:inline-block;padding:4px 10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:4px;margin:3px 4px 3px 0;font-size:10px}.footer{margin-top:30px;padding-top:12px;border-top:1px solid #eee;font-size:9px;color:#888;text-align:center}@media print{body{padding:20px}}</style></head><body><div class="header"><div><div class="logo">FerriBor</div><p style="font-size:10px;color:#666;margin-top:2px">Artefatos de Borracha</p></div><div class="meta"><p><strong>${t('orders.detailModal.title')} ${selectedOrder.order_number || ''}</strong></p><p>${t('orders.detailModal.date')}: ${new Date(selectedOrder.created_at).toLocaleDateString('pt-BR')}</p><p>${t('orders.detailModal.status')}: ${statusLabels[selectedOrder.status] || selectedOrder.status}</p>${selectedOrder.lote ? `<p>${t('orders.detailModal.lote')}: <strong>${selectedOrder.lote}</strong></p>` : ''}</div></div>${selectedOrder.nf_number ? `<div class="nf-box"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#475569;margin-bottom:6px">${t('orders.detailModal.nfTitle')}</div><div class="grid"><div class="field"><div class="field-label">${t('orders.detailModal.nfNumber')}</div><div class="field-value">${selectedOrder.nf_number}</div></div><div class="field"><div class="field-label">${t('orders.detailModal.nfSerie')}</div><div class="field-value">${selectedOrder.nf_serie || '001'}</div></div>${selectedOrder.nf_access_key ? `<div class="field" style="grid-column:1/-1"><div class="field-label">${t('orders.detailModal.nfKey')}</div><div class="field-value" style="font-family:monospace;font-size:10px">${selectedOrder.nf_access_key}</div></div>` : ''}</div></div>` : ''}<div class="section"><div class="section-title">${t('orders.detailModal.issuer')}</div><div class="grid"><div class="field"><div class="field-label">Razao Social</div><div class="field-value">Ferri Fabricacao de Artefatos de Borracha Ltda</div></div><div class="field"><div class="field-label">CNPJ</div><div class="field-value">20.036.263/0001-68</div></div><div class="field"><div class="field-label">Municipio/UF</div><div class="field-value">Santa Gertrudes / SP</div></div><div class="field"><div class="field-label">CNAE</div><div class="field-value">2219-6/00</div></div></div></div><div class="section"><div class="section-title">${t('orders.wizard.buyer')}</div><div class="grid"><div class="field"><div class="field-label">Nome</div><div class="field-value">${selectedOrder.client_name || ''}</div></div><div class="field"><div class="field-label">Empresa</div><div class="field-value">${selectedOrder.client_company || ''}</div></div><div class="field"><div class="field-label">CNPJ/CPF</div><div class="field-value">${selectedOrder.client_cpf_cnpj || ''}</div></div><div class="field"><div class="field-label">IE</div><div class="field-value">${selectedOrder.client_ie || ''}</div></div><div class="field" style="grid-column:1/-1"><div class="field-label">${t('orders.detailModal.delivery')}</div><div class="field-value">${selectedOrder.shipping_address || ''}</div></div></div></div><div class="section"><div class="section-title">${t('orders.detailModal.items')}</div><table><thead><tr><th>${t('orders.wizard.fieldProduct')}</th><th>Qtd</th><th>${t('orders.wizard.fieldUnit')}</th><th>${t('orders.wizard.unitPrice')}</th><th>Total</th></tr></thead><tbody>${items.map((i: any) => `<tr><td>${i.product_name}</td><td>${i.quantity}</td><td>${i.unit}</td><td>R$ ${Number(i.unit_price || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td><td>R$ ${Number(i.total_price || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td></tr>`).join('')}<tr class="total-row"><td colspan="4" style="text-align:right">${t('orders.detailModal.total')}</td><td>R$ ${Number(selectedOrder.total_amount || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td></tr></tbody></table></div>${certs.length > 0 ? `<div class="section"><div class="section-title">${t('orders.detailModal.certificates')}</div>${certs.map((c: any) => `<span class="cert-item">✓ ${c.name} (${c.type})</span>`).join('')}</div>` : ''}${selectedOrder.notes ? `<div class="section"><div class="section-title">${t('orders.detailModal.obs')}</div><p style="font-size:12px">${selectedOrder.notes}</p></div>` : ''}<div class="footer"><p>Documento gerado pelo sistema FerriBor Global 4.0</p></div><script>window.print();</script></body></html>`);
                   pw.document.close();
                 }}
                 className={`flex-1 flex items-center justify-center gap-1.5 rounded-xl border py-2 text-xs font-medium transition ${d ? "border-white/10 text-neutral-300 hover:bg-white/5" : "border-neutral-200 text-neutral-700 hover:bg-neutral-50"}`}
               >
                 <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Baixar PDF
+                {t('orders.detailModal.btnDownload')}
               </button>
               <button
                 onClick={() => {
@@ -816,22 +826,22 @@ function PedidosTab({ d }: { d: boolean }) {
                   const certs = selectedOrder.certificates || [];
                   const pw = window.open('', '_blank');
                   if (!pw) return;
-                  pw.document.write(`<html><head><title>Pedido N:${selectedOrder.order_number || ''}</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;padding:40px;max-width:800px;margin:0 auto;color:#1a1a1a}.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #dc2626}.logo{font-size:22px;font-weight:800;color:#dc2626}.meta{text-align:right;font-size:11px;color:#666}.meta strong{color:#1a1a1a}.section{margin:16px 0}.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#dc2626;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #eee}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:6px}.field-label{font-size:9px;text-transform:uppercase;letter-spacing:0.5px;color:#888}.field-value{font-size:12px;font-weight:500}table{width:100%;border-collapse:collapse;margin:8px 0}th,td{border:1px solid #e5e5e5;padding:8px;text-align:left;font-size:11px}th{background:#f9f9f9;font-weight:600;text-transform:uppercase;font-size:9px}.total-row{font-weight:700;background:#fef2f2}.nf-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px;margin:12px 0}.cert-item{display:inline-block;padding:4px 10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:4px;margin:3px 4px 3px 0;font-size:10px}.footer{margin-top:30px;padding-top:12px;border-top:1px solid #eee;font-size:9px;color:#888;text-align:center}@media print{body{padding:20px}}</style></head><body><div class="header"><div><div class="logo">FerriBor</div><p style="font-size:10px;color:#666;margin-top:2px">Artefatos de Borracha</p></div><div class="meta"><p><strong>Pedido N:${selectedOrder.order_number || ''}</strong></p><p>Data: ${new Date(selectedOrder.created_at).toLocaleDateString('pt-BR')}</p><p>Status: ${statusLabels[selectedOrder.status] || selectedOrder.status}</p>${selectedOrder.lote ? `<p>LOTE: <strong>${selectedOrder.lote}</strong></p>` : ''}</div></div>${selectedOrder.nf_number ? `<div class="nf-box"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#475569;margin-bottom:6px">Nota Fiscal</div><div class="grid"><div class="field"><div class="field-label">Numero NF</div><div class="field-value">${selectedOrder.nf_number}</div></div><div class="field"><div class="field-label">Serie</div><div class="field-value">${selectedOrder.nf_serie || '001'}</div></div>${selectedOrder.nf_access_key ? `<div class="field" style="grid-column:1/-1"><div class="field-label">Chave de Acesso</div><div class="field-value" style="font-family:monospace;font-size:10px">${selectedOrder.nf_access_key}</div></div>` : ''}</div></div>` : ''}<div class="section"><div class="section-title">Emitente</div><div class="grid"><div class="field"><div class="field-label">Razao Social</div><div class="field-value">Ferri Fabricacao de Artefatos de Borracha Ltda</div></div><div class="field"><div class="field-label">CNPJ</div><div class="field-value">20.036.263/0001-68</div></div><div class="field"><div class="field-label">Municipio/UF</div><div class="field-value">Santa Gertrudes / SP</div></div><div class="field"><div class="field-label">CNAE</div><div class="field-value">2219-6/00</div></div></div></div><div class="section"><div class="section-title">Destinatario</div><div class="grid"><div class="field"><div class="field-label">Nome</div><div class="field-value">${selectedOrder.client_name || ''}</div></div><div class="field"><div class="field-label">Empresa</div><div class="field-value">${selectedOrder.client_company || ''}</div></div><div class="field"><div class="field-label">CNPJ/CPF</div><div class="field-value">${selectedOrder.client_cpf_cnpj || ''}</div></div><div class="field"><div class="field-label">IE</div><div class="field-value">${selectedOrder.client_ie || ''}</div></div><div class="field" style="grid-column:1/-1"><div class="field-label">Endereco</div><div class="field-value">${selectedOrder.shipping_address || ''}</div></div></div></div><div class="section"><div class="section-title">Itens</div><table><thead><tr><th>Produto</th><th>Qtd</th><th>Un.</th><th>Valor Unit.</th><th>Total</th></tr></thead><tbody>${items.map((i: any) => `<tr><td>${i.product_name}</td><td>${i.quantity}</td><td>${i.unit}</td><td>R$ ${Number(i.unit_price || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td><td>R$ ${Number(i.total_price || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td></tr>`).join('')}<tr class="total-row"><td colspan="4" style="text-align:right">TOTAL</td><td>R$ ${Number(selectedOrder.total_amount || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td></tr></tbody></table></div>${certs.length > 0 ? `<div class="section"><div class="section-title">Certificados</div>${certs.map((c: any) => `<span class="cert-item">✓ ${c.name} (${c.type})</span>`).join('')}</div>` : ''}${selectedOrder.notes ? `<div class="section"><div class="section-title">Observacoes</div><p style="font-size:12px">${selectedOrder.notes}</p></div>` : ''}<div class="footer"><p>Documento gerado pelo sistema FerriBor Global 4.0</p></div><script>window.print();</script></body></html>`);
+                  pw.document.write(`<html><head><title>${t('orders.detailModal.title')} ${selectedOrder.order_number || ''}</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;padding:40px;max-width:800px;margin:0 auto;color:#1a1a1a}.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #dc2626}.logo{font-size:22px;font-weight:800;color:#dc2626}.meta{text-align:right;font-size:11px;color:#666}.meta strong{color:#1a1a1a}.section{margin:16px 0}.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#dc2626;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #eee}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:6px}.field-label{font-size:9px;text-transform:uppercase;letter-spacing:0.5px;color:#888}.field-value{font-size:12px;font-weight:500}table{width:100%;border-collapse:collapse;margin:8px 0}th,td{border:1px solid #e5e5e5;padding:8px;text-align:left;font-size:11px}th{background:#f9f9f9;font-weight:600;text-transform:uppercase;font-size:9px}.total-row{font-weight:700;background:#fef2f2}.nf-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px;margin:12px 0}.cert-item{display:inline-block;padding:4px 10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:4px;margin:3px 4px 3px 0;font-size:10px}.footer{margin-top:30px;padding-top:12px;border-top:1px solid #eee;font-size:9px;color:#888;text-align:center}@media print{body{padding:20px}}</style></head><body><div class="header"><div><div class="logo">FerriBor</div><p style="font-size:10px;color:#666;margin-top:2px">Artefatos de Borracha</p></div><div class="meta"><p><strong>${t('orders.detailModal.title')} ${selectedOrder.order_number || ''}</strong></p><p>${t('orders.detailModal.date')}: ${new Date(selectedOrder.created_at).toLocaleDateString('pt-BR')}</p><p>${t('orders.detailModal.status')}: ${statusLabels[selectedOrder.status] || selectedOrder.status}</p>${selectedOrder.lote ? `<p>${t('orders.detailModal.lote')}: <strong>${selectedOrder.lote}</strong></p>` : ''}</div></div>${selectedOrder.nf_number ? `<div class="nf-box"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#475569;margin-bottom:6px">${t('orders.detailModal.nfTitle')}</div><div class="grid"><div class="field"><div class="field-label">${t('orders.detailModal.nfNumber')}</div><div class="field-value">${selectedOrder.nf_number}</div></div><div class="field"><div class="field-label">${t('orders.detailModal.nfSerie')}</div><div class="field-value">${selectedOrder.nf_serie || '001'}</div></div>${selectedOrder.nf_access_key ? `<div class="field" style="grid-column:1/-1"><div class="field-label">${t('orders.detailModal.nfKey')}</div><div class="field-value" style="font-family:monospace;font-size:10px">${selectedOrder.nf_access_key}</div></div>` : ''}</div></div>` : ''}<div class="section"><div class="section-title">${t('orders.detailModal.issuer')}</div><div class="grid"><div class="field"><div class="field-label">Razao Social</div><div class="field-value">Ferri Fabricacao de Artefatos de Borracha Ltda</div></div><div class="field"><div class="field-label">CNPJ</div><div class="field-value">20.036.263/0001-68</div></div><div class="field"><div class="field-label">Municipio/UF</div><div class="field-value">Santa Gertrudes / SP</div></div><div class="field"><div class="field-label">CNAE</div><div class="field-value">2219-6/00</div></div></div></div><div class="section"><div class="section-title">${t('orders.wizard.buyer')}</div><div class="grid"><div class="field"><div class="field-label">Nome</div><div class="field-value">${selectedOrder.client_name || ''}</div></div><div class="field"><div class="field-label">Empresa</div><div class="field-value">${selectedOrder.client_company || ''}</div></div><div class="field"><div class="field-label">CNPJ/CPF</div><div class="field-value">${selectedOrder.client_cpf_cnpj || ''}</div></div><div class="field"><div class="field-label">IE</div><div class="field-value">${selectedOrder.client_ie || ''}</div></div><div class="field" style="grid-column:1/-1"><div class="field-label">${t('orders.detailModal.delivery')}</div><div class="field-value">${selectedOrder.shipping_address || ''}</div></div></div></div><div class="section"><div class="section-title">${t('orders.detailModal.items')}</div><table><thead><tr><th>${t('orders.wizard.fieldProduct')}</th><th>Qtd</th><th>${t('orders.wizard.fieldUnit')}</th><th>${t('orders.wizard.unitPrice')}</th><th>Total</th></tr></thead><tbody>${items.map((i: any) => `<tr><td>${i.product_name}</td><td>${i.quantity}</td><td>${i.unit}</td><td>R$ ${Number(i.unit_price || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td><td>R$ ${Number(i.total_price || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td></tr>`).join('')}<tr class="total-row"><td colspan="4" style="text-align:right">${t('orders.detailModal.total')}</td><td>R$ ${Number(selectedOrder.total_amount || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td></tr></tbody></table></div>${certs.length > 0 ? `<div class="section"><div class="section-title">${t('orders.detailModal.certificates')}</div>${certs.map((c: any) => `<span class="cert-item">✓ ${c.name} (${c.type})</span>`).join('')}</div>` : ''}${selectedOrder.notes ? `<div class="section"><div class="section-title">${t('orders.detailModal.obs')}</div><p style="font-size:12px">${selectedOrder.notes}</p></div>` : ''}<div class="footer"><p>Documento gerado pelo sistema FerriBor Global 4.0</p></div><script>window.print();</script></body></html>`);
                   pw.document.close();
                 }}
                 className={`flex-1 flex items-center justify-center gap-1.5 rounded-xl border py-2 text-xs font-medium transition ${d ? "border-white/10 text-neutral-300 hover:bg-white/5" : "border-neutral-200 text-neutral-700 hover:bg-neutral-50"}`}
               >
                 <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-                Imprimir pedido
+                {t('orders.detailModal.btnPrint')}
               </button>
             </div>
             <div className={`rounded-xl border p-4 space-y-3 ${d ? "border-white/10 bg-white/[0.03]" : "border-neutral-200 bg-neutral-50"}`}>
               <div className="flex justify-between items-center">
-                <span className={`text-xs ${d ? "text-neutral-400" : "text-neutral-600"}`}>Status</span>
+                <span className={`text-xs ${d ? "text-neutral-400" : "text-neutral-600"}`}>{t('orders.detailModal.status')}</span>
                 <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${d ? "bg-white/10 text-white" : "bg-neutral-200 text-neutral-800"}`}>{statusLabels[selectedOrder.status] || selectedOrder.status}</span>
               </div>
               <div className={`border-t pt-3 ${d ? "border-white/10" : "border-neutral-200"}`}>
-                <p className={`text-[10px] uppercase tracking-wider mb-2 ${d ? "text-neutral-500" : "text-neutral-400"}`}>Itens</p>
+                <p className={`text-[10px] uppercase tracking-wider mb-2 ${d ? "text-neutral-500" : "text-neutral-400"}`}>{t('orders.detailModal.items')}</p>
                 <div className="space-y-2">
                   {selectedOrder.order_items?.map((item: any, i: number) => (
                     <div key={i} className={`flex items-center justify-between text-sm ${d ? "text-neutral-200" : "text-neutral-700"}`}>
@@ -843,30 +853,30 @@ function PedidosTab({ d }: { d: boolean }) {
               </div>
               {selectedOrder.total_amount && (
                 <div className={`border-t pt-2 flex justify-between ${d ? "border-white/10" : "border-neutral-200"}`}>
-                  <span className={`text-sm font-bold ${d ? "text-white" : "text-neutral-900"}`}>Total</span>
+                  <span className={`text-sm font-bold ${d ? "text-white" : "text-neutral-900"}`}>{t('orders.detailModal.total')}</span>
                   <span className={`text-sm font-bold ${d ? "text-white" : "text-neutral-900"}`}>R$ {Number(selectedOrder.total_amount).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
                 </div>
               )}
               <div className={`border-t pt-2 space-y-1 ${d ? "border-white/10" : "border-neutral-200"}`}>
                 <div className="flex justify-between text-xs">
-                  <span className={d ? "text-neutral-400" : "text-neutral-600"}>Data</span>
+                  <span className={d ? "text-neutral-400" : "text-neutral-600"}>{t('orders.detailModal.date')}</span>
                   <span className={d ? "text-neutral-200" : "text-neutral-700"}>{new Date(selectedOrder.created_at).toLocaleDateString('pt-BR')}</span>
                 </div>
                 {selectedOrder.shipping_address && (
                   <div className="flex justify-between text-xs">
-                    <span className={d ? "text-neutral-400" : "text-neutral-600"}>Entrega</span>
+                    <span className={d ? "text-neutral-400" : "text-neutral-600"}>{t('orders.detailModal.delivery')}</span>
                     <span className={`text-right max-w-[60%] ${d ? "text-neutral-200" : "text-neutral-700"}`}>{selectedOrder.shipping_address}</span>
                   </div>
                 )}
                 {selectedOrder.notes && (
                   <div className="flex justify-between text-xs">
-                    <span className={d ? "text-neutral-400" : "text-neutral-600"}>Obs</span>
+                    <span className={d ? "text-neutral-400" : "text-neutral-600"}>{t('orders.detailModal.obs')}</span>
                     <span className={d ? "text-neutral-200" : "text-neutral-700"}>{selectedOrder.notes}</span>
                   </div>
                 )}
                 {selectedOrder.lote && (
                   <div className="flex justify-between text-xs">
-                    <span className={d ? "text-neutral-400" : "text-neutral-600"}>LOTE</span>
+                    <span className={d ? "text-neutral-400" : "text-neutral-600"}>{t('orders.detailModal.lote')}</span>
                     <span className={`font-mono font-bold ${d ? "text-neutral-200" : "text-neutral-700"}`}>{selectedOrder.lote}</span>
                   </div>
                 )}
@@ -875,21 +885,21 @@ function PedidosTab({ d }: { d: boolean }) {
               {/* Nota Fiscal */}
               {selectedOrder.nf_number && (
                 <div className={`border-t pt-3 ${d ? "border-white/10" : "border-neutral-200"}`}>
-                  <p className={`text-[10px] uppercase tracking-wider mb-2 ${d ? "text-neutral-500" : "text-neutral-400"}`}>Nota Fiscal</p>
+                  <p className={`text-[10px] uppercase tracking-wider mb-2 ${d ? "text-neutral-500" : "text-neutral-400"}`}>{t('orders.detailModal.nfTitle')}</p>
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs">
-                      <span className={d ? "text-neutral-400" : "text-neutral-600"}>Número NF</span>
+                      <span className={d ? "text-neutral-400" : "text-neutral-600"}>{t('orders.detailModal.nfNumber')}</span>
                       <span className={`font-mono ${d ? "text-neutral-200" : "text-neutral-700"}`}>{selectedOrder.nf_number}</span>
                     </div>
                     {selectedOrder.nf_serie && (
                       <div className="flex justify-between text-xs">
-                        <span className={d ? "text-neutral-400" : "text-neutral-600"}>Série</span>
+                        <span className={d ? "text-neutral-400" : "text-neutral-600"}>{t('orders.detailModal.nfSerie')}</span>
                         <span className={d ? "text-neutral-200" : "text-neutral-700"}>{selectedOrder.nf_serie}</span>
                       </div>
                     )}
                     {selectedOrder.nf_access_key && (
                       <div className="flex justify-between text-xs">
-                        <span className={d ? "text-neutral-400" : "text-neutral-600"}>Chave de Acesso</span>
+                        <span className={d ? "text-neutral-400" : "text-neutral-600"}>{t('orders.detailModal.nfKey')}</span>
                         <span className={`font-mono text-[10px] ${d ? "text-neutral-300" : "text-neutral-600"}`}>{selectedOrder.nf_access_key}</span>
                       </div>
                     )}
@@ -899,7 +909,7 @@ function PedidosTab({ d }: { d: boolean }) {
 
               {/* Emitente */}
               <div className={`border-t pt-3 ${d ? "border-white/10" : "border-neutral-200"}`}>
-                <p className={`text-[10px] uppercase tracking-wider mb-2 ${d ? "text-neutral-500" : "text-neutral-400"}`}>Emitente</p>
+                <p className={`text-[10px] uppercase tracking-wider mb-2 ${d ? "text-neutral-500" : "text-neutral-400"}`}>{t('orders.detailModal.issuer')}</p>
                 <div className="space-y-0.5">
                   <p className={`text-xs font-medium ${d ? "text-neutral-200" : "text-neutral-700"}`}>Ferri Fabricação de Artefatos de Borracha Ltda</p>
                   <p className={`text-[11px] ${d ? "text-neutral-400" : "text-neutral-500"}`}>CNPJ: 20.036.263/0001-68</p>
@@ -910,7 +920,7 @@ function PedidosTab({ d }: { d: boolean }) {
               {/* Certificados */}
               {selectedOrder.certificates && selectedOrder.certificates.length > 0 && (
                 <div className={`border-t pt-3 ${d ? "border-white/10" : "border-neutral-200"}`}>
-                  <p className={`text-[10px] uppercase tracking-wider mb-2 ${d ? "text-neutral-500" : "text-neutral-400"}`}>Certificados</p>
+                  <p className={`text-[10px] uppercase tracking-wider mb-2 ${d ? "text-neutral-500" : "text-neutral-400"}`}>{t('orders.detailModal.certificates')}</p>
                   <div className="space-y-1.5">
                     {selectedOrder.certificates.map((cert: any, i: number) => (
                       <a key={i} href={cert.url} target="_blank" rel="noreferrer" className={`flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs transition ${d ? "bg-white/5 hover:bg-white/10 text-neutral-200 border border-white/10" : "bg-neutral-100 hover:bg-neutral-200 text-neutral-700 border border-neutral-200"}`}>
@@ -931,6 +941,7 @@ function PedidosTab({ d }: { d: boolean }) {
 }
 
 function RecompraTab({ d }: { d: boolean }) {
+  const { t } = useI18n();
   const [view, setView] = useState<"home" | "list" | "form">("home");
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -1000,15 +1011,15 @@ function RecompraTab({ d }: { d: boolean }) {
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className={`text-lg font-semibold ${d ? "text-white" : "text-neutral-900"}`}>Pedidos disponíveis para recompra</h2>
+          <h2 className={`text-lg font-semibold ${d ? "text-white" : "text-neutral-900"}`}>{t('recompra.title')}</h2>
           <button onClick={() => setView("home")} className={`text-xs ${d ? "text-neutral-400 hover:text-white" : "text-neutral-600 hover:text-neutral-900"} transition`}>
-            ← Voltar
+            {t('recompra.btnBack')}
           </button>
         </div>
         {loading ? (
-          <p className={`text-sm ${d ? "text-neutral-500" : "text-neutral-600"}`}>Carregando pedidos...</p>
+          <p className={`text-sm ${d ? "text-neutral-500" : "text-neutral-600"}`}>{t('recompra.loading')}</p>
         ) : orders.length === 0 ? (
-          <p className={`text-sm ${d ? "text-neutral-500" : "text-neutral-600"}`}>Nenhum pedido encontrado.</p>
+          <p className={`text-sm ${d ? "text-neutral-500" : "text-neutral-600"}`}>{t('recompra.empty')}</p>
         ) : (
           <div className="space-y-2">
             {orders.map((order) => (
@@ -1025,7 +1036,7 @@ function RecompraTab({ d }: { d: boolean }) {
                   onClick={() => startRecompra(order)}
                   className="rounded-lg bg-red-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-red-500"
                 >
-                  Recompra
+                  {t('recompra.badgeRecompra')}
                 </button>
               </div>
             ))}
@@ -1040,22 +1051,22 @@ function RecompraTab({ d }: { d: boolean }) {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className={`text-lg font-semibold ${d ? "text-white" : "text-neutral-900"}`}>
-            Recompra — Pedido #{selectedOrder.order_number || selectedOrder.id.slice(0, 8)}
+            {t('recompra.formTitle')}{selectedOrder.order_number || selectedOrder.id.slice(0, 8)}
           </h2>
           <button onClick={() => setView("list")} className={`text-xs ${d ? "text-neutral-400 hover:text-white" : "text-neutral-600 hover:text-neutral-900"} transition`}>
-            ← Voltar
+            {t('recompra.btnBack')}
           </button>
         </div>
 
         <div className={`rounded-xl border p-4 ${d ? "border-white/10 bg-white/[0.03]" : "border-neutral-200 bg-neutral-50"}`}>
-          <p className={`text-xs font-medium uppercase tracking-wide mb-3 ${d ? "text-neutral-400" : "text-neutral-600"}`}>Itens do pedido</p>
+          <p className={`text-xs font-medium uppercase tracking-wide mb-3 ${d ? "text-neutral-400" : "text-neutral-600"}`}>{t('recompra.formItemsTitle')}</p>
           <div className="space-y-2">
             {formItems.map((item, idx) => (
               <div key={idx} className={`flex items-center gap-2 rounded-lg border px-3 py-2 ${d ? "border-white/10 bg-white/[0.02]" : "border-neutral-200 bg-white"}`}>
                 <input
                   value={item.product_name}
                   onChange={(e) => updateItem(idx, "product_name", e.target.value)}
-                  placeholder="Nome do produto"
+                  placeholder={t('recompra.placeholderProd')}
                   className={`flex-1 bg-transparent text-sm outline-none ${d ? "text-white placeholder-neutral-600" : "text-neutral-900 placeholder-neutral-400"}`}
                 />
                 <input
@@ -1075,12 +1086,12 @@ function RecompraTab({ d }: { d: boolean }) {
             ))}
           </div>
           <button onClick={addItem} className={`mt-2 text-xs ${d ? "text-neutral-400 hover:text-white" : "text-neutral-600 hover:text-neutral-900"} transition`}>
-            + Adicionar item
+            {t('recompra.btnAddItem')}
           </button>
         </div>
 
         <div className={`rounded-xl border p-4 ${d ? "border-white/10 bg-white/[0.03]" : "border-neutral-200 bg-neutral-50"}`}>
-          <label className={`text-xs font-medium uppercase tracking-wide ${d ? "text-neutral-400" : "text-neutral-600"}`}>Prazo de entrega</label>
+          <label className={`text-xs font-medium uppercase tracking-wide ${d ? "text-neutral-400" : "text-neutral-600"}`}>{t('recompra.formDeadline')}</label>
           <input
             type="date"
             value={deadline}
@@ -1094,7 +1105,7 @@ function RecompraTab({ d }: { d: boolean }) {
           disabled={submitting || formItems.length === 0}
           className="w-full rounded-xl bg-red-600 py-3 text-sm font-medium text-white transition hover:bg-red-500 disabled:opacity-50"
         >
-          {submitting ? "Enviando..." : "Confirmar Recompra"}
+          {submitting ? t('recompra.btnConfirmSending') : t('recompra.btnConfirm')}
         </button>
       </div>
     );
@@ -1104,55 +1115,57 @@ function RecompraTab({ d }: { d: boolean }) {
     <div className="grid grid-cols-1 gap-4 md:grid-cols-8 lg:grid-cols-12">
       <Card d={d} accent className="md:col-span-8 lg:col-span-6 min-h-[240px] flex flex-col justify-between">
         <div className="mb-4">
-          <p className="text-xs font-medium uppercase tracking-[0.14em] text-red-100/80">Recompra inteligente</p>
-          <h2 className="text-[22px] font-semibold tracking-tight text-white">Alertas de desgaste</h2>
+          <p className="text-xs font-medium uppercase tracking-[0.14em] text-red-100/80">{t('recompra.kpiTitle')}</p>
+          <h2 className="text-[22px] font-semibold tracking-tight text-white">{t('recompra.kpiSubtitle')}</h2>
         </div>
-        <p className="text-sm text-red-100/80 border-b border-white/20 pb-3 mb-3">Peças chegando ao fim da vida útil estimada.</p>
+        <p className="text-sm text-red-100/80 border-b border-white/20 pb-3 mb-3">{t('recompra.kpiDesc')}</p>
         <div className="space-y-2">
           <div className="flex items-center justify-between rounded-xl bg-white/10 border border-white/20 px-3 py-2.5">
             <span className="text-sm text-white">Rolo transportador 800mm</span>
-            <span className="rounded-full bg-white/20 border border-white/30 px-2 py-0.5 text-[10px] text-white">Substituir em breve</span>
+            <span className="rounded-full bg-white/20 border border-white/30 px-2 py-0.5 text-[10px] text-white">{t('recompra.wearStatus1')}</span>
           </div>
           <div className="flex items-center justify-between rounded-xl bg-white/10 border border-white/20 px-3 py-2.5">
             <span className="text-sm text-white">Vedação silicone ø120mm</span>
-            <span className="rounded-full bg-white/20 border border-white/30 px-2 py-0.5 text-[10px] text-white">~30 dias</span>
+            <span className="rounded-full bg-white/20 border border-white/30 px-2 py-0.5 text-[10px] text-white">{t('recompra.wearStatus2')}</span>
           </div>
         </div>
       </Card>
 
       <Card d={d} className="md:col-span-4 lg:col-span-6 min-h-[240px] flex flex-col justify-between">
         <div className="mb-3">
-          <p className={`text-xs font-medium uppercase tracking-[0.14em] ${d ? "text-neutral-400" : "text-neutral-700"}`}>Ação rápida</p>
-          <h2 className={`text-lg font-semibold tracking-tight ${d ? "text-white" : "text-neutral-900"}`}>Recomprar pedido anterior</h2>
+          <p className={`text-xs font-medium uppercase tracking-[0.14em] ${d ? "text-neutral-400" : "text-neutral-700"}`}>{t('recompra.ctaTitle')}</p>
+          <h2 className={`text-lg font-semibold tracking-tight ${d ? "text-white" : "text-neutral-900"}`}>{t('recompra.ctaTitle')}</h2>
         </div>
-        <p className={`text-xs mb-4 ${d ? "text-neutral-500" : "text-neutral-600"}`}>Selecione um pedido anterior para recompra com 1 clique.</p>
+        <p className={`text-xs mb-4 ${d ? "text-neutral-500" : "text-neutral-600"}`}>{t('recompra.ctaDesc')}</p>
         <button onClick={fetchOrders} className="w-full rounded-xl bg-red-600 py-3 text-sm font-medium text-white transition hover:bg-red-500">
-          Ver pedidos disponíveis
+          {t('recompra.ctaBtn')}
         </button>
       </Card>
+
     </div>
   );
 }
 
 function CreditTab({ d }: { d: boolean }) {
+  const { t } = useI18n();
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-8 lg:grid-cols-12">
       <Card d={d} className={`md:col-span-4 lg:col-span-5 min-h-[220px] flex flex-col justify-between ${!d ? "" : "!bg-white !border-neutral-200"}`}>
         <div className="mb-4">
-          <p className="text-xs font-medium uppercase tracking-[0.14em] text-neutral-500">Saldo</p>
-          <h2 className="text-[28px] font-semibold tracking-tight text-neutral-900">1.240 créditos</h2>
+          <p className="text-xs font-medium uppercase tracking-[0.14em] text-neutral-500">{t('credit.kpiTitle')}</p>
+          <h2 className="text-[28px] font-semibold tracking-tight text-neutral-900">1.240 {t('credit.kpiUnit')}</h2>
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-neutral-600">Compras recorrentes</span>
+            <span className="text-neutral-600">{t('credit.labelRecurrent')}</span>
             <span className="font-medium text-neutral-900">+80</span>
           </div>
           <div className="flex items-center justify-between text-sm">
-            <span className="text-neutral-600">Indicações</span>
+            <span className="text-neutral-600">{t('credit.labelRefs')}</span>
             <span className="font-medium text-neutral-900">+200</span>
           </div>
           <div className="flex items-center justify-between text-sm">
-            <span className="text-neutral-600">Programa ESG</span>
+            <span className="text-neutral-600">{t('credit.labelEsg')}</span>
             <span className="font-medium text-neutral-900">+160</span>
           </div>
         </div>
@@ -1160,27 +1173,27 @@ function CreditTab({ d }: { d: boolean }) {
 
       <Card d={d} className="md:col-span-4 lg:col-span-4 min-h-[220px] flex flex-col justify-between">
         <div className="mb-3">
-          <p className={`text-xs font-medium uppercase tracking-[0.14em] ${d ? "text-neutral-400" : "text-neutral-700"}`}>Ranking</p>
-          <h2 className={`text-lg font-semibold tracking-tight ${d ? "text-white" : "text-neutral-900"}`}>Sua posição</h2>
+          <p className={`text-xs font-medium uppercase tracking-[0.14em] ${d ? "text-neutral-400" : "text-neutral-700"}`}>{t('credit.rankTitle')}</p>
+          <h2 className={`text-lg font-semibold tracking-tight ${d ? "text-white" : "text-neutral-900"}`}>{t('credit.rankSubtitle')}</h2>
         </div>
         <div className={`flex items-center gap-3 rounded-xl p-4 ${d ? "bg-white/5 border border-white/10" : "bg-neutral-50 border border-neutral-100"}`}>
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-600 text-white font-bold text-lg">#4</div>
           <div>
-            <p className={`text-sm font-medium ${d ? "text-neutral-200" : "text-neutral-800"}`}>Top 10%</p>
-            <p className={`text-xs ${d ? "text-neutral-500" : "text-neutral-600"}`}>Entre os clientes ativos</p>
+            <p className={`text-sm font-medium ${d ? "text-neutral-200" : "text-neutral-800"}`}>{t('credit.rankBadge')}</p>
+            <p className={`text-xs ${d ? "text-neutral-500" : "text-neutral-600"}`}>{t('credit.rankDesc')}</p>
           </div>
         </div>
         <button className={`mt-4 w-full rounded-xl border py-2.5 text-sm font-medium transition ${d ? "border-white/10 bg-white/5 text-neutral-200 hover:bg-white/10" : "border-neutral-200 text-neutral-700 hover:bg-neutral-50"}`}>
-          Resgatar créditos
+          {t('credit.btnRedeem')}
         </button>
       </Card>
 
       <Card d={d} className="md:col-span-8 lg:col-span-3 min-h-[220px] flex flex-col justify-between">
         <div className="mb-3">
-          <p className={`text-xs font-medium uppercase tracking-[0.14em] ${d ? "text-neutral-400" : "text-neutral-700"}`}>Benefícios</p>
+          <p className={`text-xs font-medium uppercase tracking-[0.14em] ${d ? "text-neutral-400" : "text-neutral-700"}`}>{t('credit.benefitsTitle')}</p>
         </div>
         <div className="space-y-2 flex-1">
-          {["Desconto em compras", "Manutenção preventiva", "Consultoria técnica"].map((b, i) => (
+          {(t('credit.benefits') as string[]).map((b, i) => (
             <div key={i} className={`flex items-center gap-2 rounded-lg px-2 py-2 text-sm transition ${d ? "text-neutral-300 hover:bg-white/5" : "text-neutral-600 hover:bg-neutral-50"}`}>
               <span className="h-2 w-2 rounded-full bg-red-500"></span>
               {b}
@@ -1193,38 +1206,39 @@ function CreditTab({ d }: { d: boolean }) {
 }
 
 function CircularTab({ d }: { d: boolean }) {
+  const { t } = useI18n();
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-8 lg:grid-cols-12">
       <Card d={d} className={`md:col-span-4 lg:col-span-6 min-h-[240px] flex flex-col justify-between ${d ? "!bg-neutral-900 !border-white/10" : ""}`}>
         <div className="mb-4">
-          <p className={`text-xs font-medium uppercase tracking-[0.14em] ${d ? "text-neutral-400" : "text-neutral-700"}`}>Logística reversa</p>
-          <h2 className={`text-[22px] font-semibold tracking-tight ${d ? "text-white" : "text-neutral-900"}`}>FerriBor Circular</h2>
+          <p className={`text-xs font-medium uppercase tracking-[0.14em] ${d ? "text-neutral-400" : "text-neutral-700"}`}>{t('circular.title')}</p>
+          <h2 className={`text-[22px] font-semibold tracking-tight ${d ? "text-white" : "text-neutral-900"}`}>{t('circular.subtitle')}</h2>
         </div>
-        <p className={`text-sm mb-4 ${d ? "text-neutral-400" : "text-neutral-700"}`}>Solicite coleta de peças usadas e acumule créditos ESG.</p>
-        <button className="w-full rounded-xl bg-red-600 py-3 text-sm font-medium text-white transition hover:bg-red-500">Solicitar coleta</button>
+        <p className={`text-sm mb-4 ${d ? "text-neutral-400" : "text-neutral-700"}`}>{t('circular.desc')}</p>
+        <button className="w-full rounded-xl bg-red-600 py-3 text-sm font-medium text-white transition hover:bg-red-500">{t('circular.btnRequest')}</button>
       </Card>
 
       <Card d={d} className="md:col-span-4 lg:col-span-6 min-h-[240px] flex flex-col justify-between">
         <div className="mb-3">
-          <p className={`text-xs font-medium uppercase tracking-[0.14em] ${d ? "text-neutral-400" : "text-neutral-700"}`}>Impacto ambiental</p>
-          <h2 className={`text-lg font-semibold tracking-tight ${d ? "text-white" : "text-neutral-900"}`}>Certificado ESG</h2>
+          <p className={`text-xs font-medium uppercase tracking-[0.14em] ${d ? "text-neutral-400" : "text-neutral-700"}`}>{t('circular.impactTitle')}</p>
+          <h2 className={`text-lg font-semibold tracking-tight ${d ? "text-white" : "text-neutral-900"}`}>{t('circular.impactSubtitle')}</h2>
         </div>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className={`text-sm ${d ? "text-neutral-400" : "text-neutral-700"}`}>Borracha desviada de aterros</span>
+            <span className={`text-sm ${d ? "text-neutral-400" : "text-neutral-700"}`}>{t('circular.impactRow1')}</span>
             <span className={`text-sm font-medium ${d ? "text-white" : "text-neutral-900"}`}>320 kg</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className={`text-sm ${d ? "text-neutral-400" : "text-neutral-700"}`}>CO₂ economizado</span>
+            <span className={`text-sm ${d ? "text-neutral-400" : "text-neutral-700"}`}>{t('circular.impactRow2')}</span>
             <span className={`text-sm font-medium ${d ? "text-white" : "text-neutral-900"}`}>1.2 ton</span>
           </div>
           <div className={`w-full rounded-full h-2 mt-2 ${d ? "bg-neutral-800" : "bg-neutral-200"}`}>
             <div className="h-2 rounded-full bg-red-600" style={{ width: "68%" }}></div>
           </div>
-          <p className={`text-[11px] ${d ? "text-neutral-500" : "text-neutral-600"}`}>68% do objetivo anual atingido</p>
+          <p className={`text-[11px] ${d ? "text-neutral-500" : "text-neutral-600"}`}>68% {t('circular.progressLabel')}</p>
         </div>
         <button className={`mt-4 w-full rounded-xl border py-2.5 text-sm font-medium transition ${d ? "border-white/10 bg-white/5 text-neutral-200 hover:bg-white/10" : "border-neutral-200 text-neutral-700 hover:bg-neutral-50"}`}>
-          Baixar certificado PDF
+          {t('circular.btnDownload')}
         </button>
       </Card>
     </div>
@@ -1232,6 +1246,7 @@ function CircularTab({ d }: { d: boolean }) {
 }
 
 function DocumentosTab({ d }: { d: boolean }) {
+  const { t } = useI18n();
   const docs = [
     { name: "NF-e 001247", type: "Nota Fiscal", date: "Jun 20, 2026" },
     { name: "Certificado de qualidade - Lote 89", type: "Certificado", date: "Jun 18, 2026" },
@@ -1245,11 +1260,11 @@ function DocumentosTab({ d }: { d: boolean }) {
       <Card d={d} className="min-h-[300px] flex flex-col">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className={`text-xs font-medium uppercase tracking-[0.14em] ${d ? "text-neutral-400" : "text-neutral-700"}`}>Central de documentos</p>
-            <h2 className={`text-lg font-semibold tracking-tight ${d ? "text-white" : "text-neutral-900"}`}>Notas fiscais, certificados e laudos</h2>
+            <p className={`text-xs font-medium uppercase tracking-[0.14em] ${d ? "text-neutral-400" : "text-neutral-700"}`}>{t('documentos.title')}</p>
+            <h2 className={`text-lg font-semibold tracking-tight ${d ? "text-white" : "text-neutral-900"}`}>{t('documentos.subtitle')}</h2>
           </div>
           <button className={`rounded-full border px-3 py-1.5 text-[11px] transition ${d ? "bg-neutral-800 border-white/10 text-neutral-200 hover:bg-neutral-700" : "bg-neutral-100 border-neutral-200 text-neutral-600 hover:bg-neutral-200"}`}>
-            Filtrar
+            {t('documentos.btnFilter')}
           </button>
         </div>
         <div className="space-y-2 flex-1">
@@ -1268,7 +1283,15 @@ function DocumentosTab({ d }: { d: boolean }) {
                 </div>
                 <div>
                   <p className={`text-sm font-medium ${d ? "text-neutral-200" : "text-neutral-700"}`}>{doc.name}</p>
-                  <p className={`text-[11px] ${d ? "text-neutral-500" : "text-neutral-600"}`}>{doc.type}</p>
+                  <p className={`text-[11px] ${d ? "text-neutral-500" : "text-neutral-600"}`}>
+                    {doc.type === "Nota Fiscal" 
+                      ? t('orders.detailModal.nfTitle') 
+                      : doc.type === "Certificado" 
+                      ? t('orders.detailModal.certificates') 
+                      : doc.type === "Laudo" 
+                      ? t('documentos.report') 
+                      : doc.type}
+                  </p>
                 </div>
               </div>
               <span className={`text-xs ${d ? "text-neutral-500" : "text-neutral-600"}`}>{doc.date}</span>

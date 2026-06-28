@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { useI18n } from "@/i18n/LanguageContext";
+import { LanguageSwitcher } from "@/i18n/LanguageSwitcher";
 
 export default function Auth() {
+  const { t } = useI18n();
   const [isLogin, setIsLogin] = useState(false);
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
@@ -39,15 +42,25 @@ export default function Auth() {
           })
           .catch(() => {});
         if (!data.session) {
-          setInfo("Cadastro criado. Confirme seu e-mail para entrar.");
+          setInfo(t('auth.confirmEmail'));
         }
       }
     }
     setLoading(false);
   }
 
+  function traduzErro(msg: string): string {
+    if (msg.includes("Invalid login credentials")) return t('auth.errorCredentials');
+    if (msg.includes("already registered")) return t('auth.errorRegistered');
+    if (msg.includes("at least 6")) return t('auth.errorLength');
+    return msg;
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-950 px-4 py-10 relative overflow-hidden antialiased">
+      <div className="absolute right-4 top-4 z-50">
+        <LanguageSwitcher dark={true} />
+      </div>
       {/* Background decorative elements */}
       <div className="absolute -left-40 -top-40 h-80 w-80 rounded-full bg-red-600/10 blur-[120px] pointer-events-none" />
       <div className="absolute -right-40 -bottom-40 h-80 w-80 rounded-full bg-red-600/10 blur-[120px] pointer-events-none" />
@@ -62,26 +75,26 @@ export default function Auth() {
               className="logo-3d-img"
             />
           </div>
-          <p className="text-[10px] uppercase tracking-widest text-neutral-400 font-mono mt-3">Portal do Cliente</p>
+          <p className="text-[10px] uppercase tracking-widest text-neutral-400 font-mono mt-3">{t('common.portalCliente')}</p>
 
         <h2 className="mb-6 text-xl font-bold tracking-tight text-white">
-          {isLogin ? "Entrar no Portal" : "Criar sua Conta"}
+          {isLogin ? t('auth.titleLogin') : t('auth.titleRegister')}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {!isLogin && (
             <>
-              <Field label="Nome completo" required value={nome} onChange={setNome} placeholder="Seu nome completo" />
-              <Field label="WhatsApp" required value={whatsapp} onChange={setWhatsapp} placeholder="(00) 00000-0000" type="tel" />
-              <Field label="Empresa" required value={empresa} onChange={setEmpresa} placeholder="Nome da empresa" />
-              <Field label="Cargo" required value={cargo} onChange={setCargo} placeholder="Seu cargo" />
+              <Field label={t('auth.fieldNome')} required value={nome} onChange={setNome} placeholder={t('auth.fieldNomePlaceholder')} />
+              <Field label={t('auth.fieldWhatsapp')} required value={whatsapp} onChange={setWhatsapp} placeholder="(00) 00000-0000" type="tel" />
+              <Field label={t('auth.fieldEmpresa')} required value={empresa} onChange={setEmpresa} placeholder={t('auth.fieldEmpresaPlaceholder')} />
+              <Field label={t('auth.fieldCargo')} required value={cargo} onChange={setCargo} placeholder={t('auth.fieldCargoPlaceholder')} />
             </>
           )}
 
-          <Field label="E-mail" required value={email} onChange={setEmail} placeholder="voce@empresa.com" type="email" />
+          <Field label={t('auth.fieldEmail')} required value={email} onChange={setEmail} placeholder="voce@empresa.com" type="email" />
 
           <div>
-            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-neutral-400">Senha</label>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-neutral-400">{t('auth.fieldSenha')}</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -90,7 +103,7 @@ export default function Auth() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full rounded-xl border border-white/10 bg-neutral-900/60 px-4 py-2.5 pr-12 text-sm text-white placeholder:text-neutral-500 outline-none transition focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30"
-                placeholder="Mínimo 6 caracteres"
+                placeholder={t('auth.fieldSenhaPlaceholder')}
               />
               <button
                 type="button"
@@ -115,12 +128,12 @@ export default function Auth() {
             disabled={loading}
             className="w-full rounded-xl bg-red-600 py-3 text-sm font-semibold text-white transition hover:bg-red-500 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none shadow-lg shadow-red-950/20"
           >
-            {loading ? "Aguarde..." : isLogin ? "Entrar" : "Criar conta"}
+            {loading ? t('auth.btnWait') : isLogin ? t('auth.btnEnter') : t('auth.btnCreate')}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-neutral-400">
-          {isLogin ? "Não tem uma conta?" : "Já possui conta?"}{" "}
+          {isLogin ? t('auth.noAccount') : t('auth.hasAccount')}{" "}
           <button
             type="button"
             onClick={() => {
@@ -130,7 +143,7 @@ export default function Auth() {
             }}
             className="font-semibold text-red-500 hover:text-red-400 hover:underline transition-colors"
           >
-            {isLogin ? "Cadastre-se agora" : "Entrar"}
+            {isLogin ? t('auth.btnRegisterNow') : t('auth.btnEnter')}
           </button>
         </p>
       </div>
@@ -155,7 +168,7 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-neutral-400">{label}</label>
+      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-400">{label}</label>
       <input
         type={type}
         required={required}
@@ -166,11 +179,4 @@ function Field({
       />
     </div>
   );
-}
-
-function traduzErro(msg: string): string {
-  if (msg.includes("Invalid login credentials")) return "E-mail ou senha incorretos.";
-  if (msg.includes("already registered")) return "Este e-mail já está cadastrado.";
-  if (msg.includes("at least 6")) return "A senha precisa ter ao menos 6 caracteres.";
-  return msg;
 }
