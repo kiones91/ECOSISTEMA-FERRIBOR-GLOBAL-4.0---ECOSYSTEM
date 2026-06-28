@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FerriBor — Proposta de Ecossistema Digital · BUFFALLOS Tecnologia</title>
+<meta name="description" content="Proposta estratégica do ecossistema digital FerriBor — Site, CRM com IA, Portal do Cliente e automação industrial. Desenvolvido por BUFFALLOS Tecnologia." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+  /* ============ DESIGN TOKENS ============ */
+  :root {
+    --bg-base: #08090B;
+    --bg-alt: #0D0F12;
+    --surface-1: rgba(22, 24, 28, 0.46);
+    --surface-2: rgba(32, 34, 40, 0.66);
+    --border-dim: rgba(255, 255, 255, 0.05);
+    --border-light: rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(255, 255, 255, 0.17);
+
+    /* FerriBor brand — industrial red + steel */
+    --fb-red: #E11D2A;
+    --fb-red-bright: #FF3B47;
+    --fb-red-deep: #9E1119;
+    --fb-steel: #8A929E;
+    --fb-graphite: #1A1C20;
+
+    --accent: var(--fb-red);
+    --accent-bright: var(--fb-red-bright);
+
+    --text-main: #F5F6F8;
+    --text-dim: #AEB2BB;
+    --text-muted: #7B808B;
+
+    --font-display: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "JetBrains Mono", "SF Mono", Consolas, ui-monospace, monospace;
+
+    --easing-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    --grad-red: linear-gradient(115deg, var(--fb-red-bright) 0%, var(--fb-red) 45%, var(--fb-red-deep) 100%);
+    --grad-white: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.52) 100%);
+
+    --shadow-glow: 0 0 48px rgba(225, 29, 42, 0.26);
+    --shadow-card: 0 24px 80px rgba(0, 0, 0, 0.5);
+
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-pill: 999px;
+
+    --maxw: 1240px;
+    --gutter: clamp(20px, 5vw, 44px);
+  }
+
+  /* ============ RESET ============ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--bg-base);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+  ::selection { background: var(--fb-red); color: #fff; }
+
+  .container { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
+
+  /* fine grid texture on the whole page */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size: 64px 64px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ============ TOP BAR ============ */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px var(--gutter);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    background: linear-gradient(180deg, rgba(8,9,11,0.82) 0%, rgba(8,9,11,0) 100%);
+  }
+  .topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+  }
+  .topbar-brand img { height: 30px; width: auto; }
+  .topbar-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .topbar-cta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border: 1px solid var(--border-light);
+    padding: 9px 18px;
+    border-radius: var(--radius-pill);
+    transition: all 0.3s var(--easing-smooth);
+  }
+  .topbar-cta:hover { border-color: var(--fb-red); color: #fff; }
+  @media (max-width: 680px) { .topbar-cta { display: none; } }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 150px 0 90px;
+    overflow: hidden;
+    z-index: 1;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: -10% -20% auto -20%;
+    height: 75vh;
+    background: radial-gradient(ellipse at center, rgba(225, 29, 42, 0.18), transparent 60%);
+    filter: blur(50px);
+    animation: breathe 9s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    bottom: -30%;
+    right: -10%;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(138, 146, 158, 0.06), transparent 65%);
+    pointer-events: none;
+  }
+  @keyframes breathe {
+    from { opacity: 0.7; transform: scale(1); }
+    to   { opacity: 1;   transform: scale(1.08); }
+  }
+
+  .hero-inner { position: relative; z-index: 2; max-width: 1080px; }
+
+  /* logo lockup — Buffallos apresenta FerriBor */
+  .lockup {
+    display: flex;
+    align-items: center;
+    gap: clamp(22px, 5vw, 56px);
+    margin-bottom: 44px;
+    flex-wrap: wrap;
+  }
+  .lockup-item { display: flex; flex-direction: column; gap: 9px; }
+  .lockup-item .role {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .lockup-buffallos img {
+    height: clamp(38px, 5vw, 52px);
+    width: auto;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.08));
+  }
+  .lockup-ferribor img {
+    height: clamp(64px, 9vw, 104px);
+    width: auto;
+    filter: drop-shadow(0 0 38px rgba(225, 29, 42, 0.32));
+  }
+  .lockup-x {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    color: var(--text-muted);
+    align-self: center;
+    margin-top: 14px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fb-red-bright);
+    border: 1px solid var(--border-light);
+    background: rgba(225, 29, 42, 0.06);
+    backdrop-filter: blur(10px);
+    padding: 9px 18px;
+    border-radius: var(--radius-pill);
+    margin-bottom: 26px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--fb-red-bright);
+    box-shadow: 0 0 12px var(--fb-red-bright);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  .hero h1 {
+    font-size: clamp(2.7rem, 6.4vw, 5.4rem);
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    margin-bottom: 26px;
+    max-width: 16ch;
+  }
+  .hero h1 .accent {
+    background: var(--grad-red);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero .lead {
+    font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+    color: var(--text-dim);
+    max-width: 640px;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 15px 30px;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.3s var(--easing-smooth);
+  }
+  .btn-primary {
+    background: var(--grad-red);
+    color: #fff;
+    box-shadow: var(--shadow-glow);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 64px rgba(225, 29, 42, 0.4); }
+  .btn-ghost {
+    border-color: var(--border-strong);
+    color: var(--text-main);
+    background: rgba(255,255,255,0.02);
+  }
+  .btn-ghost:hover { border-color: var(--fb-red); background: rgba(225, 29, 42, 0.08); }
+
+  .hero-meta {
+    margin-top: 30px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .hero-meta strong { color: var(--text-dim); font-weight: 600; }
+
+  /* hero stats strip */
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    margin-top: 64px;
+    background: var(--border-dim);
+    border: 1px solid var(--border-dim);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .stat { padding: 22px 24px; background: var(--bg-base); }
+  .stat .num {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.3rem);
+    font-weight: 800;
+    line-height: 1;
+    background: var(--grad-red);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .stat .label {
+    margin-top: 7px;
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+  }
+  @media (max-width: 720px) {
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* scroll cue */
+  .scroll-cue {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    animation: float 2.4s ease-in-out infinite;
+  }
+  .scroll-cue::after {
+    content: "";
+    width: 1px; height: 34px;
+    background: linear-gradient(var(--fb-red), transparent);
+  }
+  @keyframes float { 0%,100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 6px); } }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s var(--easing-smooth), transform 0.7s var(--easing-smooth); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 560px) {
+    .lockup { gap: 18px; }
+    .lockup-x { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <img src="assets/buffallos-logo.png" alt="BUFFALLOS Tecnologia" />
+  </div>
+  <span class="topbar-tag">Proposta Confidencial · 2026</span>
+  <a href="#ecossistema" class="topbar-cta">Ver Ecossistema</a>
+</div>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="container hero-inner">
+
+    <!-- Logo lockup: BUFFALLOS apresenta FERRIBOR -->
+    <div class="lockup reveal">
+      <div class="lockup-item lockup-buffallos">
+        <span class="role">Desenvolvido por</span>
+        <img src="assets/buffallos-logo.png" alt="BUFFALLOS Tecnologia" />
+      </div>
+      <span class="lockup-x">×</span>
+      <div class="lockup-item lockup-ferribor">
+        <span class="role">Proposta para</span>
+        <img src="assets/ferribor-logo.png" alt="FerriBor" />
+      </div>
+    </div>
+
+    <span class="eyebrow reveal">Ecossistema Digital Industrial</span>
+
+    <h1 class="reveal">
+      O futuro digital da <span class="accent">FerriBor</span><br />
+      em um único ecossistema.
+    </h1>
+
+    <p class="lead reveal">
+      Site institucional, CRM com Inteligência Artificial, Portal do Cliente e
+      automação comercial — uma estrutura integrada para escalar vendas,
+      relacionamento e operação da indústria de borracha, silicone e PU.
+    </p>
+
+    <div class="hero-actions reveal">
+      <a href="#ecossistema" class="btn btn-primary">
+        Conhecer a estrutura
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+      <a href="https://ferribor.bullaffos.com.br" target="_blank" rel="noopener" class="btn btn-ghost">
+        Ver demonstração ao vivo
+      </a>
+    </div>
+
+    <p class="hero-meta reveal">
+      Proposta desenvolvida para <strong>FerriBor</strong> · Execução técnica por <strong>BUFFALLOS Tecnologia</strong>
+    </p>
+
+    <!-- Stats teaser -->
+    <div class="hero-stats reveal">
+      <div class="stat"><div class="num">04</div><div class="label">Módulos integrados</div></div>
+      <div class="stat"><div class="num">IA</div><div class="label">CRM inteligente</div></div>
+      <div class="stat"><div class="num">3D</div><div class="label">Catálogo interativo</div></div>
+      <div class="stat"><div class="num">24/7</div><div class="label">Portal do cliente</div></div>
+    </div>
+
+  </div>
+
+  <div class="scroll-cue">Role para explorar</div>
+</header>
+
+<!-- placeholder anchor para próximas dobras -->
+<section id="ecossistema" style="position:relative;z-index:1;min-height:30vh;display:grid;place-items:center;border-top:1px solid var(--border-dim);">
+  <p style="font-family:var(--font-mono);font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);">
+    Próximas dobras da apresentação · em construção
+  </p>
+</section>
+
+<script>
+  // reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.07) + 's';
+    io.observe(el);
+  });
+</script>
+
+</body>
+</html>

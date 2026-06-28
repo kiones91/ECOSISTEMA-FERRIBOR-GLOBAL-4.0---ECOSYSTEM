@@ -248,6 +248,20 @@ export default function HomePage() {
 		}
 	];
 
+	// Comparativo Tecnológico — FerriBor vs Concorrência Nacional
+	const comparison: { feature: string; competitor: string; ferribor: string; competitorStatus: 'none' | 'partial' }[] = [
+		{ feature: "Presença Digital", competitor: "Site institucional básico", ferribor: "Ecossistema completo: Site + Dashboard + PWA + CRM", competitorStatus: "partial" },
+		{ feature: "Visualização 3D Interativa", competitor: "Não possui", ferribor: "Modelos 360° — gire, amplie e inspecione antes de cotar", competitorStatus: "none" },
+		{ feature: "Análise de Desenhos Técnicos", competitor: "Manual e demorada", ferribor: "IA SmartSpec — leitura automática de plantas e specs", competitorStatus: "partial" },
+		{ feature: "Portal do Cliente", competitor: "Inexistente", ferribor: "Dashboard + PWA com histórico, pedidos e documentos", competitorStatus: "none" },
+		{ feature: "Emissão de Certificados", competitor: "Manual (PDF avulso)", ferribor: "Automática no PWA — técnicos e ESG", competitorStatus: "partial" },
+		{ feature: "Logística Reversa / Circular", competitor: "Não oferece", ferribor: "FerriBor Circular — devolva a peça usada e ganhe crédito", competitorStatus: "none" },
+		{ feature: "Multilinguagem", competitor: "Apenas português", ferribor: "PT · EN · ES · FR automático", competitorStatus: "none" },
+		{ feature: "Recompra Automática", competitor: "Pedido manual a cada compra", ferribor: "1-clique + alertas inteligentes de reposição", competitorStatus: "none" },
+		{ feature: "Ciclo Médio de Cotação", competitor: "15 a 25 dias", ferribor: "4 a 8 dias — acelerado por IA", competitorStatus: "partial" },
+		{ feature: "Nível de Inovação Digital", competitor: "Baixo / Tradicional", ferribor: "Líder em tecnologia no setor", competitorStatus: "none" },
+	];
+
 	return (
 		<>
 			{/* Aura background overlays */}
@@ -370,8 +384,11 @@ export default function HomePage() {
 					</div>
 				</section>
 
+				{/* Divisor costura de solda */}
+				<div aria-hidden="true" className="weld-seam"></div>
+
 				{/* TERCEIRA DOBRA — Números que Falam */}
-				<section className="relative z-10 bg-black py-28 lg:py-36 px-6 md:px-12 border-t border-white/5">
+				<section className="relative z-10 bg-black py-28 lg:py-36 px-6 md:px-12">
 					<div className="max-w-6xl mx-auto text-center mb-16">
 						<h2 className="text-3xl md:text-4xl font-bold tracking-tighter text-white font-heading mb-4">
 							Números que <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300">falam.</span>
@@ -399,8 +416,11 @@ export default function HomePage() {
 					</div>
 				</section>
 
+				{/* Divisor costura de solda */}
+				<div aria-hidden="true" className="weld-seam weld-delay-1"></div>
+
 				{/* QUARTA DOBRA — Por que Engenheiros escolhem a FerriBor */}
-				<section className="relative z-10 bg-[#0a0a0c] py-28 lg:py-36 px-6 md:px-12 border-t border-white/5">
+				<section className="relative z-10 bg-[#0a0a0c] py-28 lg:py-36 px-6 md:px-12">
 					<div className="max-w-6xl mx-auto">
 						<div className="text-center mb-16 space-y-4">
 							<span className="text-xs font-bold tracking-widest uppercase text-red-500/80">Para Engenheiros & Compradores</span>
@@ -476,73 +496,188 @@ export default function HomePage() {
 					</div>
 				</section>
 
-				{/* FOOTER */}
-				<footer className="relative mt-auto border-t border-slate-900/5 bg-slate-950 text-white py-16 px-6 md:px-12 z-10 overflow-hidden">
-					<div className="grid grid-cols-1 md:grid-cols-12 gap-8 max-w-6xl mx-auto mb-12 relative z-10">
-						{/* Col 1: Bio */}
-						<div className="md:col-span-5 space-y-4">
-							<div className="flex items-center">
-								<div className="h-20 w-64 relative flex items-center justify-center -ml-4">
-									<img src="/assets/imagens/logo.png" alt="Ferribor Logo" className="w-full h-full object-contain scale-[1.3]" />
+				{/* Divisor costura de solda */}
+				<div aria-hidden="true" className="weld-seam weld-delay-2"></div>
+
+				{/* QUINTA DOBRA — Comparativo Tecnológico vs Concorrência */}
+				<section className="relative z-10 bg-black py-28 lg:py-36 px-6 md:px-12 overflow-hidden">
+					{/* Glow ambiental */}
+					<div aria-hidden="true" className="pointer-events-none absolute top-1/4 right-0 w-[40rem] h-[40rem] bg-red-600/10 rounded-full blur-[120px]"></div>
+
+					<div className="max-w-6xl mx-auto relative">
+						{/* Cabeçalho */}
+						<div className="text-center mb-16 space-y-4 reveal-item">
+							<div className="inline-flex items-center gap-2 justify-center">
+								<span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+								<span className="text-xs font-bold tracking-widest uppercase text-red-500/80">FerriBor vs. Concorrência Nacional</span>
+							</div>
+							<h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-white font-heading">
+								Enquanto o setor opera no <span className="text-outline-light">analógico,</span><br />
+								nós entregamos o <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300">futuro digital.</span>
+							</h2>
+							<p className="text-white/50 text-sm max-w-2xl mx-auto leading-relaxed">
+								Nenhum player do mercado oferece IA para análise de desenhos, portal do cliente ou logística circular. Veja por que a FerriBor lidera em tecnologia.
+							</p>
+						</div>
+
+						{/* Tabela comparativa */}
+						<div className="reveal-item rounded-3xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-sm overflow-hidden">
+							{/* Linha de cabeçalho das colunas */}
+							<div className="grid grid-cols-[1.1fr_1fr_1.3fr] md:grid-cols-[1.3fr_1fr_1.4fr] border-b border-white/[0.08]">
+								<div className="p-4 md:p-6 flex items-end">
+									<span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-white/40">Critério</span>
+								</div>
+								<div className="p-4 md:p-6 border-l border-white/[0.06] flex flex-col gap-1">
+									<span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-white/40">Concorrência</span>
+									<span className="text-[9px] text-white/25 hidden md:block">Players tradicionais</span>
+								</div>
+								<div className="relative p-4 md:p-6 border-l border-red-500/30 bg-gradient-to-b from-red-600/15 to-transparent flex flex-col gap-1">
+									<span className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500 to-transparent"></span>
+									<span className="text-[10px] md:text-xs font-extrabold uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-200">FerriBor Global 4.0</span>
+									<span className="text-[9px] text-red-300/40 hidden md:block">Ecossistema inteligente</span>
 								</div>
 							</div>
-							<p className="text-slate-400 text-xs leading-relaxed max-w-sm">
-								A Ferri Indústria de Artefatos de Borracha Ltda-ME é especializada no desenvolvimento, fabricação e revestimento de peças técnicas em borracha, silicone e poliuretano.
-							</p>
-							<div className="flex items-center gap-4 pt-2">
-								<a href="https://www.facebook.com/FerriborArtefatosDeBorracha" target="_blank" className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 hover:text-red-500 flex items-center justify-center transition-all cursor-hover text-slate-300">
-									<i className="iconify" data-icon="lucide:facebook"></i>
-								</a>
-								<a href="https://api.whatsapp.com/send?phone=5519981748364&text=Ol%C3%A1!" target="_blank" className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 hover:text-green-500 flex items-center justify-center transition-all cursor-hover text-slate-300">
-									<i className="iconify" data-icon="lucide:message-square"></i>
-								</a>
+
+							{/* Linhas de dados */}
+							{comparison.map((row, i) => (
+								<div
+									key={row.feature}
+									className={`grid grid-cols-[1.1fr_1fr_1.3fr] md:grid-cols-[1.3fr_1fr_1.4fr] items-stretch transition-colors duration-300 hover:bg-white/[0.02] ${i !== comparison.length - 1 ? 'border-b border-white/[0.05]' : ''}`}
+								>
+									{/* Critério */}
+									<div className="p-4 md:p-6 flex items-center">
+										<span className="text-xs md:text-sm font-bold text-white/90 leading-snug">{row.feature}</span>
+									</div>
+
+									{/* Concorrência */}
+									<div className="p-4 md:p-6 border-l border-white/[0.05] flex items-center gap-2.5">
+										<svg className="w-4 h-4 flex-shrink-0 text-white/25" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+											{row.competitorStatus === 'none'
+												? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+												: <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />}
+										</svg>
+										<span className="text-[11px] md:text-xs text-white/40 leading-snug">{row.competitor}</span>
+									</div>
+
+									{/* FerriBor */}
+									<div className="relative p-4 md:p-6 border-l border-red-500/20 bg-gradient-to-r from-red-600/[0.06] to-transparent flex items-center gap-2.5">
+										<span className="flex-shrink-0 w-5 h-5 rounded-full bg-green-500/15 border border-green-500/30 flex items-center justify-center">
+											<svg className="w-3 h-3 text-green-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+												<path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+											</svg>
+										</span>
+										<span className="text-[11px] md:text-xs font-medium text-white/85 leading-snug">{row.ferribor}</span>
+									</div>
+								</div>
+							))}
+						</div>
+
+						{/* Faixa de impacto */}
+						<div className="grid grid-cols-1 sm:grid-cols-3 gap-px mt-px rounded-3xl overflow-hidden border border-white/[0.08] mt-6 reveal-item">
+							<div className="bg-white/[0.02] p-6 text-center">
+								<span className="block text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300 font-heading">3x</span>
+								<span className="text-[11px] text-white/40 uppercase tracking-widest">mais rápido na cotação</span>
+							</div>
+							<div className="bg-white/[0.02] p-6 text-center border-y sm:border-y-0 sm:border-x border-white/[0.06]">
+								<span className="block text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300 font-heading">4</span>
+								<span className="text-[11px] text-white/40 uppercase tracking-widest">idiomas automáticos</span>
+							</div>
+							<div className="bg-white/[0.02] p-6 text-center">
+								<span className="block text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300 font-heading">100%</span>
+								<span className="text-[11px] text-white/40 uppercase tracking-widest">digital e rastreável</span>
 							</div>
 						</div>
 
-						{/* Col 2: Site Map */}
-						<div className="md:col-span-3 space-y-4">
-							<h4 className="font-heading text-xs font-bold uppercase tracking-widest text-slate-200">Mapa do Site</h4>
-							<ul className="space-y-2 text-xs text-slate-400 font-medium">
-								<li><a className="hover:text-white transition-colors cursor-hover" href="#inicio">Home</a></li>
-								<li><a className="hover:text-white transition-colors cursor-hover" href="#aempresa">Empresa</a></li>
-								<li><a className="hover:text-white transition-colors cursor-hover" href="#servicos">Serviços</a></li>
-								<li><a className="hover:text-white transition-colors cursor-hover" href="#depoimentos">Depoimentos</a></li>
-								<li><a className="hover:text-white transition-colors cursor-hover" href="#noticias">Notícias & Cotações</a></li>
-								<li><a className="hover:text-white transition-colors cursor-hover" href="#contato">Contato</a></li>
-								<li><a className="hover:text-white transition-colors cursor-hover" href="/politica-privacidade.pdf" target="_blank">Política de Privacidade</a></li>
+						{/* CTA */}
+						<div className="text-center mt-14 reveal-item">
+							<a href="/contact" className="inline-flex items-center gap-3 px-8 py-4 bg-red-600 text-white font-bold text-sm uppercase tracking-widest rounded-full hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] transition-all duration-300">
+								<span>Experimente o Ecossistema FerriBor</span>
+								<svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+							</a>
+						</div>
+					</div>
+				</section>
+
+				{/* FOOTER */}
+				<footer
+					className="relative mt-auto border-t border-slate-900/10 text-slate-800 py-16 px-6 md:px-12 z-10 overflow-hidden"
+					style={{
+						backgroundColor: '#F8FAF9',
+						backgroundImage:
+							'radial-gradient(circle at 50% 0%, rgba(220,38,38,0.06), transparent 45%), linear-gradient(rgba(15,23,42,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.04) 1px, transparent 1px)',
+						backgroundSize: '100% 100%, 80px 80px, 80px 80px',
+					}}
+				>
+					{/* LED beams traveling along the grid lines */}
+					<div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+						{/* Black LEDs descending the vertical lines */}
+						<div className="footer-led-v" style={{ left: '80px', animationDelay: '0s' }} />
+						<div className="footer-led-v" style={{ left: '160px', animationDelay: '1.4s' }} />
+						<div className="footer-led-v" style={{ left: '240px', animationDelay: '2.6s' }} />
+						<div className="footer-led-v" style={{ left: '400px', animationDelay: '0.8s' }} />
+						<div className="footer-led-v" style={{ left: '560px', animationDelay: '2s' }} />
+						<div className="footer-led-v" style={{ left: '720px', animationDelay: '3.2s' }} />
+						<div className="footer-led-v" style={{ left: '880px', animationDelay: '1.1s' }} />
+						{/* Red LED sweeping the horizontal top line */}
+						<div className="footer-led-h" style={{ top: '0px', animationDelay: '0s' }} />
+						<div className="footer-led-h" style={{ top: '0px', animationDelay: '2.5s' }} />
+					</div>
+
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16 max-w-6xl mx-auto mb-12 relative z-10">
+						{/* Col 1: Site Map */}
+						<div className="space-y-4">
+							<h4 className="font-heading text-sm font-bold uppercase tracking-widest text-slate-950">Mapa do Site</h4>
+							<ul className="space-y-2.5 text-sm text-slate-800 font-medium">
+								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#inicio">Home</a></li>
+								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#aempresa">Empresa</a></li>
+								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#servicos">Serviços</a></li>
+								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#depoimentos">Depoimentos</a></li>
+								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#noticias">Notícias & Cotações</a></li>
+								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="#contato">Contato</a></li>
+								<li><a className="hover:text-red-600 transition-colors cursor-hover" href="/politica-privacidade.pdf" target="_blank">Política de Privacidade</a></li>
 							</ul>
 						</div>
 
-						{/* Col 3: Contacts */}
-						<div className="md:col-span-4 space-y-4">
-							<h4 className="font-heading text-xs font-bold uppercase tracking-widest text-slate-200">Contato</h4>
-							<ul className="space-y-3.5 text-xs text-slate-400 leading-normal">
+						{/* Col 2: Contacts */}
+						<div className="space-y-4">
+							<h4 className="font-heading text-sm font-bold uppercase tracking-widest text-slate-950">Contato</h4>
+							<ul className="space-y-3.5 text-sm text-slate-800 leading-normal">
 								<li className="flex gap-2">
-									<i className="iconify text-md text-red-500 flex-shrink-0 mt-0.5" data-icon="lucide:map-pin"></i>
+									<i className="iconify text-lg text-red-500 flex-shrink-0 mt-0.5" data-icon="lucide:map-pin"></i>
 									<span>Rua Aurea Basso Baptista, 36 - Jardim D&apos;itália, Santa Gertrudes - SP, 13510-092</span>
 								</li>
 								<li className="flex gap-2 items-center">
-									<i className="iconify text-md text-red-500" data-icon="lucide:phone"></i>
-									<a href="tel:+5519981748364" className="hover:text-white cursor-hover">(19) 98174-8364</a>
+									<i className="iconify text-lg text-red-500" data-icon="lucide:phone"></i>
+									<a href="tel:+5519981748364" className="hover:text-red-600 cursor-hover">(19) 98174-8364</a>
 								</li>
 								<li className="flex gap-2 items-center">
-									<i className="iconify text-md text-green-500" data-icon="lucide:message-square"></i>
-									<a href="https://api.whatsapp.com/send?phone=5519981748364&text=Ol%C3%A1!" target="_blank" className="hover:text-white cursor-hover">(19) 98174-8364</a>
+									<i className="iconify text-lg text-green-500" data-icon="lucide:message-square"></i>
+									<a href="https://api.whatsapp.com/send?phone=5519981748364&text=Ol%C3%A1!" target="_blank" className="hover:text-red-600 cursor-hover">(19) 98174-8364</a>
 								</li>
 								<li className="flex gap-2 items-center">
-									<i className="iconify text-md text-red-500" data-icon="lucide:mail"></i>
-									<a href="mailto:comercial@ferribor.com.br" className="hover:text-white cursor-hover">comercial@ferribor.com.br</a>
+									<i className="iconify text-lg text-red-500" data-icon="lucide:mail"></i>
+									<a href="mailto:comercial@ferribor.com.br" className="hover:text-red-600 cursor-hover">comercial@ferribor.com.br</a>
 								</li>
 							</ul>
+
+							{/* Redes Sociais */}
+							<div className="flex items-center gap-3 pt-2">
+								<a href="https://www.facebook.com/FerriborArtefatosDeBorracha" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-9 h-9 rounded-full bg-slate-900/[0.04] border border-slate-900/10 flex items-center justify-center text-slate-700 hover:text-white hover:bg-blue-600 hover:border-blue-600 transition-all duration-300 cursor-hover">
+									<i className="iconify text-lg" data-icon="lucide:facebook"></i>
+								</a>
+								<a href="https://www.instagram.com/ferribor_borrachas" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-9 h-9 rounded-full bg-slate-900/[0.04] border border-slate-900/10 flex items-center justify-center text-slate-700 hover:text-white hover:bg-gradient-to-br hover:from-purple-600 hover:via-pink-600 hover:to-orange-500 hover:border-transparent transition-all duration-300 cursor-hover">
+									<i className="iconify text-lg" data-icon="lucide:instagram"></i>
+								</a>
+							</div>
 						</div>
 					</div>
 
 					{/* Bottom credits bar */}
-					<div className="relative z-10 border-t border-white/5 pt-8 text-center max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 font-mono gap-4">
+					<div className="relative z-10 border-t border-slate-900/10 pt-8 text-center max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs text-slate-600 font-mono gap-4">
 						<span>Copyright &copy; FerriBor 2026. Todos os direitos reservados.</span>
 						<span>
 							Desenvolvido por{' '}
-							<a href="https://buffallos.com.br" target="_blank" className="hover:text-white underline cursor-hover">
+							<a href="https://buffallos.com.br" target="_blank" className="hover:text-red-600 underline cursor-hover">
 								Buffallos Tecnologia
 							</a>
 						</span>

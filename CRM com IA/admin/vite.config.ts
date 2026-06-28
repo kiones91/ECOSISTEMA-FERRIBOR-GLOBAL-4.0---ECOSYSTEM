@@ -7,7 +7,7 @@ import { cursosDevPublish } from "./vite-cursos-dev";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/admin/",
+  base: process.env.VITE_BASE_PATH || "/admin/",
   server: {
     host: "::",
     port: 8080,

@@ -7,6 +7,11 @@ Site/node_modules/
 Site/.next/
 out/
 Site/out/
+dist-cloudflare/
+# Vite build outputs (regenerados pelo build-cloudflare.sh / Cloudflare Pages)
+/dist/
+DASHBOARD/dist/
+*.tsbuildinfo
 
 # Local env files / secrets (NUNCA commitar)
 .env

@@ -126,7 +126,7 @@ const App = () => (
         <ForcePasswordChange />
         <Toaster />
         <Sonner />
-        <BrowserRouter basename="/admin">
+        <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, "") || "/"}>
           <RouteErrorBoundary>
             <Suspense fallback={<PageLoader />}>
               <Routes>
