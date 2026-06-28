@@ -43,10 +43,4 @@ VITE_BASE_PATH=/cliente/ npm run build
 mkdir -p "$OUT/cliente"
 cp -r dist/. "$OUT/cliente/"
 
-echo "==> Gerando _redirects (SPA fallback)"
-cat > "$OUT/_redirects" <<'EOF'
-/crm/*       /crm/index.html       200
-/cliente/*   /cliente/index.html   200
-EOF
-
 echo "==> Concluído. Saída pronta em: dist-cloudflare/"
