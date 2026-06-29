@@ -250,16 +250,4 @@ export const en = {
 			{ title: 'Sustainability in the rubber industry: challenges and opportunities', excerpt: 'Reverse logistics, elastomer recycling and circular economy in the industrial rubber products sector.', category: 'ESG', readTime: '6 min' },
 		],
 	},
-	ecosystem: {
-		tag: 'FerriBor Global 4.0 Ecosystem',
-		title1: 'A connected',
-		title2: 'digital ecosystem.',
-		subtitle: 'Three integrated platforms working together to speed up your quotes, orders and relationship. Hover and explore each piece.',
-		cards: [
-			{ label: 'AI CRM', title: 'Intelligent CRM', desc: 'Automated service with multilingual AI agents, lead capture and complete B2B sales funnel management.', link: 'Open CRM' },
-			{ label: 'Global Site', title: 'Corporate Website', desc: 'Multilingual digital showcase with 3D catalog, SmartSpec AI and real-time technical quote capture.', link: 'Visit Site' },
-			{ label: 'Client Portal', title: 'B2B Dashboard', desc: 'Portal and PWA with order history, 1-click reorder, automatic certificates and circular logistics.', link: 'Open Dashboard' },
-		],
-		activeLink: 'Online',
-	},
 };

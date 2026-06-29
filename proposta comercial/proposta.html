@@ -1019,6 +1019,190 @@
   </div>
 </section>
 
+<!-- ECOSSISTEMA ACCORDION (Demo Interativo) -->
+<section id="demo-ecossistema" class="proposal-section">
+  <style>
+    @keyframes eco-radar-sweep { from{transform:translate(-50%,-50%) rotate(0deg)} to{transform:translate(-50%,-50%) rotate(360deg)} }
+    @keyframes eco-ring-spin   { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    @keyframes eco-pulse       { 0%,100%{opacity:1} 50%{opacity:.45} }
+
+    .eco-acc-wrap {
+      display: flex; flex-direction: column; gap: 12px;
+      width: 100%; height: 1100px;
+    }
+    @media (min-width: 768px) { .eco-acc-wrap { flex-direction: row; height: 580px; } }
+
+    .eco-card-link {
+      position: relative; flex: 1; border-radius: 2rem; overflow: hidden;
+      background: #060913; border: 1px solid rgba(255,255,255,.1);
+      transition: all 800ms cubic-bezier(.16,1,.3,1);
+      cursor: pointer; box-shadow: 0 24px 80px rgba(0,0,0,.6);
+      transform: translateY(0); text-decoration: none; display: block; isolation: isolate;
+    }
+    .eco-acc-wrap:hover .eco-card-link { opacity: .5; filter: blur(4px); }
+    .eco-acc-wrap .eco-card-link:hover {
+      flex: 4; opacity: 1 !important; filter: blur(0) !important;
+      border-color: rgba(225,29,42,.4); transform: translateY(-4px);
+    }
+    .eco-card-link::before {
+      content:''; position:absolute; inset-inline:0; top:0; height:1px;
+      background:linear-gradient(to right,transparent,#E11D2A,transparent);
+      opacity:0; z-index:20; transition:opacity 800ms;
+    }
+    .eco-card-link:hover::before { opacity: 1; }
+
+    .eco-card-bg {
+      position:absolute; inset:0; width:100%; height:100%;
+      object-fit:cover; object-position:top;
+      opacity:.25; filter:grayscale(100%); mix-blend-mode:overlay;
+      transition:all 1200ms cubic-bezier(.16,1,.3,1); z-index:1;
+    }
+    .eco-card-link:hover .eco-card-bg {
+      transform:scale(1.05); opacity:.6; filter:grayscale(0); mix-blend-mode:normal;
+    }
+    .eco-radar-fx {
+      position:absolute; top:50%; left:50%; width:150%; aspect-ratio:1;
+      background:conic-gradient(from 0deg,transparent 0 280deg,rgba(225,29,42,.25) 360deg);
+      opacity:0; pointer-events:none; filter:blur(48px); z-index:0;
+      transition:opacity 700ms; animation:eco-radar-sweep 6s linear infinite;
+    }
+    .eco-card-link:hover .eco-radar-fx { opacity: 1; }
+    .eco-card-mask {
+      position:absolute; inset:0;
+      background:linear-gradient(to top,#000,rgba(0,0,0,.8),transparent); z-index:10;
+    }
+    .eco-collapsed {
+      position:absolute; inset:0; display:flex; align-items:center;
+      justify-content:center; z-index:20;
+      transition:opacity 500ms,transform 500ms; opacity:1; pointer-events:none;
+    }
+    .eco-collapsed span {
+      font-family:var(--font-mono); font-size:13px; letter-spacing:.3em;
+      color:rgba(255,255,255,.5); text-transform:uppercase; white-space:nowrap;
+    }
+    @media (min-width:768px) { .eco-collapsed span { transform:rotate(-90deg); } }
+    .eco-card-link:hover .eco-collapsed { opacity:0; transform:scale(.95); }
+
+    .eco-expanded {
+      position:absolute; inset:0; padding:2rem; display:flex;
+      flex-direction:column; justify-content:flex-end;
+      z-index:30; opacity:0; pointer-events:none; min-width:280px;
+    }
+    @media (min-width:768px) { .eco-expanded { padding:3rem; min-width:450px; } }
+    .eco-card-link:hover .eco-expanded { opacity:1; pointer-events:auto; }
+
+    .eco-badge {
+      display:flex; align-items:center; gap:8px; padding:6px 12px;
+      border-radius:999px; background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1); backdrop-filter:blur(8px);
+      width:fit-content; margin-bottom:auto; padding-top:8px;
+      transform:translateY(2rem); opacity:0;
+      transition:transform 800ms 100ms cubic-bezier(.16,1,.3,1),opacity 800ms 100ms cubic-bezier(.16,1,.3,1);
+    }
+    .eco-badge-dot { width:6px; height:6px; border-radius:50%; background:#E11D2A; box-shadow:0 0 8px #E11D2A; animation:eco-pulse 2s infinite; flex-shrink:0; }
+    .eco-badge-text { font-family:var(--font-mono); font-size:10px; color:#ff6b6b; text-transform:uppercase; letter-spacing:.12em; }
+    .eco-content {
+      transform:translateY(2rem); opacity:0; margin-bottom:1.5rem;
+      transition:transform 800ms 200ms cubic-bezier(.16,1,.3,1),opacity 800ms 200ms cubic-bezier(.16,1,.3,1);
+    }
+    .eco-lbl { font-family:var(--font-mono); font-size:10px; font-weight:700; color:rgba(225,29,42,.8); text-transform:uppercase; letter-spacing:.15em; margin-bottom:12px; display:block; }
+    .eco-h3  { font-family:var(--font-display); font-size:clamp(1.4rem,2.5vw,2rem); font-weight:700; color:rgba(255,255,255,.9); line-height:1.2; letter-spacing:-.02em; margin-bottom:1rem; }
+    .eco-p   { font-size:14px; color:rgba(255,255,255,.6); line-height:1.6; max-width:440px; }
+    .eco-cta {
+      display:flex; align-items:center; gap:20px;
+      transform:translateY(2rem); opacity:0;
+      transition:transform 800ms 300ms cubic-bezier(.16,1,.3,1),opacity 800ms 300ms cubic-bezier(.16,1,.3,1);
+    }
+    .eco-ring-wrap { position:relative; width:48px; height:48px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .eco-ring-svg  { position:absolute; inset:0; width:100%; height:100%; animation:eco-ring-spin 4s linear infinite; color:rgba(225,29,42,.4); }
+    .eco-arrow     { color:rgba(225,29,42,.9); }
+    .eco-link-text { font-family:var(--font-display); font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:#fff; }
+
+    .eco-card-link:hover .eco-badge   { transform:translateY(0); opacity:1; }
+    .eco-card-link:hover .eco-content { transform:translateY(0); opacity:1; }
+    .eco-card-link:hover .eco-cta     { transform:translateY(0); opacity:1; }
+  </style>
+
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow-small">● Ecossistema FerriBor Global 4.0</span>
+      <h2>Um ecossistema digital <span class="accent">conectado.</span></h2>
+      <p>Três plataformas integradas que trabalham juntas para acelerar suas cotações, pedidos e relacionamento. Passe o mouse e explore cada peça.</p>
+    </div>
+
+    <div class="eco-acc-wrap reveal">
+      <!-- Card 1: CRM -->
+      <a href="https://ferribor.buffallos.com.br/crm" target="_blank" rel="noopener" class="eco-card-link">
+        <div class="eco-radar-fx"></div>
+        <img src="/assets/ecosystem/crm.png" alt="CRM com IA" class="eco-card-bg" />
+        <div class="eco-card-mask"></div>
+        <div class="eco-collapsed"><span>01 // CRM com IA</span></div>
+        <div class="eco-expanded">
+          <div class="eco-badge"><span class="eco-badge-dot"></span><span class="eco-badge-text">Online</span></div>
+          <div class="eco-content">
+            <span class="eco-lbl">CRM com IA</span>
+            <h3 class="eco-h3">CRM Inteligente</h3>
+            <p class="eco-p">Atendimento automatizado com agentes de IA multilíngues, captação de leads e gestão completa do funil de vendas B2B.</p>
+          </div>
+          <div class="eco-cta">
+            <span class="eco-ring-wrap">
+              <svg class="eco-ring-svg" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="48" stroke="currentColor" stroke-dasharray="25 10 5 10" stroke-width="1.5"/></svg>
+              <svg class="eco-arrow" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </span>
+            <span class="eco-link-text">Acessar CRM</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 2: Site -->
+      <a href="https://ferribor.buffallos.com.br" target="_blank" rel="noopener" class="eco-card-link">
+        <div class="eco-radar-fx"></div>
+        <img src="/assets/ecosystem/site.png" alt="Site Global" class="eco-card-bg" />
+        <div class="eco-card-mask"></div>
+        <div class="eco-collapsed"><span>02 // Site Global</span></div>
+        <div class="eco-expanded">
+          <div class="eco-badge"><span class="eco-badge-dot"></span><span class="eco-badge-text">Online</span></div>
+          <div class="eco-content">
+            <span class="eco-lbl">Site Global</span>
+            <h3 class="eco-h3">Site Institucional</h3>
+            <p class="eco-p">Vitrine digital multilíngue com catálogo 3D, SmartSpec por IA e captação de orçamentos técnicos em tempo real.</p>
+          </div>
+          <div class="eco-cta">
+            <span class="eco-ring-wrap">
+              <svg class="eco-ring-svg" viewBox="0 0 100 100" fill="none" style="animation-direction:reverse"><circle cx="50" cy="50" r="48" stroke="currentColor" stroke-dasharray="15 5 30 10" stroke-width="1.5"/></svg>
+              <svg class="eco-arrow" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </span>
+            <span class="eco-link-text">Visitar Site</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 3: Dashboard -->
+      <a href="https://ferribor.buffallos.com.br/cliente" target="_blank" rel="noopener" class="eco-card-link">
+        <div class="eco-radar-fx"></div>
+        <img src="/assets/ecosystem/dashboard.png" alt="Portal do Cliente" class="eco-card-bg" />
+        <div class="eco-card-mask"></div>
+        <div class="eco-collapsed"><span>03 // Portal do Cliente</span></div>
+        <div class="eco-expanded">
+          <div class="eco-badge"><span class="eco-badge-dot"></span><span class="eco-badge-text">Online</span></div>
+          <div class="eco-content">
+            <span class="eco-lbl">Portal do Cliente</span>
+            <h3 class="eco-h3">Dashboard B2B</h3>
+            <p class="eco-p">Portal e PWA com histórico de pedidos, recompra 1-clique, certificados automáticos e logística circular.</p>
+          </div>
+          <div class="eco-cta">
+            <span class="eco-ring-wrap">
+              <svg class="eco-ring-svg" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="48" stroke="currentColor" stroke-dasharray="10 20 40 10" stroke-width="1.5"/></svg>
+              <svg class="eco-arrow" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </span>
+            <span class="eco-link-text">Abrir Dashboard</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
 <script>
   // reveal on scroll
   const io = new IntersectionObserver((entries) => {

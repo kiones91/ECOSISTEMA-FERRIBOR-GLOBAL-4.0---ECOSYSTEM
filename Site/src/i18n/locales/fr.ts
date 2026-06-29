@@ -250,16 +250,4 @@ export const fr = {
 			{ title: "Durabilité dans l'industrie du caoutchouc : défis et opportunités", excerpt: "Logistique inverse, recyclage des élastomères et économie circulaire dans le secteur des articles de caoutchouc industriel.", category: 'ESG', readTime: '6 min' },
 		],
 	},
-	ecosystem: {
-		tag: 'Écosystème FerriBor Global 4.0',
-		title1: 'Un écosystème numérique',
-		title2: 'connecté.',
-		subtitle: "Trois plateformes intégrées qui travaillent ensemble pour accélérer vos devis, commandes et relation. Survolez et explorez chaque pièce.",
-		cards: [
-			{ label: 'CRM avec IA', title: 'CRM Intelligent', desc: "Service automatisé avec des agents IA multilingues, capture de leads et gestion complète de l'entonnoir de vente B2B.", link: 'Accéder au CRM' },
-			{ label: 'Site Global', title: 'Site Institutionnel', desc: "Vitrine numérique multilingue avec catalogue 3D, SmartSpec par IA et capture de devis techniques en temps réel.", link: 'Visiter le Site' },
-			{ label: 'Portail Client', title: 'Dashboard B2B', desc: "Portail et PWA avec historique des commandes, réachat en 1 clic, certificats automatiques et logistique circulaire.", link: 'Ouvrir le Dashboard' },
-		],
-		activeLink: 'En ligne',
-	},
 };

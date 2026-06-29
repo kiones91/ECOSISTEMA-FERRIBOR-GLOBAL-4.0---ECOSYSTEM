@@ -731,25 +731,6 @@ h6,
 	100% { left: 100%; opacity: 0; }
 }
 
-/* Ecosystem holographic accordion (between folds 5 and 6) */
-@keyframes eco-radar-sweep {
-	from { transform: translate(-50%, -50%) rotate(0deg); }
-	to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-@keyframes eco-ring-spin {
-	from { transform: rotate(0deg); }
-	to { transform: rotate(360deg); }
-}
-
-.eco-radar {
-	animation: eco-radar-sweep 6s linear infinite;
-}
-
-.eco-ring {
-	animation: eco-ring-spin 4s linear infinite;
-}
-
 /* Skip link */
 .skip-link {
 	position: absolute;
