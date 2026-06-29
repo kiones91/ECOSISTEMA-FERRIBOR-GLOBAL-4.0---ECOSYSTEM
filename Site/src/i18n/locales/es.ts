@@ -250,4 +250,16 @@ export const es = {
 			{ title: 'Sostenibilidad en la industria del caucho: desafíos y oportunidades', excerpt: 'Logística inversa, reciclaje de elastómeros y economía circular en el sector de artículos de caucho industrial.', category: 'ESG', readTime: '6 min' },
 		],
 	},
+	ecosystem: {
+		tag: 'Ecosistema FerriBor Global 4.0',
+		title1: 'Un ecosistema digital',
+		title2: 'conectado.',
+		subtitle: 'Tres plataformas integradas que trabajan juntas para acelerar sus cotizaciones, pedidos y relación. Pase el cursor y explore cada pieza.',
+		cards: [
+			{ label: 'CRM con IA', title: 'CRM Inteligente', desc: 'Atención automatizada con agentes de IA multilingües, captación de leads y gestión completa del embudo de ventas B2B.', link: 'Acceder al CRM' },
+			{ label: 'Sitio Global', title: 'Sitio Institucional', desc: 'Vitrina digital multilingüe con catálogo 3D, SmartSpec por IA y captación de presupuestos técnicos en tiempo real.', link: 'Visitar Sitio' },
+			{ label: 'Portal del Cliente', title: 'Dashboard B2B', desc: 'Portal y PWA con historial de pedidos, recompra 1 clic, certificados automáticos y logística circular.', link: 'Abrir Dashboard' },
+		],
+		activeLink: 'En línea',
+	},
 };

@@ -250,6 +250,18 @@ export const pt = {
 			{ title: 'Sustentabilidade na indústria de borracha: desafios e oportunidades', excerpt: 'Logística reversa, reciclagem de elastômeros e economia circular no setor de artefatos de borracha industrial.', category: 'ESG', readTime: '6 min' },
 		],
 	},
+	ecosystem: {
+		tag: 'Ecossistema FerriBor Global 4.0',
+		title1: 'Um ecossistema digital',
+		title2: 'conectado.',
+		subtitle: 'Três plataformas integradas que trabalham juntas para acelerar suas cotações, pedidos e relacionamento. Passe o mouse e explore cada peça.',
+		cards: [
+			{ label: 'CRM com IA', title: 'CRM Inteligente', desc: 'Atendimento automatizado com agentes de IA multilíngues, captação de leads e gestão completa do funil de vendas B2B.', link: 'Acessar CRM' },
+			{ label: 'Site Global', title: 'Site Institucional', desc: 'Vitrine digital multilíngue com catálogo 3D, SmartSpec por IA e captação de orçamentos técnicos em tempo real.', link: 'Visitar Site' },
+			{ label: 'Portal do Cliente', title: 'Dashboard B2B', desc: 'Portal e PWA com histórico de pedidos, recompra 1-clique, certificados automáticos e logística circular.', link: 'Abrir Dashboard' },
+		],
+		activeLink: 'Online',
+	},
 };
 
 export type Dictionary = typeof pt;

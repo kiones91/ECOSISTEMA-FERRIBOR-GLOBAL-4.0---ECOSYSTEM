@@ -7,6 +7,8 @@ import { useI18n } from '../i18n/LanguageContext';
 import { LanguageSwitcher } from '../i18n/LanguageSwitcher';
 
 const DASHBOARD_URL = process.env.NEXT_PUBLIC_DASHBOARD_URL || 'http://localhost:5174/auth';
+const CRM_URL = process.env.NEXT_PUBLIC_CRM_URL || 'http://localhost:8080';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || '/';
 
 export default function HomePage() {
 
@@ -526,6 +528,96 @@ export default function HomePage() {
 								<span>{t('cta.experimentarEcossistema')}</span>
 								<svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
 							</a>
+						</div>
+					</div>
+				</section>
+
+				{/* Divisor costura de solda */}
+				<div aria-hidden="true" className="weld-seam weld-delay-1"></div>
+
+				{/* SEXTA DOBRA — Ecossistema (accordion holográfico) */}
+				<section className="relative z-10 bg-black py-28 lg:py-36 px-6 md:px-12 overflow-hidden">
+					{/* Glow ambiental */}
+					<div aria-hidden="true" className="pointer-events-none absolute top-1/3 left-0 w-[40rem] h-[40rem] bg-red-600/10 rounded-full blur-[120px]"></div>
+
+					<div className="max-w-7xl mx-auto relative">
+						{/* Cabeçalho */}
+						<div className="text-center mb-16 space-y-4 reveal-item">
+							<div className="inline-flex items-center gap-2 justify-center">
+								<span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+								<span className="text-xs font-bold tracking-widest uppercase text-red-500/80">{t('ecosystem.tag')}</span>
+							</div>
+							<h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-white font-heading">
+								{t('ecosystem.title1')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300">{t('ecosystem.title2')}</span>
+							</h2>
+							<p className="text-white/50 text-sm max-w-2xl mx-auto leading-relaxed">
+								{t('ecosystem.subtitle')}
+							</p>
+						</div>
+
+						{/* Accordion holográfico */}
+						<div className="flex flex-col md:flex-row w-full h-[1200px] md:h-[600px] gap-3 md:gap-5 group/accordion">
+							{[
+								{ href: CRM_URL, img: '/assets/ecosystem/crm.png', i: 0 },
+								{ href: SITE_URL, img: '/assets/ecosystem/site.png', i: 1 },
+								{ href: DASHBOARD_URL, img: '/assets/ecosystem/dashboard.png', i: 2 },
+							].map((piece) => {
+								const card = (t('ecosystem.cards') as { label: string; title: string; desc: string; link: string }[])[piece.i];
+								return (
+									<a
+										key={piece.i}
+										href={piece.href}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="group/card relative flex-1 rounded-[2rem] overflow-hidden bg-[#060913] border border-white/10 transition-all duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:flex-[4] cursor-hover shadow-2xl group-hover/accordion:opacity-50 hover:!opacity-100 group-hover/accordion:blur-sm hover:!blur-none hover:border-red-500/40 isolate transform hover:-translate-y-1 block"
+									>
+										{/* Linha de destaque no topo */}
+										<div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-[800ms] z-20"></div>
+										{/* Imagem da peça */}
+										<img alt={card.title} className="absolute inset-0 w-full h-full object-cover object-top opacity-25 grayscale mix-blend-overlay transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:scale-105 group-hover/card:opacity-60 group-hover/card:grayscale-0 group-hover/card:mix-blend-normal" src={piece.img} />
+										{/* Varredura radar holográfica */}
+										<div className="absolute top-1/2 left-1/2 w-[150%] aspect-square bg-[conic-gradient(from_0deg,transparent_0_280deg,rgba(220,38,38,0.25)_360deg)] opacity-0 group-hover/card:opacity-100 eco-radar pointer-events-none blur-2xl z-0 transition-opacity duration-700"></div>
+										{/* Máscara gradiente */}
+										<div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent z-10"></div>
+										{/* Estado recolhido: texto vertical */}
+										<div className="absolute inset-0 flex items-center justify-center z-20 transition-all duration-500 opacity-100 group-hover/card:opacity-0 group-hover/card:scale-95 pointer-events-none">
+											<div className="md:-rotate-90 origin-center transition-transform duration-500">
+												<span className="font-mono text-sm tracking-[0.3em] text-white/50 uppercase whitespace-nowrap">0{piece.i + 1} // {card.label}</span>
+											</div>
+										</div>
+										{/* Conteúdo expandido */}
+										<div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end z-30 opacity-0 group-hover/card:opacity-100 min-w-[280px] md:min-w-[450px] pointer-events-none">
+											{/* Badge LED no topo */}
+											<div className="flex justify-between items-start mb-auto pt-2 transform translate-y-8 opacity-0 group-hover/card:translate-y-0 group-hover/card:opacity-100 transition-all duration-[800ms] delay-100 ease-[cubic-bezier(0.16,1,0.3,1)]">
+												<div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+													<div className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444] animate-pulse"></div>
+													<span className="text-[10px] font-mono text-red-400 uppercase tracking-widest">{t('ecosystem.activeLink')}</span>
+												</div>
+											</div>
+											{/* Texto */}
+											<div className="transform translate-y-8 opacity-0 group-hover/card:translate-y-0 group-hover/card:opacity-100 transition-all duration-[800ms] delay-[200ms] ease-[cubic-bezier(0.16,1,0.3,1)]">
+												<span className="text-[10px] font-bold tracking-widest uppercase text-red-500/80 mb-3 block">{card.label}</span>
+												<h3 className="font-heading text-2xl md:text-3xl text-white font-bold leading-tight tracking-tight mb-4">
+													{card.title}
+												</h3>
+												<p className="text-sm text-white/60 leading-relaxed mb-8 max-w-md">
+													{card.desc}
+												</p>
+											</div>
+											{/* Link CTA */}
+											<div className="flex items-center gap-5 transform translate-y-8 opacity-0 group-hover/card:translate-y-0 group-hover/card:opacity-100 transition-all duration-[800ms] delay-[300ms] ease-[cubic-bezier(0.16,1,0.3,1)]">
+												<span className="relative w-12 h-12 flex items-center justify-center shrink-0">
+													<svg className="absolute inset-0 w-full h-full eco-ring text-red-400/40" viewBox="0 0 100 100">
+														<circle cx="50" cy="50" fill="none" r="48" stroke="currentColor" strokeDasharray="25 10 5 10" strokeWidth="1.5"></circle>
+													</svg>
+													<svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+												</span>
+												<span className="text-sm font-bold uppercase tracking-widest text-white">{card.link}</span>
+											</div>
+										</div>
+									</a>
+								);
+							})}
 						</div>
 					</div>
 				</section>
