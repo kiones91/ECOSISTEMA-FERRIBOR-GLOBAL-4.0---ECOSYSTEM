@@ -10,7 +10,7 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-inter), 'Inter', sans-serif;
     background-color: #F8FAF9;
     background-image:
         radial-gradient(circle at 70% 10%, rgba(220, 38, 38, 0.06), transparent 34rem),
@@ -50,6 +50,17 @@ body {
     text-shadow: 0 2px 30px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
+/* Hero scrub spacer — CSS-driven so server/client HTML match (no hydration mismatch). */
+.hero-spacer {
+    height: 360vh;
+}
+
+@media (max-width: 767px) {
+    .hero-spacer {
+        height: 150vh;
+    }
+}
+
 .text-outline-light {
     -webkit-text-stroke: 1.5px #f3f0e8;
     color: transparent;
@@ -71,7 +82,7 @@ h4,
 h5,
 h6,
 .font-heading {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-montserrat), 'Montserrat', sans-serif;
 }
 
 .font-oswald {
@@ -247,7 +258,7 @@ h6,
     overflow: hidden;
     border-radius: 9999px;
     padding: 12px 28px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-montserrat), 'Montserrat', sans-serif;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -303,7 +314,7 @@ h6,
     position: relative;
     border-radius: 9999px;
     padding: 12px 28px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-montserrat), 'Montserrat', sans-serif;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -337,7 +348,7 @@ h6,
     overflow: hidden;
     border-radius: 9999px;
     padding: 11px 24px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-montserrat), 'Montserrat', sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -743,4 +754,49 @@ h6,
 .skip-link:focus {
 	left: 1rem;
 	top: 1rem;
+}
+
+/* ---- Mobile performance overrides ----
+   On throttled phones the infinite decorative animations + backdrop-filter
+   blurs repaint large areas every frame, keeping the main thread busy. That
+   sustained Style & Layout work (~2.5s) is what inflates the simulated
+   LCP/TTI in Lighthouse/PSI. Desktop keeps all effects. */
+@media (max-width: 767px) {
+	.footer-led-v,
+	.footer-led-h,
+	.weld-seam::before,
+	.weld-seam::after,
+	.aura-noise,
+	.aura-grid {
+		display: none !important;
+	}
+
+	.animate-scroll-line,
+	.animate-pulse {
+		animation: none !important;
+	}
+
+	/* The 3 fixed radial-gradient layers force a full-viewport repaint on every
+	   style recalc; flat color is visually near-identical on a phone. */
+	body {
+		background-image: none !important;
+	}
+
+	/* backdrop-filter compositing is one of the costliest paint operations on
+	   mobile GPUs. Strip every blur utility and replace the translucency with
+	   a near-opaque solid so the UI still reads. */
+	.glass-panel-light,
+	[class*="backdrop-blur"] {
+		backdrop-filter: none !important;
+		-webkit-backdrop-filter: none !important;
+	}
+
+	.glass-panel-light {
+		background: rgba(255, 255, 255, 0.95);
+	}
+
+	/* Large blur radii (the ambient red glow) are expensive to rasterize. */
+	[class*="blur-["] {
+		filter: none !important;
+	}
 }

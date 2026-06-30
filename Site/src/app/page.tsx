@@ -119,12 +119,16 @@ export default function HomePage() {
 		const ctx = canvas.getContext("2d", { alpha: false });
 		if (!ctx) return;
 
-		const FRAME_COUNT = isMobile ? 64 : 192;
+		// On mobile, skip the scroll-video entirely. The static <picture> already
+		// paints the hero background and the content sections scroll over it via
+		// z-index. Running 64 webp decodes + a rAF loop on a throttled phone CPU was
+		// jamming the main thread and pushing the hero-text LCP past 19s.
+		if (isMobile) return;
+
+		const FRAME_COUNT = 192;
 		const framePath = (i: number) => {
-			const frameIndex = isMobile ? (i - 1) * 3 + 1 : i;
-			const safeIndex = Math.min(192, Math.max(1, frameIndex));
-			const name = `frame_${String(safeIndex).padStart(3, "0")}.webp`;
-			return isMobile ? `/assets/video2_frames/mobile/${name}` : `/assets/video2_frames/${name}`;
+			const safeIndex = Math.min(192, Math.max(1, i));
+			return `/assets/video2_frames/frame_${String(safeIndex).padStart(3, "0")}.webp`;
 		};
 		const frames: HTMLImageElement[] = [];
 		let ready = false;
@@ -347,7 +351,7 @@ export default function HomePage() {
 
 				{/* HERO SCRUB SPACER — drives the fixed canvas; you scroll the whole
 				    video before the content below appears. Text lives in the fixed overlay. */}
-				<section ref={heroRef} id="inicio" className="relative z-10 w-full pointer-events-none" style={{ height: isMobile ? '150vh' : '360vh' }}></section>
+				<section ref={heroRef} id="inicio" className="hero-spacer relative z-10 w-full pointer-events-none"></section>
 
 				{/* SEGUNDA DOBRA — Catálogo 3D Showcase */}
 				<section className="relative z-10 bg-black py-24 lg:py-32 px-6 md:px-12">

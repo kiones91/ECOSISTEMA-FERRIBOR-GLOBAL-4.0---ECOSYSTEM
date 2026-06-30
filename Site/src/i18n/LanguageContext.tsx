@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { dictionaries, resolve, SUPPORTED, type Lang } from './index';
+import { dictionaries, loadDictionary, resolve, SUPPORTED, type Lang } from './index';
 
 interface I18nContextValue {
 	lang: Lang;
@@ -11,28 +11,35 @@ interface I18nContextValue {
 
 const I18nContext = createContext<I18nContextValue | null>(null);
 
-function detectLang(): Lang {
-	if (typeof navigator === 'undefined') return 'pt';
-	const code = (navigator.language || '').slice(0, 2).toLowerCase();
-	if (code === 'en' || code === 'es' || code === 'fr') return code;
-	return 'pt';
-}
-
 export function LanguageProvider({ children }: { children: ReactNode }) {
 	// First render is always PT to match the statically exported HTML; corrected on mount.
 	const [lang, setLangState] = useState<Lang>('pt');
 
+	// Switch only after the target dictionary is loaded, so the UI never flashes
+	// PT fallbacks while a lazy-loaded locale is in flight.
+	const switchTo = (l: Lang) => {
+		if (l === 'pt' || dictionaries[l]) {
+			setLangState(l);
+			return;
+		}
+		loadDictionary(l).then(() => setLangState(l));
+	};
+
 	useEffect(() => {
+		// Only honor an explicit saved choice. We intentionally do NOT auto-detect
+		// navigator.language: the site is PT-BR by default (matching the statically
+		// exported HTML), and auto-switching on first visit repainted the hero <h1>
+		// — the LCP element — after hydration, which pushed the simulated LCP past
+		// 19s in PageSpeed. First-time visitors stay PT (no repaint); other languages
+		// are opt-in via the switcher.
 		const saved = localStorage.getItem('ferribor_lang') as Lang | null;
-		if (saved && SUPPORTED.includes(saved)) {
-			setLangState(saved);
-		} else {
-			setLangState(detectLang());
+		if (saved && saved !== 'pt' && SUPPORTED.includes(saved)) {
+			switchTo(saved);
 		}
 	}, []);
 
 	const setLang = (l: Lang) => {
-		setLangState(l);
+		switchTo(l);
 		try {
 			localStorage.setItem('ferribor_lang', l);
 		} catch {}

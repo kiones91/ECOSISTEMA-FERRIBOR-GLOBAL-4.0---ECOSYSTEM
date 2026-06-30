@@ -1,7 +1,23 @@
 import type { Metadata } from 'next';
+import { Inter, Montserrat } from 'next/font/google';
 import './globals.css';
 import Script from 'next/script';
 import { LanguageProvider } from '../i18n/LanguageContext';
+
+// Self-hosted at build time (no external fonts.googleapis.com round-trip).
+// The hero <h1> is the LCP element; serving the font same-origin + auto-preload
+// removes the late font-swap repaint that was pushing LCP past 17s on mobile.
+const inter = Inter({
+	subsets: ['latin'],
+	variable: '--font-inter',
+	display: 'swap',
+});
+
+const montserrat = Montserrat({
+	subsets: ['latin'],
+	variable: '--font-montserrat',
+	display: 'swap',
+});
 
 export const metadata: Metadata = {
 	title: 'FerriBor',
@@ -14,21 +30,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="pt-BR" className="scroll-smooth">
-			<head>
-				{/* LCP: descobre e baixa o primeiro frame do Hero antes do JS hidratar (resolução por dispositivo) */}
-				<link rel="preload" as="image" href="/assets/video2_frames/mobile/frame_001.webp" media="(max-width: 767px)" fetchPriority="high" />
-				<link rel="preload" as="image" href="/assets/video2_frames/frame_001.webp" media="(min-width: 768px)" fetchPriority="high" />
-				<link rel="preconnect" href="https://fonts.googleapis.com" />
-				<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-				<link
-					rel="stylesheet"
-					href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap"
-					media="print"
-					// @ts-ignore
-					onLoad="this.media='all'"
-				/>
-			</head>
+		<html lang="pt-BR" className={`scroll-smooth ${inter.variable} ${montserrat.variable}`}>
 			<body>
 				<LanguageProvider>
 					<a href="#conteudo" className="skip-link">
@@ -41,4 +43,3 @@ export default function RootLayout({
 		</html>
 	);
 }
-
