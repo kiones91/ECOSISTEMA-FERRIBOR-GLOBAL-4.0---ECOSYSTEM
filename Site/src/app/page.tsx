@@ -126,11 +126,14 @@ export default function HomePage() {
 			const cw = canvas.width, ch = canvas.height;
 			ctx.fillStyle = "#060706";
 			ctx.fillRect(0, 0, cw, ch);
-			const ar = img.naturalWidth / img.naturalHeight;
-			const car = cw / ch;
-			let dw, dh, dx, dy;
-			if (ar > car) { dw = cw; dh = cw / ar; dx = 0; dy = (ch - dh) / 2; }
-			else { dh = ch; dw = ch * ar; dx = (cw - dw) / 2; dy = 0; }
+			
+			// robust cover aspect ratio calculation
+			const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+			const dw = img.naturalWidth * scale;
+			const dh = img.naturalHeight * scale;
+			const dx = (cw - dw) / 2;
+			const dy = (ch - dh) / 2;
+			
 			ctx.drawImage(img, dx, dy, dw, dh);
 		};
 
@@ -198,8 +201,8 @@ export default function HomePage() {
 			<div aria-hidden="true" className="aura-grid" />
 
 			{/* Cinematic hero canvas — scroll-driven video frames (viewport-fixed) */}
-			<div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-				<canvas ref={heroCanvasRef} className="absolute inset-0 w-full h-full block" />
+			<div className="fixed top-0 left-0 w-screen h-screen z-0 overflow-hidden pointer-events-none">
+				<canvas ref={heroCanvasRef} className="absolute inset-0 w-full h-full object-cover block" />
 				{/* Dark overlay to improve text readability */}
 				<div className="absolute inset-0 bg-black/50"></div>
 			</div>
