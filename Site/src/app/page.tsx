@@ -119,14 +119,17 @@ export default function HomePage() {
 		const ctx = canvas.getContext("2d", { alpha: false });
 		if (!ctx) return;
 
-		// On mobile, skip the scroll-video entirely. The static <picture> already
-		// paints the hero background and the content sections scroll over it via
-		// z-index. Running 64 webp decodes + a rAF loop on a throttled phone CPU was
-		// jamming the main thread and pushing the hero-text LCP past 19s.
-		if (isMobile) return;
-
-		const FRAME_COUNT = 192;
+		// Mobile mantém o scroll-video, mas com metade dos quadros (32 em 768w) e a
+		// inicialização adiada para quando o navegador estiver ocioso — a <picture>
+		// estática já cobre o hero, então o canvas "sobe" depois sem competir com o LCP.
+		const FRAME_COUNT = isMobile ? 32 : 192;
 		const framePath = (i: number) => {
+			if (isMobile) {
+				// a pasta mobile tem frames ≡1 mod 3 (1,4,7,…); pulando de 6 em 6
+				// pegamos 32 quadros, todos existentes nessa pasta.
+				const idx = Math.min(187, (i - 1) * 6 + 1);
+				return `/assets/video2_frames/mobile/frame_${String(idx).padStart(3, "0")}.webp`;
+			}
 			const safeIndex = Math.min(192, Math.max(1, i));
 			return `/assets/video2_frames/frame_${String(safeIndex).padStart(3, "0")}.webp`;
 		};
@@ -136,6 +139,7 @@ export default function HomePage() {
 		let currentFrac = 0;
 		let raf = 0;
 		let deferTimer = 0;
+		let idleId = 0;
 		const ease = 0.12;
 
 		const sizeCanvas = () => {
@@ -218,8 +222,6 @@ export default function HomePage() {
 				loadRemaining();
 			}, 2500);
 		};
-		firstImg.src = framePath(1);
-		frames.push(firstImg);
 
 		const loadRemaining = () => {
 			for (let i = 2; i <= FRAME_COUNT; i++) {
@@ -229,14 +231,42 @@ export default function HomePage() {
 			}
 		};
 
-		window.addEventListener("scroll", onScroll, { passive: true });
-		window.addEventListener("resize", onResize, { passive: true });
-		document.addEventListener("visibilitychange", onVis);
-		raf = requestAnimationFrame(loop);
+		const start = () => {
+			firstImg.src = framePath(1);
+			frames.push(firstImg);
+			window.addEventListener("scroll", onScroll, { passive: true });
+			window.addEventListener("resize", onResize, { passive: true });
+			document.addEventListener("visibilitychange", onVis);
+			raf = requestAnimationFrame(loop);
+		};
+
+		// No mobile, inicia o canvas no primeiro scroll (que é quando o scroll-video
+		// importa) ou quando o navegador ficar ocioso — o que vier primeiro. Assim a
+		// <picture> estática cobre o hero, os 32 quadros não disputam o LCP, e o
+		// repaint do canvas fica fora da janela de carregamento. Desktop começa já.
+		if (!isMobile) {
+			start();
+		} else {
+			let started = false;
+			const kickoff = () => {
+				if (started) return;
+				started = true;
+				if (idleId && typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idleId);
+				window.removeEventListener("scroll", kickoff);
+				start();
+			};
+			window.addEventListener("scroll", kickoff, { passive: true, once: true });
+			if (typeof window.requestIdleCallback === "function") {
+				idleId = window.requestIdleCallback(kickoff, { timeout: 4000 });
+			} else {
+				deferTimer = window.setTimeout(kickoff, 3000);
+			}
+		}
 
 		return () => {
 			cancelAnimationFrame(raf);
 			clearTimeout(deferTimer);
+			if (idleId && typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idleId);
 			window.removeEventListener("scroll", onScroll);
 			window.removeEventListener("resize", onResize);
 			document.removeEventListener("visibilitychange", onVis);

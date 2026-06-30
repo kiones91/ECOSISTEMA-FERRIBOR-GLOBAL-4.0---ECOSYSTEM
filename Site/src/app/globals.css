@@ -757,46 +757,31 @@ h6,
 }
 
 /* ---- Mobile performance overrides ----
-   On throttled phones the infinite decorative animations + backdrop-filter
-   blurs repaint large areas every frame, keeping the main thread busy. That
-   sustained Style & Layout work (~2.5s) is what inflates the simulated
-   LCP/TTI in Lighthouse/PSI. Desktop keeps all effects. */
+   As animações decorativas (LEDs, faísca de solda, pulse) já usam transform +
+   opacity, então rodam no compositor/GPU e são baratas. O que pesava na thread
+   principal era o PAINT de fundo. Em vez de remover efeitos, deixamos o
+   conteúdo abaixo da dobra pular layout/paint até ser rolado — o que também
+   pausa as animações dessas seções durante o carregamento, sem desligá-las.
+   Desktop mantém tudo intacto. */
 @media (max-width: 767px) {
-	.footer-led-v,
-	.footer-led-h,
-	.weld-seam::before,
-	.weld-seam::after,
-	.aura-noise,
-	.aura-grid {
-		display: none !important;
+	#viewport-screen > section:not(#inicio),
+	#viewport-screen > .weld-seam,
+	#viewport-screen > footer {
+		content-visibility: auto;
+		contain-intrinsic-size: auto 700px;
 	}
 
-	.animate-scroll-line,
-	.animate-pulse {
-		animation: none !important;
-	}
-
-	/* The 3 fixed radial-gradient layers force a full-viewport repaint on every
-	   style recalc; flat color is visually near-identical on a phone. */
-	body {
-		background-image: none !important;
-	}
-
-	/* backdrop-filter compositing is one of the costliest paint operations on
-	   mobile GPUs. Strip every blur utility and replace the translucency with
-	   a near-opaque solid so the UI still reads. */
-	.glass-panel-light,
+	/* backdrop-filter é a operação de paint mais cara em GPU de celular e o
+	   header fica acima da dobra (content-visibility não ajuda). Reduzimos o
+	   raio do blur — mantém o efeito de vidro fosco cortando o custo. */
 	[class*="backdrop-blur"] {
-		backdrop-filter: none !important;
-		-webkit-backdrop-filter: none !important;
+		backdrop-filter: blur(4px) !important;
+		-webkit-backdrop-filter: blur(4px) !important;
 	}
 
-	.glass-panel-light {
-		background: rgba(255, 255, 255, 0.95);
-	}
-
-	/* Large blur radii (the ambient red glow) are expensive to rasterize. */
+	/* O glow ambiente (raio 120px) é caro de rasterizar quando entra em cena;
+	   reduzir o raio mantém o brilho a um custo bem menor. */
 	[class*="blur-["] {
-		filter: none !important;
+		filter: blur(64px) !important;
 	}
 }
