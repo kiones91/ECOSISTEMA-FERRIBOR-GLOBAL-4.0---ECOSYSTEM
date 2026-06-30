@@ -16,6 +16,9 @@ export default function RootLayout({
 	return (
 		<html lang="pt-BR" className="scroll-smooth">
 			<head>
+				{/* LCP: descobre e baixa o primeiro frame do Hero antes do JS hidratar (resolução por dispositivo) */}
+				<link rel="preload" as="image" href="/assets/video2_frames/mobile/frame_001.webp" media="(max-width: 767px)" fetchPriority="high" />
+				<link rel="preload" as="image" href="/assets/video2_frames/frame_001.webp" media="(min-width: 768px)" fetchPriority="high" />
 				<link rel="preconnect" href="https://fonts.googleapis.com" />
 				<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 				<link

@@ -11,7 +11,8 @@ const DASHBOARD_URL = process.env.NEXT_PUBLIC_DASHBOARD_URL || 'http://localhost
 export default function HomePage() {
 
 	const { t } = useI18n();
-	const [isMobile, setIsMobile] = useState(false);
+	// Detecta mobile no primeiro render (client) para evitar carregar os dois conjuntos de frames
+	const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
 	useEffect(() => {
 		setIsMobile(window.innerWidth < 768);
@@ -122,13 +123,15 @@ export default function HomePage() {
 		const framePath = (i: number) => {
 			const frameIndex = isMobile ? (i - 1) * 3 + 1 : i;
 			const safeIndex = Math.min(192, Math.max(1, frameIndex));
-			return `/assets/video2_frames/frame_${String(safeIndex).padStart(3, "0")}.jpg`;
+			const name = `frame_${String(safeIndex).padStart(3, "0")}.webp`;
+			return isMobile ? `/assets/video2_frames/mobile/${name}` : `/assets/video2_frames/${name}`;
 		};
 		const frames: HTMLImageElement[] = [];
 		let ready = false;
 		let targetFrac = 0;
 		let currentFrac = 0;
 		let raf = 0;
+		let deferTimer = 0;
 		const ease = 0.12;
 
 		const sizeCanvas = () => {
@@ -169,7 +172,10 @@ export default function HomePage() {
 			if (scrollHintRef.current) scrollHintRef.current.style.opacity = String(fade * 0.7);
 		};
 
-		const onScroll = () => { updateTarget(); if (document.hidden) { currentFrac = targetFrac; paint(); } };
+		let running = false;
+		const startLoop = () => { if (!running) { running = true; raf = requestAnimationFrame(loop); } };
+
+		const onScroll = () => { updateTarget(); if (document.hidden) { currentFrac = targetFrac; paint(); } else { startLoop(); } };
 		const onResize = () => { sizeCanvas(); updateTarget(); paint(); };
 		const onVis = () => { if (!document.hidden && ready) { updateTarget(); currentFrac = targetFrac; paint(); } };
 
@@ -177,7 +183,12 @@ export default function HomePage() {
 			if (ready) {
 				updateTarget();
 				currentFrac += (targetFrac - currentFrac) * ease;
-				if (Math.abs(currentFrac - targetFrac) < 0.0004) currentFrac = targetFrac;
+				if (Math.abs(currentFrac - targetFrac) < 0.0004) {
+					currentFrac = targetFrac;
+					paint();
+					running = false; // assentou: para o loop até o próximo scroll/resize
+					return;
+				}
 				paint();
 			}
 			raf = requestAnimationFrame(loop);
@@ -191,14 +202,15 @@ export default function HomePage() {
 			updateTarget();
 			currentFrac = targetFrac;
 			paint();
+			canvas.style.opacity = "1"; // revela o canvas só após a 1ª pintura (img estática cobre o LCP)
 
 			// Defer remaining frames to prevent blocking the initial PageSpeed load
-			setTimeout(() => {
+			deferTimer = window.setTimeout(() => {
 				loadRemaining();
 			}, 2500);
 		};
 		firstImg.onerror = () => {
-			setTimeout(() => {
+			deferTimer = window.setTimeout(() => {
 				loadRemaining();
 			}, 2500);
 		};
@@ -220,6 +232,7 @@ export default function HomePage() {
 
 		return () => {
 			cancelAnimationFrame(raf);
+			clearTimeout(deferTimer);
 			window.removeEventListener("scroll", onScroll);
 			window.removeEventListener("resize", onResize);
 			document.removeEventListener("visibilitychange", onVis);
@@ -241,7 +254,20 @@ export default function HomePage() {
 
 			{/* Cinematic hero canvas — scroll-driven video frames (viewport-fixed) */}
 			<div className="fixed top-0 left-0 w-screen h-screen z-0 overflow-hidden pointer-events-none">
-				<canvas ref={heroCanvasRef} className="absolute inset-0 w-full h-full object-cover block" />
+				{/* LCP element: primeiro frame como <img> real, pintado sem esperar o JS */}
+				<picture>
+					<source srcSet="/assets/video2_frames/mobile/frame_001.webp" media="(max-width: 767px)" />
+					<source srcSet="/assets/video2_frames/frame_001.webp" media="(min-width: 768px)" />
+					<img
+						src="/assets/video2_frames/frame_001.webp"
+						alt=""
+						aria-hidden="true"
+						fetchPriority="high"
+						decoding="async"
+						className="absolute inset-0 w-full h-full object-cover block"
+					/>
+				</picture>
+				<canvas ref={heroCanvasRef} className="absolute inset-0 w-full h-full object-cover block opacity-0 transition-opacity duration-300" />
 				{/* Dark overlay to improve text readability */}
 				<div className="absolute inset-0 bg-black/50"></div>
 			</div>
