@@ -639,37 +639,39 @@ h6,
 
 /* Footer LED beams traveling along the grid lines */
 @keyframes footer-led-fall {
-	0% { top: -260px; opacity: 0; }
+	0% { transform: translateY(-260px); opacity: 0; }
 	15% { opacity: 1; }
 	85% { opacity: 1; }
-	100% { top: 100%; opacity: 0; }
+	100% { transform: translateY(800px); opacity: 0; }
 }
 
 @keyframes footer-led-slide {
-	0% { left: -320px; opacity: 0; }
+	0% { transform: translateX(-320px); opacity: 0; }
 	15% { opacity: 1; }
 	85% { opacity: 1; }
-	100% { left: 100%; opacity: 0; }
+	100% { transform: translateX(100vw); opacity: 0; }
 }
 
 .footer-led-v {
 	position: absolute;
+	top: 0;
 	width: 1px;
 	height: 260px;
 	background: linear-gradient(to bottom, transparent, rgba(8, 10, 14, 0.5) 50%, transparent);
 	box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.18);
 	animation: footer-led-fall 9s linear infinite;
-	will-change: top, opacity;
+	will-change: transform, opacity;
 }
 
 .footer-led-h {
 	position: absolute;
+	left: 0;
 	height: 1px;
 	width: 320px;
 	background: linear-gradient(to right, transparent, rgba(220, 38, 38, 0.55) 50%, transparent);
 	box-shadow: 0 0 10px 1px rgba(220, 38, 38, 0.22);
 	animation: footer-led-slide 11s linear infinite;
-	will-change: left, opacity;
+	will-change: transform, opacity;
 }
 
 /* Weld-seam divider between folds — a red bead with a white-hot spark
@@ -708,7 +710,7 @@ h6,
 	left: 0;
 	width: 110px;
 	height: 2px;
-	transform: translateY(-50%);
+	transform: translate(-110px, -50%);
 	border-radius: 50%;
 	background: linear-gradient(to right,
 		transparent,
@@ -718,17 +720,17 @@ h6,
 		transparent);
 	box-shadow: 0 0 12px 2px rgba(255, 150, 70, 0.6), 0 0 26px 5px rgba(220, 38, 38, 0.4);
 	animation: weld-spark 8s linear infinite;
-	will-change: left, opacity;
+	will-change: transform, opacity;
 }
 
 .weld-seam.weld-delay-1::after { animation-delay: 2.7s; }
 .weld-seam.weld-delay-2::after { animation-delay: 5.3s; }
 
 @keyframes weld-spark {
-	0% { left: -110px; opacity: 0; }
+	0% { transform: translate(-110px, -50%); opacity: 0; }
 	10% { opacity: 1; }
 	88% { opacity: 1; }
-	100% { left: 100%; opacity: 0; }
+	100% { transform: translate(100vw, -50%); opacity: 0; }
 }
 
 /* Skip link */

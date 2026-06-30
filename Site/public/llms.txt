@@ -1,0 +1,18 @@
+# FerriBor Global
+
+> FerriBor is a leading manufacturer of high-precision elastomeric artifacts (rubber, silicone, polyurethane) based in Brazil, serving global industries. It integrates advanced digital services including 360° 3D interactive models, an AI-powered technical drawing analyzer (SmartSpec), a client dashboard/PWA, and a circular logistics program.
+
+This document serves as a guide for AI agents and LLMs visiting the FerriBor ecosystem. It details key pages, services, and interactive features available on the website.
+
+## Core Offerings
+
+- [Serviços / Services](https://ferribor.buffallos.com.br/services): Technical services including compounds formulation (NBR, Silicone, Viton, PU) for ceramic industries, welding artifacts, levelers, seals, and rollers.
+- [Catálogo / Catalog](https://ferribor.buffallos.com.br/catalog): High-precision product catalogue with 360-degree interactive 3D model showcase.
+- [A Empresa / About](https://ferribor.buffallos.com.br/about): Corporate overview, compliance certificates, ESG actions, and circular logistics info.
+- [Contato / Contact](https://ferribor.buffallos.com.br/contact): Inquiries, customer support, and commercial channels.
+
+## Key Digital Integrations
+
+- [SmartSpec AI](https://ferribor.buffallos.com.br/services): Intelligent reading and interpretation of technical drawings to speed up the quotation workflow.
+- [FerriBor Circular](https://ferribor.buffallos.com.br/about): Recycling program where customers return worn-out elastomeric parts to earn trade-in credits.
+- [Customer Portal](https://ferribor.buffallos.com.br/request-quote): Dashboard for real-time tracking, purchase history, and direct certificate downloads.

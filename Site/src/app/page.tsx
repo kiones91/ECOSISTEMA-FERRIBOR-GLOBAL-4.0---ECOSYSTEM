@@ -11,6 +11,11 @@ const DASHBOARD_URL = process.env.NEXT_PUBLIC_DASHBOARD_URL || 'http://localhost
 export default function HomePage() {
 
 	const { t } = useI18n();
+	const [isMobile, setIsMobile] = useState(false);
+
+	useEffect(() => {
+		setIsMobile(window.innerWidth < 768);
+	}, []);
 
 
 	// 3. Request Quote Modal logic
@@ -70,22 +75,33 @@ export default function HomePage() {
 		setShowCookies(false);
 	};
 
-	// Load model-viewer web component
+	// Load model-viewer web component lazily on intersection
 	useEffect(() => {
-		import('@google/model-viewer').then(() => {
-			if (modelViewerRef.current && !modelViewerRef.current.querySelector('model-viewer')) {
-				const mv = document.createElement('model-viewer') as any;
-				mv.setAttribute('src', '/models/vedacao-industrial.glb');
-				mv.setAttribute('alt', 'Peça industrial FerriBor em 3D');
-				mv.setAttribute('auto-rotate', '');
-				mv.setAttribute('camera-controls', '');
-				mv.setAttribute('shadow-intensity', '1');
-				mv.setAttribute('exposure', '1.2');
-				mv.style.width = '100%';
-				mv.style.height = '100%';
-				modelViewerRef.current.appendChild(mv);
+		const observer = new IntersectionObserver((entries) => {
+			if (entries[0].isIntersecting) {
+				import('@google/model-viewer').then(() => {
+					if (modelViewerRef.current && !modelViewerRef.current.querySelector('model-viewer')) {
+						const mv = document.createElement('model-viewer') as any;
+						mv.setAttribute('src', '/models/vedacao-industrial.glb');
+						mv.setAttribute('alt', 'Peça industrial FerriBor em 3D');
+						mv.setAttribute('auto-rotate', '');
+						mv.setAttribute('camera-controls', '');
+						mv.setAttribute('shadow-intensity', '1');
+						mv.setAttribute('exposure', '1.2');
+						mv.style.width = '100%';
+						mv.style.height = '100%';
+						modelViewerRef.current.appendChild(mv);
+					}
+				});
+				observer.disconnect();
 			}
-		});
+		}, { rootMargin: '200px' });
+
+		if (modelViewerRef.current) {
+			observer.observe(modelViewerRef.current);
+		}
+
+		return () => observer.disconnect();
 	}, []);
 
 	// 7. Hero scroll-video (pre-rendered frame sequence painted on canvas)
@@ -102,8 +118,12 @@ export default function HomePage() {
 		const ctx = canvas.getContext("2d", { alpha: false });
 		if (!ctx) return;
 
-		const FRAME_COUNT = 192;
-		const framePath = (i: number) => `/assets/video2_frames/frame_${String(i).padStart(3, "0")}.jpg`;
+		const FRAME_COUNT = isMobile ? 64 : 192;
+		const framePath = (i: number) => {
+			const frameIndex = isMobile ? (i - 1) * 3 + 1 : i;
+			const safeIndex = Math.min(192, Math.max(1, frameIndex));
+			return `/assets/video2_frames/frame_${String(safeIndex).padStart(3, "0")}.jpg`;
+		};
 		const frames: HTMLImageElement[] = [];
 		let ready = false;
 		let targetFrac = 0;
@@ -126,14 +146,14 @@ export default function HomePage() {
 			const cw = canvas.width, ch = canvas.height;
 			ctx.fillStyle = "#060706";
 			ctx.fillRect(0, 0, cw, ch);
-			
+
 			// robust cover aspect ratio calculation
 			const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
 			const dw = img.naturalWidth * scale;
 			const dh = img.naturalHeight * scale;
 			const dx = (cw - dw) / 2;
 			const dy = (ch - dh) / 2;
-			
+
 			ctx.drawImage(img, dx, dy, dw, dh);
 		};
 
@@ -163,16 +183,35 @@ export default function HomePage() {
 			raf = requestAnimationFrame(loop);
 		};
 
-		for (let i = 1; i <= FRAME_COUNT; i++) {
-			const img = new Image();
-			const done = () => {
-				if (i === 1) { ready = true; updateTarget(); currentFrac = targetFrac; paint(); }
-			};
-			img.onload = done;
-			img.onerror = done;
-			img.src = framePath(i);
-			frames.push(img);
-		}
+		// Carrega o frame 1 imediatamente
+		const firstImg = new Image();
+		firstImg.onload = () => {
+			ready = true;
+			frames[0] = firstImg;
+			updateTarget();
+			currentFrac = targetFrac;
+			paint();
+
+			// Defer remaining frames to prevent blocking the initial PageSpeed load
+			setTimeout(() => {
+				loadRemaining();
+			}, 2500);
+		};
+		firstImg.onerror = () => {
+			setTimeout(() => {
+				loadRemaining();
+			}, 2500);
+		};
+		firstImg.src = framePath(1);
+		frames.push(firstImg);
+
+		const loadRemaining = () => {
+			for (let i = 2; i <= FRAME_COUNT; i++) {
+				const img = new Image();
+				img.src = framePath(i);
+				frames.push(img);
+			}
+		};
 
 		window.addEventListener("scroll", onScroll, { passive: true });
 		window.addEventListener("resize", onResize, { passive: true });
@@ -185,7 +224,7 @@ export default function HomePage() {
 			window.removeEventListener("resize", onResize);
 			document.removeEventListener("visibilitychange", onVis);
 		};
-	}, []);
+	}, [isMobile]);
 
 	// Status per comparison row (none = X, partial = dash) — content comes from i18n
 	const comparisonStatus: ('none' | 'partial')[] = ['partial', 'none', 'partial', 'none', 'partial', 'none', 'none', 'none', 'partial', 'none'];
@@ -231,9 +270,9 @@ export default function HomePage() {
 				</div>
 			</div>
 
-				{/* Main Content Container with Lateral and Top Borders */}
-				<div className="relative w-full max-w-[1440px] min-h-screen mx-auto border border-red-500/20 rounded-t-[32px] xl:rounded-t-[48px] shadow-none flex flex-col z-10" id="viewport-screen">
-				
+			{/* Main Content Container with Lateral and Top Borders */}
+			<div className="relative w-full max-w-[1440px] min-h-screen mx-auto border border-red-500/20 rounded-t-[32px] xl:rounded-t-[48px] shadow-none flex flex-col z-10" id="viewport-screen">
+
 
 				{/* Header */}
 				<header className="fixed top-0 left-0 right-0 z-30 mx-auto flex w-full max-w-[92rem] items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-8 lg:py-5 xl:px-10">
@@ -282,7 +321,7 @@ export default function HomePage() {
 
 				{/* HERO SCRUB SPACER — drives the fixed canvas; you scroll the whole
 				    video before the content below appears. Text lives in the fixed overlay. */}
-				<section ref={heroRef} id="inicio" className="relative z-10 w-full pointer-events-none" style={{ height: '360vh' }}></section>
+				<section ref={heroRef} id="inicio" className="relative z-10 w-full pointer-events-none" style={{ height: isMobile ? '150vh' : '360vh' }}></section>
 
 				{/* SEGUNDA DOBRA — Catálogo 3D Showcase */}
 				<section className="relative z-10 bg-black py-24 lg:py-32 px-6 md:px-12">
@@ -632,7 +671,7 @@ export default function HomePage() {
 			{isModalOpen && (
 				<div id="demo-modal" className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300">
 					<div className="relative w-full max-w-lg bg-[#F8FAF9] rounded-3xl border border-white/50 p-8 shadow-2xl flex flex-col transition-all duration-300" id="modal-content">
-						
+
 						{/* Close Button */}
 						<button onClick={closeQuoteModal} className="absolute top-4 right-4 text-slate-400 hover:text-slate-900 cursor-hover">
 							<i className="iconify text-2xl" data-icon="lucide:x"></i>
