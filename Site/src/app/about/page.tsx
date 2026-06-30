@@ -99,7 +99,7 @@ export default function AboutPage() {
 						<div className="glass-panel-light rounded-2xl p-8 border border-white/40 bg-white/40 backdrop-blur-xl">
 							<div className="aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 border border-slate-200 flex items-center justify-center">
 								<img
-									src="/assets/imagens/logo-3d.png"
+									src="/assets/imagens/logo-3d.webp"
 									alt="FerriBor - Fábrica"
 									className="w-2/3 h-auto object-contain"
 								/>
